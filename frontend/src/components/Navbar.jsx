@@ -10,25 +10,18 @@ const navLinks = [
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileOpen]);
-
-  const handleNavClick = (e, href) => {
+  const handleScrollTo = (e, href) => {
     e.preventDefault();
-    setMobileOpen(false);
+    setIsMobileMenuOpen(false);
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
@@ -36,110 +29,101 @@ export default function Navbar() {
   return (
     <>
       <motion.nav
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-out ${
-          scrolled
-            ? "bg-white/70 backdrop-blur-2xl border-b border-black/[0.03] shadow-[0_4px_30px_rgba(0,0,0,0.02)] py-3"
-            : "bg-transparent py-6"
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          isScrolled ? "py-4" : "py-8"
         }`}
       >
-        <div className="section-container flex items-center justify-between">
-          {/* Logo */}
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            className="relative z-10 flex items-center"
+        <div className="section-container">
+          <div 
+            className={`mx-auto flex items-center justify-between transition-all duration-500 ${
+              isScrolled 
+                ? "bg-black/40 backdrop-blur-xl border border-white/10 rounded-full px-6 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.4)]" 
+                : "bg-transparent px-2"
+            }`}
           >
-            <span className="font-display text-[1.5rem] font-black tracking-tighter text-text-primary">
-              Siddharth<span className="text-accent-warm">.</span>
-            </span>
-          </a>
+            {/* Logo */}
+            <a href="#" className="text-2xl font-black tracking-tighter text-white">
+              Sid<span className="text-accent-warm">.</span>
+            </a>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-10">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className="text-[0.95rem] font-medium text-text-secondary hover:text-text-primary transition-colors duration-300"
+            {/* Desktop Links */}
+            <div className="hidden md:flex items-center gap-8">
+              <div className="flex items-center gap-8">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    onClick={(e) => handleScrollTo(e, link.href)}
+                    className="text-[0.95rem] font-bold text-gray-300 hover:text-white transition-colors duration-300"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+              <motion.a
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                href="/resume.pdf"
+                className="flex items-center justify-center gap-2.5 px-6 py-3.5 text-[0.95rem] font-bold rounded-full bg-white text-black hover:bg-gray-200 transition-colors duration-300 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
               >
-                {link.label}
-              </a>
-            ))}
+                <Download className="w-4 h-4" /> Resume
+              </motion.a>
+            </div>
 
-            {/* Resume Button */}
-            <motion.a
-              href="/resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              className="flex items-center justify-center gap-2.5 px-6 py-3.5 text-[0.95rem] font-semibold rounded-full bg-text-primary text-white hover:bg-accent-soft transition-colors duration-300"
+            {/* Mobile Toggle */}
+            <button
+              className="md:hidden p-2 text-white"
+              onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Open Menu"
             >
-              <Download className="w-4 h-4" />
-              <span>Resume</span>
-            </motion.a>
+              <Menu className="w-6 h-6" />
+            </button>
           </div>
-
-          {/* Mobile Hamburger */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden relative z-10 p-2 -mr-2 text-text-primary focus:outline-none"
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? (
-              <X className="w-7 h-7" />
-            ) : (
-              <Menu className="w-7 h-7" />
-            )}
-          </button>
         </div>
       </motion.nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
-        {mobileOpen && (
+        {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-40 bg-white/90 backdrop-blur-3xl flex flex-col items-center justify-center gap-12"
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            animate={{ opacity: 1, backdropFilter: "blur(20px)" }}
+            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            className="fixed inset-0 z-[60] bg-black/80 flex flex-col justify-center items-center"
           >
-            {navLinks.map((link, i) => (
-              <motion.a
-                key={link.label}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  delay: i * 0.06,
-                  duration: 0.5,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className="text-4xl font-display font-bold tracking-tight text-text-primary"
-              >
-                {link.label}
-              </motion.a>
-            ))}
-            <motion.a
-              href="/resume.pdf"
-              target="_blank"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="flex items-center justify-center gap-3 px-10 py-5 mt-4 text-xl font-semibold rounded-full bg-text-primary text-white"
+            <button
+              className="absolute top-8 right-8 p-4 text-white hover:text-accent-warm transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
             >
-              <Download className="w-5 h-5" />
-              Resume
-            </motion.a>
+              <X className="w-8 h-8" />
+            </button>
+            <div className="flex flex-col items-center gap-10">
+              {navLinks.map((link, i) => (
+                <motion.a
+                  key={link.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  href={link.href}
+                  onClick={(e) => handleScrollTo(e, link.href)}
+                  className="text-4xl font-black text-white hover:text-accent-warm transition-colors"
+                >
+                  {link.label}
+                </motion.a>
+              ))}
+              <motion.a
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                href="/resume.pdf"
+                className="mt-8 flex items-center justify-center gap-3 px-10 py-5 text-xl font-bold rounded-full bg-white text-black"
+              >
+                <Download className="w-5 h-5" /> Download Resume
+              </motion.a>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

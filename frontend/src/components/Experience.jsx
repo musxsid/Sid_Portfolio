@@ -1,109 +1,79 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll } from "framer-motion";
 import { useRef } from "react";
 import experienceData from "../data/experienceData";
+import AnimatedHeading from "./AnimatedHeading";
 
-function TimelineCard({ item, index }) {
+function ExperienceCard({ item, index }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
+  const isEven = index % 2 === 0;
+
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 1,
-        delay: index * 0.2,
-        ease: [0.16, 1, 0.3, 1],
-      }}
-      className="group relative"
-    >
-      <div className="premium-card p-10 sm:p-14 lg:p-16 flex flex-col gap-10 bg-white hover:bg-[#fafafc] transition-colors duration-500 relative z-10">
-        
-        {/* Header section */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-border-light/50 pb-8">
-          <div>
-            <div className="mb-4">
-              {item.type === "current" && (
-                <span className="inline-flex items-center gap-2 text-text-primary text-[0.85rem] font-bold tracking-widest uppercase">
-                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                  Current
-                </span>
-              )}
-              {item.type === "past" && (
-                <span className="inline-flex items-center gap-2 text-text-muted text-[0.85rem] font-bold tracking-widest uppercase">
-                  Past
-                </span>
-              )}
-            </div>
-
-            <h3 className="font-display text-3xl sm:text-[2.25rem] font-black tracking-tight text-text-primary leading-tight">
-              {item.role}
-            </h3>
-          </div>
-          
-          <div className="flex flex-col sm:items-end text-left sm:text-right">
-            <span className="text-[1.2rem] font-bold text-accent-warm mb-1">
-              {item.company}
-            </span>
-            <span className="text-[1rem] font-medium text-text-muted">
-              {item.period}
-            </span>
-          </div>
-        </div>
-
-        {/* Content section */}
-        <div className="flex flex-col lg:flex-row gap-10">
-          <div className="lg:w-1/3">
-            <p className="text-text-primary text-[1.1rem] leading-[1.7] font-medium">
-              {item.description}
-            </p>
-          </div>
-          
-          <div className="lg:w-2/3 space-y-5">
-            {item.highlights.map((highlight, i) => (
-              <div
-                key={i}
-                className="flex items-start gap-4 text-[1.05rem] text-text-secondary leading-relaxed"
-              >
-                <div className="mt-[12px] w-[6px] h-[6px] rounded-full bg-text-light flex-shrink-0" />
-                <span className="font-medium text-text-secondary group-hover:text-text-primary transition-colors duration-300">
-                  {highlight}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+    <div ref={ref} className={`mb-16 flex flex-col md:flex-row justify-between items-center w-full ${isEven ? "md:flex-row-reverse" : ""}`}>
+      {/* Empty space for the alternating layout */}
+      <div className="hidden md:block w-[45%]" />
+      
+      {/* Center dot */}
+      <div className="absolute left-[20px] md:left-1/2 -translate-x-1/2 z-20 flex items-center justify-center w-8 h-8 rounded-full bg-black border-[3px] border-accent-warm shadow-[0_0_20px_#e55a28] mt-2 md:mt-0">
+        <div className="w-2 h-2 bg-accent-warm rounded-full" />
       </div>
-    </motion.div>
+
+      {/* Card */}
+      <motion.div
+        initial={{ opacity: 0, x: isEven ? 50 : -50, rotateY: isEven ? 10 : -10 }}
+        animate={isInView ? { opacity: 1, x: 0, rotateY: 0 } : {}}
+        transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+        className="w-full pl-16 md:pl-0 md:w-[45%] perspective-container"
+      >
+        <div className="premium-card p-6 md:p-8 bg-black/40 backdrop-blur-xl border border-white/10 shadow-[0_15px_40px_rgba(0,0,0,0.5)]">
+          <p className="text-accent-warm font-bold tracking-widest text-[0.8rem] mb-2 uppercase">
+            {item.period}
+          </p>
+          <h3 className="text-2xl font-black text-white leading-tight mb-1">
+            {item.role}
+          </h3>
+          <p className="text-gray-400 font-semibold mb-4 text-[0.95rem]">{item.company}</p>
+          
+          <p className="text-gray-300 text-[0.95rem] leading-relaxed mb-5">
+            {item.description}
+          </p>
+          
+          <ul className="space-y-3">
+            {item.highlights.map((ach, i) => (
+              <li key={i} className="flex items-start gap-3 text-gray-400 text-[0.9rem]">
+                <span className="text-accent-warm mt-0.5 text-xs">▹</span>
+                <span>{ach}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </motion.div>
+    </div>
   );
 }
 
 export default function Experience() {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-150px" });
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
 
   return (
-    <section id="experience" className="relative py-32 sm:py-40 lg:py-48 bg-white">
-      <div className="section-container relative z-10 flex flex-col items-center">
-        <motion.div
-          ref={sectionRef}
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-20 lg:mb-32 text-center w-full max-w-3xl"
-        >
-          <h2 className="font-display text-5xl sm:text-6xl lg:text-[5.5rem] font-black tracking-tighter leading-none mb-8">
-            Experience.
-          </h2>
-          <p className="text-text-secondary text-[1.2rem] font-medium">
-            Building robust systems for high-growth environments.
-          </p>
-        </motion.div>
+    <section id="experience" ref={sectionRef} className="py-24 relative z-20">
+      <div className="section-container max-w-6xl mx-auto px-4 md:px-6">
+        <div className="mb-20 text-center">
+          <AnimatedHeading 
+            text="Experience."
+            scrollYProgress={scrollYProgress}
+            className="font-display text-5xl sm:text-6xl font-black tracking-tighter text-white drop-shadow-md"
+          />
+        </div>
 
-        <div className="flex flex-col gap-12 w-full max-w-5xl">
+        <div className="relative">
+          {/* Vertical center line */}
+          <div className="absolute left-[20px] md:left-1/2 top-0 bottom-0 w-px bg-white/10 -translate-x-1/2" />
+
           {experienceData.map((item, index) => (
-            <TimelineCard key={item.id} item={item} index={index} />
+            <ExperienceCard key={index} item={item} index={index} />
           ))}
         </div>
       </div>

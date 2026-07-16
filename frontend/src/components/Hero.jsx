@@ -1,17 +1,27 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ArrowDown, Mail } from "lucide-react";
+import AnimatedHeading from "./AnimatedHeading";
+import HeroOrb from "./HeroOrb";
 
 export default function Hero() {
   const ref = useRef(null);
+  
+  // Track scroll specifically for the Hero section (raw scroll progress, no delay)
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [0, 150]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  // Snappy, direct transforms based on scroll
+  // The heading moves to the top left and scales down dynamically
+  const headingX = useTransform(scrollYProgress, [0, 1], ["0vw", "-35vw"]);
+  const headingY = useTransform(scrollYProgress, [0, 1], ["0vh", "-40vh"]);
+  const headingScale = useTransform(scrollYProgress, [0, 1], [1, 0.35]);
+
+  // Other elements fade and push back instantly without spring lag
+  const otherY = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const otherOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   const handleScroll = (e, href) => {
     e.preventDefault();
@@ -25,60 +35,45 @@ export default function Hero() {
       id="hero"
       className="relative min-h-[100svh] flex flex-col items-center justify-center overflow-hidden pt-24"
     >
-      {/* Cinematic Gradient Background */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-tr from-warm-peach/40 via-warm-blush/30 to-warm-sage/40 blur-[120px] rounded-full opacity-60 mix-blend-multiply" />
-      </div>
+      <HeroOrb />
 
-      <motion.div
-        style={{ y, opacity, scale }}
-        className="relative z-10 text-center w-full max-w-5xl mx-auto px-6 flex flex-col items-center"
-      >
-        {/* Eyebrow */}
+      <div className="relative z-10 text-center w-full max-w-7xl mx-auto px-6 flex flex-col items-center">
+        
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[0.8rem] font-bold tracking-[0.35em] uppercase text-text-secondary mb-10"
+          style={{ y: otherY, opacity: otherOpacity }}
+          className="text-[0.85rem] font-bold tracking-[0.4em] uppercase text-gray-400 mb-6"
         >
-          Backend-Focused Full-Stack Developer
+          Full-Stack Developer
         </motion.p>
 
-        {/* Main Heading - Apple Style Massive Typography */}
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="font-display text-[4.5rem] sm:text-[6rem] md:text-[8rem] lg:text-[9.5rem] font-black tracking-tighter leading-[0.85] text-text-primary mb-10"
-        >
-          Siddharth<span className="text-accent-warm">.</span>
-        </motion.h1>
+        {/* Dynamic Heading that transforms to top-left on scroll */}
+        <motion.div style={{ x: headingX, y: headingY, scale: headingScale }} className="origin-center lg:origin-left z-50">
+          <AnimatedHeading 
+            text="Siddharth."
+            scrollYProgress={scrollYProgress}
+            className="font-display text-[4.5rem] sm:text-[6rem] md:text-[8rem] lg:text-[10rem] font-black tracking-tighter leading-[0.85] mb-8 drop-shadow-2xl pointer-events-none"
+          />
+        </motion.div>
 
-        {/* Sub-headline */}
         <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="font-display text-xl sm:text-3xl md:text-[2.25rem] font-medium text-text-secondary leading-snug max-w-4xl mx-auto mb-16 tracking-tight"
+          style={{ y: otherY, opacity: otherOpacity }}
+          className="font-display text-xl sm:text-3xl md:text-[2.25rem] font-medium text-gray-300 leading-snug max-w-4xl mx-auto mb-16 tracking-tight drop-shadow-md pointer-events-none"
         >
           Architecting scalable backend systems.
           <br />
-          Building premium full-stack experiences.
+          Building premium frontend experiences.
         </motion.p>
 
-        {/* CTA Buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          style={{ y: otherY, opacity: otherOpacity }}
           className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full sm:w-auto"
         >
           <motion.a
             href="#projects"
             onClick={(e) => handleScroll(e, "#projects")}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className="w-full sm:w-auto flex items-center justify-center gap-3 px-12 py-5 rounded-full bg-text-primary text-white font-semibold text-[1.05rem] hover:bg-accent-soft transition-all duration-300 shadow-xl shadow-black/10"
+            whileHover={{ scale: 1.05, rotate: -1 }}
+            whileTap={{ scale: 0.95 }}
+            className="w-full sm:w-auto flex items-center justify-center gap-3 px-12 py-5 rounded-full bg-white text-black font-bold text-[1.05rem] hover:bg-gray-200 transition-all duration-300 shadow-[0_0_40px_rgba(255,255,255,0.2)] relative z-20"
           >
             <span>View Work</span>
             <ArrowDown className="w-5 h-5" />
@@ -87,15 +82,15 @@ export default function Hero() {
           <motion.a
             href="#contact"
             onClick={(e) => handleScroll(e, "#contact")}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className="w-full sm:w-auto flex items-center justify-center gap-3 px-12 py-5 rounded-full bg-black/5 text-text-primary font-semibold text-[1.05rem] hover:bg-black/10 transition-all duration-300"
+            whileHover={{ scale: 1.05, rotate: 1 }}
+            whileTap={{ scale: 0.95 }}
+            className="w-full sm:w-auto flex items-center justify-center gap-3 px-12 py-5 rounded-full bg-black/40 text-white font-bold text-[1.05rem] hover:bg-black/60 transition-all duration-300 backdrop-blur-md border border-white/10 relative z-20"
           >
             <Mail className="w-5 h-5" />
             <span>Contact</span>
           </motion.a>
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 }

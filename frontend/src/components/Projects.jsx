@@ -1,6 +1,7 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll } from "framer-motion";
 import { useRef } from "react";
 import projectsData from "../data/projectsData";
+import AnimatedHeading from "./AnimatedHeading";
 
 function ProjectCard({ project, index }) {
   const ref = useRef(null);
@@ -9,65 +10,31 @@ function ProjectCard({ project, index }) {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 60 }}
+      initial={{ opacity: 0, y: 50 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 1.2,
-        delay: index * 0.2,
-        ease: [0.16, 1, 0.3, 1],
-      }}
-      className="w-full"
+      transition={{ duration: 0.8, delay: (index % 2) * 0.2, ease: "easeOut" }}
+      className="premium-card flex flex-col h-full bg-black/40 backdrop-blur-xl border border-white/10 shadow-[0_15px_40px_rgba(0,0,0,0.5)] overflow-hidden group cursor-pointer"
     >
-      <div className="premium-card w-full flex flex-col group cursor-pointer relative bg-white">
-        
-        {/* Project Image - Massive and Edge-to-Edge */}
-        <div className="w-full h-[300px] sm:h-[400px] lg:h-[500px] bg-[#f5f5f7] relative overflow-hidden">
-          <img 
-            src={`https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop`} 
-            alt={project.title} 
-            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-          />
-        </div>
-
-        {/* Content Section - Massive Padding */}
-        <div className="p-10 sm:p-16 lg:p-20 flex flex-col lg:flex-row gap-12 lg:gap-20">
-          
-          <div className="lg:w-1/2">
-            <p className="text-[0.9rem] font-bold tracking-[0.2em] uppercase text-text-muted mb-4">
-              {project.tagline}
-            </p>
-            <h3 className="font-display text-[2.5rem] sm:text-[3.5rem] font-black tracking-tight text-text-primary leading-none mb-6">
-              {project.title}
-            </h3>
-            <div className="flex flex-wrap gap-3 mt-8">
-              {project.techStack.map((tech) => (
-                <span
-                  key={tech}
-                  className="px-5 py-2 rounded-full text-[0.85rem] font-bold tracking-wide border border-border-warm text-text-primary bg-bg-primary"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="lg:w-1/2 flex flex-col justify-center">
-            <p className="text-text-primary text-[1.2rem] leading-[1.7] mb-10 font-medium">
-              {project.description}
-            </p>
-
-            <ul className="space-y-5">
-              {project.highlights.map((h, i) => (
-                <li
-                  key={i}
-                  className="flex items-start gap-4 text-[1.05rem] text-text-secondary leading-relaxed"
-                >
-                  <div className="mt-[12px] w-[6px] h-[6px] rounded-full bg-accent-warm flex-shrink-0" />
-                  <span className="font-medium">{h}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+      <div className="w-full h-48 md:h-64 relative overflow-hidden bg-[#111]">
+        <img 
+          src={project.image} 
+          alt={project.title} 
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+      </div>
+      <div className="p-6 md:p-8 flex flex-col flex-grow">
+        <h3 className="text-2xl md:text-3xl font-black text-white mb-2">{project.title}</h3>
+        <p className="text-accent-warm font-bold text-[0.9rem] mb-4">{project.tagline}</p>
+        <p className="text-gray-300 text-[0.95rem] leading-relaxed mb-6 flex-grow">
+          {project.description}
+        </p>
+        <div className="flex flex-wrap gap-2 mt-auto">
+          {project.techStack.map((tech) => (
+            <span key={tech} className="px-3 py-1 text-[0.75rem] font-bold tracking-wider uppercase border border-white/20 rounded-full text-gray-300">
+              {tech}
+            </span>
+          ))}
         </div>
       </div>
     </motion.div>
@@ -76,29 +43,20 @@ function ProjectCard({ project, index }) {
 
 export default function Projects() {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-150px" });
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
 
   return (
-    <section id="projects" className="relative py-32 sm:py-40 lg:py-48 bg-bg-warm">
-      <div className="section-container relative z-10 flex flex-col items-center">
-        {/* Section Header */}
-        <motion.div
-          ref={sectionRef}
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-20 lg:mb-32 w-full max-w-3xl"
-        >
-          <h2 className="font-display text-5xl sm:text-6xl lg:text-[5.5rem] font-black tracking-tighter leading-none mb-8">
-            Selected Work.
-          </h2>
-          <p className="text-text-secondary text-[1.2rem] font-medium max-w-2xl mx-auto">
-            Thoughtfully engineered systems built with modern tools and clean architecture.
-          </p>
-        </motion.div>
+    <section id="projects" ref={sectionRef} className="py-24 relative z-20">
+      <div className="section-container max-w-6xl mx-auto px-6">
+        <div className="mb-20 text-center">
+          <AnimatedHeading 
+            text="Selected Work."
+            scrollYProgress={scrollYProgress}
+            className="font-display text-5xl sm:text-6xl font-black tracking-tighter text-white drop-shadow-md"
+          />
+        </div>
 
-        {/* Project Cards - Single Column, Massive Impact */}
-        <div className="flex flex-col gap-16 lg:gap-24 w-full max-w-6xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
           {projectsData.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
           ))}
