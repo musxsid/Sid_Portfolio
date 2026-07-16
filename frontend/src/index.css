@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN SYSTEM — Premium "Apple-like" Minimalist
+   ═══════════════════════════════════════════════════════════════ */
+
+@theme {
+  --font-display: "Outfit", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  /* Core palette - warm but ultra clean */
+  --color-bg-primary: #fbfbfd;
+  --color-bg-secondary: #ffffff;
+  --color-bg-warm: #f5f5f7;
+  --color-bg-card: #ffffff;
+
+  /* Warm accent gradients - made very subtle */
+  --color-warm-peach: #fce4d6;
+  --color-warm-coral: #fad0c4;
+  --color-warm-gold: #fcf4e4;
+  --color-warm-blush: #fdf0f3;
+  --color-warm-lavender: #f3eef9;
+  --color-warm-sage: #e8f0e8;
+
+  /* Brand accent */
+  --color-accent: #000000;
+  --color-accent-soft: #1d1d1f;
+  --color-accent-warm: #e55a28;
+  --color-accent-blue: #0066cc;
+
+  /* Text */
+  --color-text-primary: #1d1d1f;
+  --color-text-secondary: #86868b;
+  --color-text-muted: #a1a1a6;
+  --color-text-light: #d2d2d7;
+
+  /* Borders */
+  --color-border-light: #d2d2d7;
+  --color-border-warm: #e5e5ea;
+}
+
+/* ═══════ BASE STYLES ═══════ */
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+body {
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  background-color: var(--color-bg-primary);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background-color: rgba(229, 90, 40, 0.2);
+  color: var(--color-text-primary);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 999px;
+  border: 2px solid var(--color-bg-primary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+/* ═══════ LAYOUT ═══════ */
+.section-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .section-container {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-container {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+/* Background Blurs */
+.gradient-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ═══════ PREMIUM CARD ═══════ */
+.premium-card {
+  background: var(--color-bg-card);
+  border-radius: 2rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.02);
+}
+
+.premium-card:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px) scale(1.005);
+}
+
+/* ═══════ FLOATING LABEL FORM ═══════ */
+.floating-label-group {
+  position: relative;
+}
+
+.floating-label-group input,
+.floating-label-group textarea {
+  width: 100%;
+  padding: 1.75rem 1.25rem 0.75rem;
+  background: var(--color-bg-warm);
+  border: 1px solid transparent;
+  border-radius: 1.25rem;
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.floating-label-group input:hover,
+.floating-label-group textarea:hover {
+  background: #ebebeb;
+}
+
+.floating-label-group input:focus,
+.floating-label-group textarea:focus {
+  background: var(--color-bg-secondary);
+  border-color: var(--color-accent-warm);
+  box-shadow: 0 0 0 4px rgba(229, 90, 40, 0.1);
+}
+
+.floating-label-group label {
+  position: absolute;
+  left: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  font-size: 1.05rem;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.floating-label-group textarea ~ label {
+  top: 1.75rem;
+  transform: translateY(0);
+}
+
+.floating-label-group input:focus ~ label,
+.floating-label-group input:not(:placeholder-shown) ~ label {
+  top: 0.6rem;
+  transform: translateY(0);
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+
+.floating-label-group textarea:focus ~ label,
+.floating-label-group textarea:not(:placeholder-shown) ~ label {
+  top: 0.6rem;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
