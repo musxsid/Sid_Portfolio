@@ -23,7 +23,49 @@ export default function Navbar() {
     e.preventDefault();
     setIsMobileMenuOpen(false);
     const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    if (!el) return;
+
+    // Calculate exact absolute top position of the element
+    const rect = el.getBoundingClientRect();
+    const absoluteTop = window.scrollY + rect.top;
+    let targetY = absoluteTop;
+
+    // Smart Offset: If the section is a massive sticky container (> 200vh),
+    // scrolling to the very top yields a blank screen (scrollYProgress = 0).
+    // We mathematically offset the target by 15% of its scrollable height.
+    // This perfectly lands you EXACTLY where the heading is fully animated in
+    // and sitting in the center of the screen, ready for the content to start.
+    if (el.offsetHeight > window.innerHeight * 2) {
+      const scrollableDistance = el.offsetHeight - window.innerHeight;
+      targetY += scrollableDistance * 0.15;
+    }
+
+    // Custom Smooth Scrolling Engine
+    // Replaces the jarring, hyper-fast native browser scroll with a luxurious, 
+    // highly-damped custom animation curve that takes exactly 1.2 seconds.
+    const startY = window.scrollY;
+    const distance = targetY - startY;
+    const duration = 2000; // 2.0 seconds for an even slower, cinematic scroll
+    let startTime = null;
+
+    // easeInOutQuart - super smooth acceleration and deceleration
+    const easeInOutQuart = (t) => {
+      return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
+    };
+
+    const animation = (currentTime) => {
+      if (startTime === null) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const progress = Math.min(timeElapsed / duration, 1);
+      
+      window.scrollTo(0, startY + distance * easeInOutQuart(progress));
+      
+      if (timeElapsed < duration) {
+        requestAnimationFrame(animation);
+      }
+    };
+
+    requestAnimationFrame(animation);
   };
 
   return (
