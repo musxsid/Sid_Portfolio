@@ -34,7 +34,7 @@ export default function AnimatedHeading({ text, scrollYProgress, className }) {
       {hasPeriod && (
         <motion.span 
           style={{ 
-            color: useTransform(scrollYProgress, [0.4, 0.55], ["#e55a28", "#8b5cf6"]) 
+            color: useTransform(scrollYProgress, [0.4, 0.55], ["#e55a28", "#ffffff"]) 
           }}
         >
           .

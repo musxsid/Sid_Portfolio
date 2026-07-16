@@ -26,7 +26,7 @@ export default function App() {
   return (
     <motion.div 
       style={{ backgroundColor }} 
-      className="relative min-h-screen text-white overflow-x-hidden transition-colors duration-500"
+      className="relative min-h-screen text-white transition-colors duration-500"
     >
       <Navbar />
       <main className="perspective-container">
