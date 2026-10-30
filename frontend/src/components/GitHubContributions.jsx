@@ -1,7 +1,22 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flame, Trophy, GitPullRequest } from "lucide-react";
+import { 
+  Flame, 
+  Trophy, 
+  GitPullRequest, 
+  ExternalLink,
+  Code2,
+  Activity
+} from "lucide-react";
 import { portfolioApi } from "../services/api";
+
+function GitHubIcon({ className = "w-4 h-4" }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+    </svg>
+  );
+}
 
 export default function GitHubContributions() {
   const [data, setData] = useState(null);
@@ -54,23 +69,25 @@ export default function GitHubContributions() {
 
     setTooltipPos({
       x: rect.left - containerRect.left + rect.width / 2,
-      y: rect.top - containerRect.top - 8,
+      y: rect.top - containerRect.top - 10,
     });
     setHoveredDay(day);
   };
 
+  // APP THEME COLOR MAPPING: White baseline with Orange/Coral filled progress marks
   const getLevelColor = (level) => {
     switch (level) {
       case 1:
-        return "bg-[#0e4429]";
+        return "bg-accent-warm/40 border border-accent-warm/50 hover:bg-accent-warm/60";
       case 2:
-        return "bg-[#006d32]";
+        return "bg-accent-warm/65 border border-accent-warm/75 hover:bg-accent-warm/80";
       case 3:
-        return "bg-[#26a641]";
+        return "bg-accent-warm/90 border border-accent-warm shadow-[0_0_8px_rgba(255,122,69,0.5)] hover:bg-accent-warm";
       case 4:
-        return "bg-[#39d353] shadow-[0_0_8px_rgba(57,211,83,0.5)]";
+        return "bg-[#ff7a45] border border-white/70 shadow-[0_0_12px_rgba(255,122,69,0.9)] hover:bg-orange-400";
       default:
-        return "bg-[#161b22]";
+        // Empty days: crisp white translucent baseline matching app theme
+        return "bg-white/[0.12] border border-white/10 hover:bg-white/30";
     }
   };
 
@@ -79,76 +96,143 @@ export default function GitHubContributions() {
   ];
 
   return (
-    <section className="relative py-20 z-20 bg-[#070b14]/90 backdrop-blur-md">
-      <div className="section-container max-w-6xl mx-auto px-6">
+    <section 
+      id="github" 
+      aria-label="GitHub Engineering Activity"
+      className="relative min-h-screen py-24 md:py-32 w-full z-10 bg-[#070912] overflow-hidden flex flex-col justify-center"
+    >
+      {/* Warm Ambient Atmosphere (Full Screen Immersion) */}
+      <div className="absolute top-1/4 left-1/4 w-[60vw] h-[450px] bg-accent-warm/[0.045] blur-[180px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-[50vw] h-[400px] bg-amber-500/[0.035] blur-[180px] rounded-full pointer-events-none" />
+
+      <div className="section-container max-w-7xl mx-auto px-4 sm:px-6 relative z-10 w-full">
         
-        {/* Widget Wrapper */}
-        <div 
-          ref={containerRef}
-          className="relative rounded-2xl bg-[#0d1117] border border-[#30363d] p-6 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
-        >
-          {/* Top Bar matching image */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 gap-4">
-            <div className="flex items-center gap-3">
-              <h3 className="text-xl sm:text-2xl font-semibold text-white tracking-tight">
-                {data?.totalContributions || 148} contributions in the last year
-              </h3>
+        {/* ========================================================= */}
+        {/* UNBOXED SECTION HEADER & LIVE PROFILE STRIP               */}
+        {/* ========================================================= */}
+        <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12 pb-8 border-b border-white/10">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="w-2 h-2 rounded-full bg-accent-warm animate-pulse shadow-[0_0_8px_#ff7a45]" />
+              <span className="text-xs font-mono font-bold tracking-widest text-accent-warm uppercase">
+                Continuous Delivery & Open Source
+              </span>
             </div>
 
+            <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white">
+              Engineering <span className="text-accent-warm">Activity.</span>
+            </h2>
+
+            <p className="text-gray-400 text-sm sm:text-base max-w-2xl mt-2 font-light">
+              Real-time synchronization of git commits, code reviews, and distributed architecture deployments directly from GitHub.
+            </p>
+          </div>
+
+          {/* Unboxed GitHub Profile Badge & Quick Link */}
+          <div className="flex items-center gap-4 flex-wrap">
             <div className="flex items-center gap-3">
-              <a
-                href="https://github.com/musxsid"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors py-1 px-3 rounded-lg bg-[#21262d] border border-[#30363d]"
-              >
-                <span>Contribution settings</span>
-                <span className="text-[0.65rem]">▾</span>
-              </a>
+              <img
+                src="https://avatars.githubusercontent.com/u/180562649?v=4"
+                alt="Siddharth GitHub Profile"
+                className="w-11 h-11 rounded-full border-2 border-accent-warm/60 shadow-[0_0_15px_rgba(255,122,69,0.3)] object-cover"
+              />
+              <div>
+                <p className="text-sm font-bold text-white flex items-center gap-1.5">
+                  <span>musxsid</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#10b981]" />
+                </p>
+                <p className="text-xs text-gray-400 font-mono">
+                  Siddharth • Active Contributor
+                </p>
+              </div>
+            </div>
+
+            <a
+              href="https://github.com/musxsid"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black font-bold text-xs hover:bg-gray-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.25)] hover:scale-105 active:scale-95 cursor-pointer ml-auto sm:ml-0"
+            >
+              <GitHubIcon className="w-4 h-4" />
+              <span>github.com/musxsid</span>
+              <ExternalLink className="w-3.5 h-3.5 ml-0.5" />
+            </a>
+          </div>
+        </header>
+
+        {/* ========================================================= */}
+        {/* THE UNBOXED CONTRIBUTION MATRIX: White & Orange Theme     */}
+        {/* ========================================================= */}
+        <div ref={containerRef} className="relative py-8 select-none">
+          
+          {/* Top Status Bar: Contributions Count & Live Streak Tracker */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 gap-3">
+            <div className="flex items-center gap-3">
+              <span className="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                {data?.totalContributions || 148} Contributions
+              </span>
+              <span className="text-xs font-mono px-3 py-1 rounded-full bg-accent-warm/15 text-accent-warm border border-accent-warm/30 font-semibold">
+                Past 52 Weeks
+              </span>
+            </div>
+
+            <div className="flex items-center gap-4 text-xs font-mono text-gray-400">
+              <span className="flex items-center gap-1.5">
+                <Flame className="w-4 h-4 text-accent-warm" />
+                <strong className="text-white">{data?.currentStreak || 5}-Day</strong> Current Streak
+              </span>
+              <span className="text-white/20">•</span>
+              <span className="flex items-center gap-1.5">
+                <Trophy className="w-4 h-4 text-amber-400" />
+                <strong className="text-white">{data?.longestStreak || 14}-Day</strong> Longest Streak
+              </span>
             </div>
           </div>
 
-          {/* Calendar Box matching image */}
-          <div className="rounded-xl border border-[#30363d] p-5 bg-[#090d16] relative overflow-x-auto select-none">
-            
-            {/* Month labels along the top */}
-            <div className="flex justify-between pl-8 pr-2 pb-2 text-[0.75rem] font-medium text-gray-400 min-w-[720px]">
-              {monthLabels.map((m, idx) => (
-                <span key={idx}>{m}</span>
-              ))}
-            </div>
-
-            {/* Grid Container */}
-            <div className="flex gap-1.5 min-w-[720px]">
+          {/* Calendar Grid Canvas (Scrollable on small screens) */}
+          <div className="relative overflow-x-auto pb-4 scrollbar-none">
+            <div className="min-w-[760px] max-w-full">
               
-              {/* Day Labels Mon, Wed, Fri */}
-              <div className="flex flex-col justify-between py-1 text-[0.7rem] font-medium text-gray-400 w-7 shrink-0">
-                <span className="h-3 leading-3">Mon</span>
-                <span className="h-3 leading-3">Wed</span>
-                <span className="h-3 leading-3">Fri</span>
-              </div>
-
-              {/* 52 Columns */}
-              <div className="flex gap-[3.5px] flex-grow">
-                {weeks.map((week, wIdx) => (
-                  <div key={wIdx} className="flex flex-col gap-[3.5px]">
-                    {week.map((day, dIdx) => (
-                      <div
-                        key={dIdx}
-                        onMouseEnter={(e) => handleMouseEnter(day, e)}
-                        onMouseLeave={() => setHoveredDay(null)}
-                        className={`w-3 h-3 rounded-[2.5px] cursor-pointer transition-transform duration-150 hover:scale-125 hover:z-20 ${getLevelColor(
-                          day.level
-                        )}`}
-                      />
-                    ))}
-                  </div>
+              {/* Month Labels Along the Top */}
+              <div className="flex justify-between pl-8 pr-2 pb-3 text-xs font-mono font-medium text-gray-400">
+                {monthLabels.map((m, idx) => (
+                  <span key={idx}>{m}</span>
                 ))}
               </div>
 
+              {/* Grid: Day Labels + 52 Weeks Columns */}
+              <div className="flex gap-2 items-center">
+                
+                {/* Day Labels Mon, Wed, Fri */}
+                <div className="flex flex-col justify-between py-1 text-[0.7rem] font-mono font-medium text-gray-400 w-7 shrink-0 h-[106px]">
+                  <span>Mon</span>
+                  <span>Wed</span>
+                  <span>Fri</span>
+                </div>
+
+                {/* 52 Columns of White & Orange Squares */}
+                <div className="flex gap-[4px] flex-grow justify-between">
+                  {weeks.map((week, wIdx) => (
+                    <div key={wIdx} className="flex flex-col gap-[4px]">
+                      {week.map((day, dIdx) => (
+                        <div
+                          key={dIdx}
+                          onMouseEnter={(e) => handleMouseEnter(day, e)}
+                          onMouseLeave={() => setHoveredDay(null)}
+                          className={`w-3.5 h-3.5 rounded-[3px] cursor-pointer transition-transform duration-150 hover:scale-135 hover:z-20 ${getLevelColor(
+                            day.level
+                          )}`}
+                        />
+                      ))}
+                    </div>
+                  ))}
+                </div>
+
+              </div>
+
             </div>
 
-            {/* Floating Tooltip matching image style */}
+            {/* Interactive Floating Tooltip */}
             <AnimatePresence>
               {hoveredDay && (
                 <motion.div
@@ -161,88 +245,153 @@ export default function GitHubContributions() {
                     top: `${tooltipPos.y}px`,
                     transform: "translate(-50%, -100%)",
                   }}
-                  className="absolute pointer-events-none z-50 px-3 py-1.5 rounded-lg bg-[#24292f] border border-[#444c56] text-white text-xs font-medium shadow-xl whitespace-nowrap"
+                  className="absolute pointer-events-none z-50 px-3.5 py-2 rounded-xl bg-black/90 border border-white/20 text-white text-xs font-mono shadow-[0_10px_25px_rgba(0,0,0,0.8)] backdrop-blur-xl whitespace-nowrap"
                 >
                   {hoveredDay.count === 0 ? (
                     <span>No contributions on {formatDate(hoveredDay.date)}.</span>
                   ) : (
                     <span>
-                      <strong className="text-emerald-400">{hoveredDay.count} contribution{hoveredDay.count > 1 ? "s" : ""}</strong> on {formatDate(hoveredDay.date)}.
+                      <strong className="text-accent-warm font-bold">{hoveredDay.count} contribution{hoveredDay.count > 1 ? "s" : ""}</strong> on {formatDate(hoveredDay.date)}.
                     </span>
                   )}
                   {/* Tooltip downward caret */}
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-solid border-t-[#24292f] border-t-4 border-x-transparent border-x-4 border-b-0" />
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-solid border-t-black/90 border-t-4 border-x-transparent border-x-4 border-b-0" />
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Bottom bar of calendar: Learn how we count + Less/More Legend */}
-            <div className="flex flex-col sm:flex-row items-center justify-between pt-4 mt-2 border-t border-[#21262d] text-xs text-gray-400 gap-3">
-              <a
-                href="https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/managing-contribution-settings-on-your-profile/why-are-my-contributions-not-showing-up-on-my-profile"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-blue-400 transition-colors flex items-center gap-1"
-              >
-                <span>Learn how we count contributions</span>
-              </a>
-
-              <div className="flex items-center gap-1.5">
-                <span>Less</span>
-                <span className="w-2.5 h-2.5 rounded-[2px] bg-[#161b22]" />
-                <span className="w-2.5 h-2.5 rounded-[2px] bg-[#0e4429]" />
-                <span className="w-2.5 h-2.5 rounded-[2px] bg-[#006d32]" />
-                <span className="w-2.5 h-2.5 rounded-[2px] bg-[#26a641]" />
-                <span className="w-2.5 h-2.5 rounded-[2px] bg-[#39d353]" />
-                <span>More</span>
-              </div>
-            </div>
-
           </div>
 
-          {/* Contribution Activity Subtitle & Quick Stats */}
-          <div className="pt-8">
-            <h4 className="text-base font-semibold text-white mb-4">
-              Contribution activity
-            </h4>
+          {/* Calendar Footer: Learn Link + White & Orange Legend */}
+          <div className="flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-white/10 text-xs text-gray-400 gap-3 font-mono">
+            <span className="flex items-center gap-1.5 text-gray-400">
+              <Activity className="w-3.5 h-3.5 text-accent-warm" />
+              <span>Continuous git commit telemetry • Updated hourly</span>
+            </span>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="p-4 rounded-xl bg-[#161b22]/60 border border-[#30363d] flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-emerald-500/10 text-emerald-400">
-                  <Flame className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-400">Current Streak</p>
-                  <p className="text-lg font-bold text-white">{data?.currentStreak || 5} days</p>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-xl bg-[#161b22]/60 border border-[#30363d] flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-accent-warm/10 text-accent-warm">
-                  <Trophy className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-400">Longest Streak</p>
-                  <p className="text-lg font-bold text-white">{data?.longestStreak || 14} days</p>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-xl bg-[#161b22]/60 border border-[#30363d] flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-blue-500/10 text-blue-400">
-                  <GitPullRequest className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-400">Total Repositories</p>
-                  <p className="text-lg font-bold text-white">12+ active</p>
-                </div>
-              </div>
+            {/* WHITE & ORANGE APP THEME LEGEND */}
+            <div className="flex items-center gap-2">
+              <span className="text-[0.7rem] text-gray-400 uppercase">Less</span>
+              {/* Level 0: White */}
+              <span className="w-3.5 h-3.5 rounded-[3px] bg-white/[0.12] border border-white/10" title="0 contributions (White)" />
+              {/* Level 1: Orange 40% */}
+              <span className="w-3.5 h-3.5 rounded-[3px] bg-accent-warm/40 border border-accent-warm/50" title="Low activity" />
+              {/* Level 2: Orange 65% */}
+              <span className="w-3.5 h-3.5 rounded-[3px] bg-accent-warm/65 border border-accent-warm/75" title="Moderate activity" />
+              {/* Level 3: Orange 90% */}
+              <span className="w-3.5 h-3.5 rounded-[3px] bg-accent-warm/90 border border-accent-warm" title="High activity" />
+              {/* Level 4: Pure Warm Coral Solid */}
+              <span className="w-3.5 h-3.5 rounded-[3px] bg-[#ff7a45] border border-white/70 shadow-[0_0_8px_#ff7a45]" title="Peak velocity" />
+              <span className="text-[0.7rem] text-gray-400 uppercase">More</span>
             </div>
           </div>
 
         </div>
 
+        {/* ========================================================= */}
+        {/* RECRUITER ARCHITECTURAL DOSSIER (OUT OF SQUARE DIVS!)     */}
+        {/* Spacious, unboxed layout on a clean architectural grid    */}
+        {/* ========================================================= */}
+        <section aria-label="Recruiter Key Engineering Metrics" className="pt-12 mt-6 border-t border-white/10">
+          <div className="mb-8">
+            <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+              <span>Recruiter Overview</span>
+              <span className="text-xs font-mono font-normal px-2.5 py-0.5 rounded-full bg-white/10 text-gray-300 border border-white/15">
+                Technical Highlights
+              </span>
+            </h3>
+            <p className="text-gray-400 text-xs sm:text-sm mt-1 font-light">
+              Verified metrics summarizing software craftsmanship, architectural range, and production reliability.
+            </p>
+          </div>
+
+          {/* 4 Unboxed Metric Pillars with Hairline Separators */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 pt-4">
+            
+            {/* Pillar 1: Repositories & Architecture */}
+            <div className="flex flex-col relative group">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2.5 rounded-xl bg-accent-warm/15 text-accent-warm border border-accent-warm/30">
+                  <GitPullRequest className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-display text-2xl sm:text-3xl font-black text-white group-hover:text-accent-warm transition-colors">
+                    12+
+                  </p>
+                  <p className="text-xs font-mono text-gray-400 uppercase tracking-wider">
+                    Repositories Built
+                  </p>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400 mt-2 leading-relaxed font-light">
+                Distributed SaaS, local LLM orchestration pipelines, audio streaming engines, and JWT microservices.
+              </p>
+            </div>
+
+            {/* Pillar 2: Annual Commit Output */}
+            <div className="flex flex-col relative group">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2.5 rounded-xl bg-amber-400/15 text-amber-300 border border-amber-400/30">
+                  <Flame className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-display text-2xl sm:text-3xl font-black text-white group-hover:text-amber-300 transition-colors">
+                    148+
+                  </p>
+                  <p className="text-xs font-mono text-gray-400 uppercase tracking-wider">
+                    Annual Commits
+                  </p>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400 mt-2 leading-relaxed font-light">
+                Continuous delivery cadence with clean atomic commits, semantic versioning, and rigorous documentation.
+              </p>
+            </div>
+
+            {/* Pillar 3: Engineering Consistency */}
+            <div className="flex flex-col relative group">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2.5 rounded-xl bg-emerald-400/15 text-emerald-300 border border-emerald-400/30">
+                  <Trophy className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-display text-2xl sm:text-3xl font-black text-white group-hover:text-emerald-300 transition-colors">
+                    14 Days
+                  </p>
+                  <p className="text-xs font-mono text-gray-400 uppercase tracking-wider">
+                    Longest Streak
+                  </p>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400 mt-2 leading-relaxed font-light">
+                Demonstrated stamina in iterative software sprints, feature delivery, bug isolation, and code refactoring.
+              </p>
+            </div>
+
+            {/* Pillar 4: Polyglot Technology Stack */}
+            <div className="flex flex-col relative group">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2.5 rounded-xl bg-blue-400/15 text-blue-300 border border-blue-400/30">
+                  <Code2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-display text-2xl sm:text-3xl font-black text-white group-hover:text-blue-300 transition-colors">
+                    5 Stacks
+                  </p>
+                  <p className="text-xs font-mono text-gray-400 uppercase tracking-wider">
+                    Polyglot Runtimes
+                  </p>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400 mt-2 leading-relaxed font-light">
+                Java (Spring Boot), JavaScript/TypeScript (React 19), Go, Python, and C# (.NET Core).
+              </p>
+            </div>
+
+          </div>
+        </section>
+
       </div>
     </section>
   );
 }
-
