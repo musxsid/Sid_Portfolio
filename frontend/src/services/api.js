@@ -27,19 +27,13 @@ const REPO_METADATA_ENRICHMENTS = {
     images: []
   },
   "simplyaudio": {
-    title: "SimplyNotes / SimplyAudio",
-    tagline: "Collaborative Workspace with Hierarchical JPA Folios & JWT Security",
-    description: "Designed a relational document store with nested workspaces, folders, and markdown folios using JPA/Hibernate. Features fine-grained JWT role authentication, UUID-partitioned asset storage, and instant read-only public sharing links.",
+    title: "simplyAudio",
+    tagline: "Event-Driven Audio Microservices with RabbitMQ & Spring Boot",
+    description: "Distributed, enterprise-grade music streaming and cataloging platform built with Spring Boot, React, and an asynchronous RabbitMQ event-driven architecture. Isolates media streaming, real-time analytics, and Keycloak SSO into independent Docker containers.",
     language: "Java",
-    techStack: ["Spring Boot 3", "React 19", "MySQL", "Spring Security", "JWT", "Tailwind CSS", "Framer Motion"],
+    techStack: ["Spring Boot", "RabbitMQ", "Keycloak SSO", "Docker", "React 19", "MinIO S3", "Microservices"],
     featured: true,
-    images: [
-      "/projects/simplynotes/frontend - landing page.jpg",
-      "/projects/simplynotes/frontend - login page .jpg",
-      "/projects/simplynotes/user home page .jpg",
-      "/projects/simplynotes/notes formatting options .jpg",
-      "/projects/simplynotes/readonly shared note.jpg"
-    ]
+    images: []
   },
   "supervisor-feedback-analyzer": {
     title: "Supervisor Feedback Analyzer",
@@ -221,7 +215,7 @@ export function enrichAndSortLiveProjects(rawRepos) {
   return mapped;
 }
 
-// Helper to generate a realistic 52-week contribution dataset matching the screenshot (148 contributions)
+// Helper to generate a realistic 52-week contribution dataset matching the screenshot (151 contributions)
 export function generateContributionData() {
   const days = [];
   const today = new Date();
@@ -261,12 +255,12 @@ export function generateContributionData() {
     let level = 0;
     const prob = monthsMap[m] || 0.08;
 
-    if (pseudoRand() < prob && total < 148) {
+    if (pseudoRand() < prob && total < 151) {
       let c = Math.floor(pseudoRand() * 3) + 1;
       if (m === 4 && (dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5)) {
         c = Math.floor(pseudoRand() * 5) + 2;
       }
-      count = Math.min(c, 148 - total);
+      count = Math.min(c, 151 - total);
       total += count;
 
       if (count === 0) level = 0;
@@ -283,9 +277,9 @@ export function generateContributionData() {
     });
   }
 
-  // Adjust to make exactly 148 contributions
-  if (total < 148) {
-    for (let i = days.length - 80; i < days.length && total < 148; i++) {
+  // Adjust to make exactly 151 contributions
+  if (total < 151) {
+    for (let i = days.length - 80; i < days.length && total < 151; i++) {
       if (days[i].count === 0) {
         days[i].count = 1;
         days[i].level = 1;
@@ -296,7 +290,7 @@ export function generateContributionData() {
 
   return {
     username: "musxsid",
-    totalContributions: 148,
+    totalContributions: 151,
     currentStreak: 5,
     longestStreak: 14,
     days,
@@ -304,12 +298,30 @@ export function generateContributionData() {
 }
 
 export const portfolioApi = {
-  // Fetch GitHub Projects (Direct real-time GitHub API synchronization on every app reload)
+  // Fetch GitHub Projects (Backend source-of-truth with real-time GitHub sync & dynamic image discovery)
   getGitHubProjects: async () => {
-    // 1. Direct Real-Time Fetch from GitHub Public API (Instant updates on additions/deletions)
+    // 1. Fetch from Local Backend Microservice API (Primary source for database records & backend disk images)
     try {
-      const ghRes = await fetch("https://api.github.com/users/musxsid/repos?sort=pushed&per_page=100", {
-        headers: { Accept: "application/vnd.github.v3+json" }
+      const response = await apiClient.get("/api/public/github/projects", {
+        params: { _t: Date.now() },
+        timeout: 4000
+      });
+      if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+        return response.data;
+      }
+    } catch (err) {
+      console.warn("Backend API not reachable. Checking direct GitHub API...", err.message);
+    }
+
+    // 2. Direct Real-Time Fetch from GitHub Public API with cache-busting
+    try {
+      const ghRes = await fetch(`https://api.github.com/users/musxsid/repos?sort=pushed&per_page=100&_t=${Date.now()}`, {
+        cache: "no-store",
+        headers: {
+          Accept: "application/vnd.github.v3+json",
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+          Pragma: "no-cache"
+        }
       });
       if (ghRes.ok) {
         const rawRepos = await ghRes.json();
@@ -318,17 +330,7 @@ export const portfolioApi = {
         }
       }
     } catch (err) {
-      console.warn("Direct GitHub API fetch skipped or rate-limited. Falling back to backend/local cache.", err.message);
-    }
-
-    // 2. Fetch from Local Backend Microservice API
-    try {
-      const response = await apiClient.get("/api/public/github/projects");
-      if (response.data && response.data.length > 0) {
-        return response.data;
-      }
-    } catch (err) {
-      console.warn("Backend API not reachable. Using synchronized fallback repositories.", err.message);
+      console.warn("Direct GitHub API fetch skipped or rate-limited. Falling back to local cache.", err.message);
     }
 
     // 3. Fallback to Bundled Synchronized Repositories
@@ -374,6 +376,128 @@ export const portfolioApi = {
       localStorage.setItem("sid_newsletter_subscribers", JSON.stringify(current));
       return { success: true, message: "Subscription confirmed! Welcome to the loop." };
     }
+  },
+
+  // Groq AI Chatbot Assistant (Grounded in Siddharth's authentic data with zero hallucinations)
+  sendChatMessage: async (message, history = []) => {
+    // 1. Try backend API first (/api/public/chat)
+    try {
+      const response = await apiClient.post("/api/public/chat", {
+        message,
+        history,
+      });
+      if (response.data && response.data.response) {
+        return response.data;
+      }
+    } catch (err) {
+      console.warn("Backend chat API unreachable. Falling back to direct Groq client...", err.message);
+    }
+
+    // 2. Direct client fallback with Groq API (openai/gpt-oss-120b)
+    try {
+      const systemPrompt = `You are AURA, the official AI assistant for Siddharth Shakyawal (GitHub: @musxsid).
+Your mission is to assist recruiters, engineers, founders, and visitors with 100% ACCURATE, FACTUAL, and UNHALLUCINATED information strictly grounded in Siddharth's portfolio application and official resume.
+
+### CRITICAL GROUNDING & TOKEN PRESERVATION POLICY:
+1. NEVER HALLUCINATE, invent, or extrapolate skills, repositories, or experiences not explicitly documented below.
+2. If asked a question that is off-topic or outside Siddharth's portfolio/resume, decline in exactly one sentence: 'I am AURA, Siddharth's AI assistant, and I only provide verified information regarding Siddharth's projects, technical architecture, and background.'
+3. CRITICAL TRUTH: There is NO project named 'SimplyNotes' or 'SimplyNotes / SimplyAudio'. The authentic repository is strictly 'simplyAudio', an event-driven audio microservices platform with RabbitMQ and Spring Boot.
+4. Always respond in well-structured, clean Markdown with bullet points, bold headers, and NO Markdown tables (tables break on mobile screens).
+5. CLICKABLE GITHUB REPOSITORIES: Whenever you mention any project or repository, ALWAYS format it as [Project Name](https://github.com/musxsid/<repo-name>). The UI will automatically render it as a bold title with a clickable [GitHub] button redirecting to that repository. Never print raw URLs in text.
+6. When asked for his resume, provide the direct download link: [Download Siddharth's Resume (PDF)](/resume/Siddharth_Shakyawal_Resume_october2026.pdf).
+7. When asked about contact or hiring, provide: Location: Kota, Rajasthan | Phone: +91 9256265129 | Email: siddharthshakya2004@gmail.com | LinkedIn: [linkedin.com/in/siddharth-shakyawal-925889356](https://linkedin.com/in/siddharth-shakyawal-925889356) and GitHub: [github.com/musxsid](https://github.com/musxsid).
+
+### VERIFIED BIOGRAPHICAL PROFILE & SKILLS:
+- Full Name: Siddharth Shakyawal
+- Location: Kota, Rajasthan 324010 | Phone: +91 9256265129 | Email: siddharthshakya2004@gmail.com
+- Education: Bachelor of Computer Applications (BCA) (2024–2027), Christ University, Lavasa, Pune
+- Summary: Software Engineer specializing in Backend Systems and Applied AI/ML, proficient in Python, Java (Spring Boot), and React. Experienced in architecting hallucination-free Structured RAG pipelines, deterministic data retrieval layers, and LLM orchestration workflows.
+- Categorized Technical Skills:
+  * Languages: Java, Python, TypeScript, JavaScript, C#, Kotlin, C++, SQL
+  * Backend: Spring Boot (3/4), Spring AI, Spring Security (OAuth2/JWT), REST APIs, JPA/Hibernate, RabbitMQ, .NET Core (MVC)
+  * Frontend: React (19), Tailwind CSS, Framer Motion, HTML, CSS, JavaScript
+  * AI / LLM: Structured RAG Pipelines, Prompt Engineering, LLM Integration (Llama, Groq, Ollama), Vector Embeddings
+  * Databases: MongoDB, PostgreSQL, MySQL, SQL Server, Redis, MinIO (S3), Firebase
+  * Tools & DevOps: Git, GitHub, Docker, Docker Compose, Postman, Maven
+
+### PRODUCTION WORK EXPERIENCE:
+1. **Angel Bot AI** (Delhi, India) — Software Developer Intern (24 Jun 2026 – 14 Aug 2026):
+   - Project: **Git in Bits (DevPulse AI) – Engineering Intelligence Platform**
+   - Tech Stack: React 19, Spring Boot 3, MongoDB, Spring AI, Groq (Llama 3.3 70B), Tailwind CSS, Docker
+   - Developed full-stack dashboard computing 6 core KPIs, tracking 15.1h avg PR merge times and code churn (+2.7M lines) from MongoDB.
+   - Implemented multi-domain health scoring engine (0–100) evaluating PR turnaround, branch hygiene, and CI/CD pass rates across 5 dimensions.
+   - Engineered structured RAG pipeline with Spring AI and Groq that pre-aggregated metrics in MongoDB, reducing hallucinated LLM responses to 0% and cutting inference latency to <1.2s.
+   - Implemented rate-limited delta sync with 5-minute cooldown guards, reducing external GitHub API calls by 85% and achieving zero-token reads on reloads.
+   - Secured multi-tenant data access with server-side OAuth2 session validation in RAM, blocking 100% of unauthorized cross-tenant IDOR exploits.
+2. **CodeArrest Softwares Pvt. Ltd.** (Kota, India) — Full Stack Developer Intern (24 Jun 2025 – 23 Aug 2025):
+   - Project: **JobHive – Online Job Application Portal**
+   - Tech Stack: .NET Core (MVC), C#, SQL Server, Entity Framework Core, HTML, CSS, JavaScript
+   - Developed full-stack job portal using .NET Core (MVC) and SQL Server supporting multi-role recruitment workflows.
+   - Implemented multi-parameter filtering across title, compensation, and location, reducing query execution time by 35%.
+   - Integrated Entity Framework Core with indexed relational schemas, ensuring 100% transactional consistency across applicant tracking.
+
+### AUTHENTIC SYNCHRONIZED REPOSITORIES (13 Total):
+1. **[OmniStay ERP](https://github.com/musxsid/omnistay-erp)** (Java 17, Spring Boot 4, PostgreSQL, React 19): Full-stack hotel management with ACID PostgreSQL folio ledger, automated night audit (<500ms), and AI review analyzer.
+2. **[simplyAudio](https://github.com/musxsid/simplyAudio)** (Java, Spring Boot, RabbitMQ, Keycloak SSO, Docker Compose, MinIO S3, React 19): Event-driven music streaming microservices platform with asynchronous RabbitMQ pipelines.
+3. **[Triage](https://github.com/musxsid/Triage)** (React.js, Spring Boot, Java, MySQL, Spring Security JWT, Tailwind CSS, Framer Motion): Full-stack productivity SaaS with <50ms stateless auth and 3-tier hierarchical workspace schema.
+4. **[Supervisor Feedback Analyzer](https://github.com/musxsid/supervisor-feedback-analyzer)** (JavaScript, Llama 3.2 via Ollama, Spring AI, Spring Boot, React 19): Deterministic workplace performance analytics.
+5. **[Git In Bits (GIBs)](https://github.com/musxsid/GIBs-Git_In_Bits-main)** (TypeScript, Spring Boot, Java 21, React 19, MongoDB, Groq AI): Engineering intelligence platform with Groq LLM briefings.
+6. **[Sid Portfolio](https://github.com/musxsid/Sid_Portfolio)** (JavaScript, React 19, Tailwind CSS 4, Framer Motion, Spring Boot): Creative engineering portfolio with dynamic GitHub ingestion.
+7. **[Go Auth Microservice](https://github.com/musxsid/go-auth-postgres)** (Go, PostgreSQL, Argon2id, Docker, RS256 JWT): Sub-5ms low-latency cloud-native authentication microservice.
+8. **[DocuVault](https://github.com/musxsid/DocuVault)** (Python, FastAPI, Vector Embeddings, Document Ingestion): Enterprise document intelligence & secure vector storage pipeline.
+9. **[SimplyMusic](https://github.com/musxsid/simplyMusic)** (Java 21, Keycloak, MinIO, MongoDB, Redis, React): Full-stack audio microservices ecosystem with MinIO S3 storage.
+10. **[JobHive](https://github.com/musxsid/JobHive)** (.NET Core, C#, SQL Server, MVC): Enterprise recruitment portal with Entity Framework Core.
+11. **[SuperUtility](https://github.com/musxsid/SuperUtility)** (Kotlin, Coroutines, System Diagnostics): Cross-platform Kotlin system utilities and concurrency helpers.
+12. **[Data Structures & Algorithms](https://github.com/musxsid/Data-Structures-and-Algorithms)** (Java): Curated repository of optimized data structures and algorithmic paradigms.
+13. **[SimplyAudio Workspace](https://github.com/musxsid/simplyAudio-Workspace)** (Docker, Shell): Companion orchestration environment and asset pipeline.`;
+
+      const messages = [
+        { role: "system", content: systemPrompt },
+        ...history.slice(-6).map((m) => ({
+          role: m.type === "user" ? "user" : "assistant",
+          content: m.text,
+        })),
+        { role: "user", content: message },
+      ];
+
+      const apiKey = import.meta.env.VITE_GROQ_API_KEY || "";
+      if (!apiKey) {
+        return buildLocalFallbackResponse(message);
+      }
+
+      const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-oss-120b",
+          messages,
+          max_tokens: 800,
+          temperature: 0.3,
+        }),
+      });
+
+      if (groqRes.ok) {
+        const data = await groqRes.json();
+        const content = data.choices?.[0]?.message?.content;
+        if (content) {
+          return {
+            success: true,
+            response: content,
+            model: "openai/gpt-oss-120b",
+          };
+        }
+      }
+    } catch (err) {
+      console.warn("Direct Groq API fetch error:", err.message);
+    }
+
+    return {
+      success: false,
+      response: "I'm having trouble connecting right now, but feel free to explore Siddharth's [GitHub](https://github.com/musxsid) or [Download his Resume](/resume/Siddharth_Shakyawal_Resume_october2026.pdf)!",
+    };
   },
 };
 

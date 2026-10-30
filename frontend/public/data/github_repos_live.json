@@ -26,32 +26,26 @@
   {
     "id": "simplyAudio",
     "name": "simplyAudio",
-    "title": "SimplyNotes / SimplyAudio",
-    "tagline": "Collaborative Workspace with Hierarchical JPA Folios & JWT Security",
-    "description": "Designed a relational document store with nested workspaces, folders, and markdown folios using JPA/Hibernate. Features fine-grained JWT role authentication, UUID-partitioned asset storage, and instant read-only public sharing links.",
+    "title": "simplyAudio",
+    "tagline": "Event-Driven Audio Microservices with RabbitMQ & Spring Boot",
+    "description": "Distributed, enterprise-grade music streaming and cataloging platform built with Spring Boot, React, and an asynchronous RabbitMQ event-driven architecture. Isolates media streaming, real-time analytics, and Keycloak SSO into independent Docker containers.",
     "githubUrl": "https://github.com/musxsid/simplyAudio",
     "liveUrl": null,
     "language": "Java",
     "techStack": [
-      "Spring Boot 3",
+      "Spring Boot",
+      "RabbitMQ",
+      "Keycloak SSO",
+      "Docker",
       "React 19",
-      "MySQL",
-      "Spring Security",
-      "JWT",
-      "Tailwind CSS",
-      "Framer Motion"
+      "MinIO S3",
+      "Microservices"
     ],
     "stars": 0,
     "forks": 0,
     "featured": true,
     "updatedAt": "2026-07-30T10:44:49Z",
-    "images": [
-      "/projects/simplynotes/frontend - landing page.jpg",
-      "/projects/simplynotes/frontend - login page .jpg",
-      "/projects/simplynotes/user home page .jpg",
-      "/projects/simplynotes/notes formatting options .jpg",
-      "/projects/simplynotes/readonly shared note.jpg"
-    ]
+    "images": []
   },
   {
     "id": "supervisor-feedback-analyzer",

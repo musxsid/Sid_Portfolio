@@ -67,11 +67,78 @@ function resumeStaticPlugin() {
   };
 }
 
+// Serves any project screenshot or asset directly from backend storage folders dynamically
+function backendProjectsStaticPlugin() {
+  const mimeTypes = {
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.png': 'image/png',
+    '.webp': 'image/webp',
+    '.svg': 'image/svg+xml',
+    '.gif': 'image/gif',
+  };
+
+  const projectDirs = [
+    path.resolve(__dirname, '../backend/src/main/resources/static/projects'),
+    path.resolve(__dirname, '../backend/projects'),
+    path.resolve(__dirname, 'public/projects')
+  ];
+
+  return {
+    name: 'serve-backend-projects-folder',
+    configureServer(server) {
+      server.middlewares.use('/projects', (req, res, next) => {
+        const reqPath = decodeURIComponent(req.url.replace(/^\//, ''));
+        if (!reqPath) return next();
+
+        for (const dir of projectDirs) {
+          const target = path.join(dir, reqPath);
+          if (fs.existsSync(target) && fs.statSync(target).isFile()) {
+            const ext = path.extname(target).toLowerCase();
+            res.setHeader('Content-Type', mimeTypes[ext] || 'application/octet-stream');
+            res.setHeader('Cache-Control', 'public, max-age=3600');
+            fs.createReadStream(target).pipe(res);
+            return;
+          }
+        }
+        next();
+      });
+    },
+    closeBundle() {
+      // Mirror backend project images to dist/projects for static production bundle
+      const distDir = path.resolve(__dirname, 'dist/projects');
+      for (const dir of projectDirs) {
+        if (!fs.existsSync(dir)) continue;
+        const copyDirRecursive = (src, dest) => {
+          if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
+          const entries = fs.readdirSync(src, { withFileTypes: true });
+          for (const entry of entries) {
+            const srcPath = path.join(src, entry.name);
+            const destPath = path.join(dest, entry.name);
+            if (entry.isDirectory()) {
+              copyDirRecursive(srcPath, destPath);
+            } else {
+              fs.copyFileSync(srcPath, destPath);
+            }
+          }
+        };
+        copyDirRecursive(dir, distDir);
+      }
+    }
+  };
+}
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), resumeStaticPlugin()],
+  plugins: [react(), tailwindcss(), resumeStaticPlugin(), backendProjectsStaticPlugin()],
   server: {
     port: 5173,
-    strictPort: true
+    strictPort: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8081',
+        changeOrigin: true,
+      }
+    }
   }
 })

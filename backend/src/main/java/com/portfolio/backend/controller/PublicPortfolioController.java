@@ -22,6 +22,7 @@ public class PublicPortfolioController {
     private final ResumeService resumeService;
     private final GitHubService gitHubService;
     private final NewsletterService newsletterService;
+    private final GroqAiService groqAiService;
 
     @GetMapping("/projects")
     public ResponseEntity<List<ProjectDto>> getProjects() {
@@ -73,5 +74,11 @@ public class PublicPortfolioController {
     public ResponseEntity<NewsletterDto> subscribeNewsletter(@Valid @RequestBody NewsletterDto newsletterDto) {
         NewsletterDto subscribed = newsletterService.subscribe(newsletterDto);
         return new ResponseEntity<>(subscribed, HttpStatus.CREATED);
+    }
+
+    // Groq AI Chatbot Assistant (Grounded on resume, GitHub repos, and system architecture)
+    @PostMapping("/chat")
+    public ResponseEntity<ChatResponseDto> chatWithAssistant(@Valid @RequestBody ChatRequestDto request) {
+        return ResponseEntity.ok(groqAiService.processChat(request));
     }
 }

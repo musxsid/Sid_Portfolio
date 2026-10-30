@@ -24,7 +24,7 @@ export default function App() {
       "#080811", // Deep midnight (About)
       "#0f0f15", // Very dark navy (Experience)
       "#080b13", // Deep tech slate (Projects & GitHub Activity)
-      "#151b18", // Dark emerald/pine (Skills)
+      "#080b13", // Deep obsidian (Skills)
       "#090d16", // Midnight navy (Newsletter)
       "#000000", // Deep black (Contact/Footer)
     ]

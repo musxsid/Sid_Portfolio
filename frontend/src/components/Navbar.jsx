@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Download, Menu, X } from "lucide-react";
 import { portfolioApi } from "../services/api";
@@ -14,8 +14,11 @@ const navLinks = [
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [resumeUrl, setResumeUrl] = useState("/resume/Siddharth Resume.pdf");
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
     let isMounted = true;
@@ -29,11 +32,40 @@ export default function Navbar() {
     };
   }, []);
 
+  // Auto-disappear on scroll down, reappear on scroll up or at page top
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setIsScrolled(currentScrollY > 40);
 
+      if (currentScrollY <= 40) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY.current + 8) {
+        // Scrolling down -> hide navbar to eliminate obstruction
+        setIsVisible(false);
+      } else if (currentScrollY < lastScrollY.current - 8) {
+        // Scrolling up -> reveal navbar smoothly
+        setIsVisible(true);
+      }
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Top-edge cursor detection: hovering near the top reveals navbar even when scrolled down
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (e.clientY <= 65) {
+        setIsHovered(true);
+      } else if (e.clientY > 110) {
+        setIsHovered(false);
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   const handleScrollTo = (e, href) => {
@@ -86,14 +118,28 @@ export default function Navbar() {
     requestAnimationFrame(animation);
   };
 
+  const showNavbar = isVisible || isHovered;
+
   return (
     <>
+      {/* Invisible hover zone at the top edge of viewport to trigger navbar slide-in on cursor hover */}
+      <div
+        className="fixed top-0 left-0 right-0 h-6 z-50 pointer-events-auto"
+        onMouseEnter={() => setIsHovered(true)}
+      />
+
       <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? "py-4" : "py-8"
-          }`}
+        initial={{ y: 0 }}
+        animate={{
+          y: showNavbar ? 0 : -100,
+          opacity: showNavbar ? 1 : 0,
+        }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          showNavbar ? "pointer-events-auto" : "pointer-events-none"
+        } ${isScrolled ? "py-4" : "py-8"}`}
       >
         <div className="section-container">
           <div

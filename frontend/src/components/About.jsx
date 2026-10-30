@@ -286,6 +286,10 @@ export default function About() {
   const [activeService, setActiveService] = useState(0);
   const [isMarqueeHovered, setIsMarqueeHovered] = useState(false);
   const [resumeUrl, setResumeUrl] = useState("/resume/Siddharth Resume.pdf");
+  const [gitStats, setGitStats] = useState({
+    contributions: 151,
+    repos: 13,
+  });
 
   useEffect(() => {
     let isMounted = true;
@@ -294,6 +298,19 @@ export default function About() {
         setResumeUrl(url);
       }
     });
+
+    portfolioApi.getGitHubContributions().then((res) => {
+      if (isMounted && res && res.totalContributions) {
+        setGitStats((prev) => ({ ...prev, contributions: res.totalContributions }));
+      }
+    });
+
+    portfolioApi.getGitHubProjects().then((repos) => {
+      if (isMounted && Array.isArray(repos) && repos.length > 0) {
+        setGitStats((prev) => ({ ...prev, repos: repos.length }));
+      }
+    });
+
     return () => {
       isMounted = false;
     };
@@ -328,8 +345,8 @@ export default function About() {
   ];
 
   const stats = [
-    { value: "148 +", label: "GitHub Contributions" },
-    { value: "12 +", label: "Repositories Built" },
+    { value: `${gitStats.contributions} +`, label: "GitHub Contributions" },
+    { value: `${gitStats.repos} +`, label: "Repositories Built" },
     { value: "2", label: "Software Developer Internships" },
   ];
 
@@ -350,7 +367,7 @@ export default function About() {
 
       {/* Atmospheric ambient lighting */}
       <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-accent-warm/15 blur-[180px] rounded-full pointer-events-none z-0" />
-      <div className="absolute bottom-1/4 left-1/4 w-[450px] h-[450px] bg-blue-600/10 blur-[180px] rounded-full pointer-events-none z-0" />
+      <div className="absolute bottom-1/4 left-1/4 w-[450px] h-[450px] bg-accent-warm/[0.04] blur-[180px] rounded-full pointer-events-none z-0" />
 
       <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 relative z-10">
 
@@ -607,7 +624,7 @@ export default function About() {
                 </h4>
                 <p className="text-xs sm:text-sm text-gray-400 mt-0.5 font-normal">
                   Christ University, Lavasa, Pune{" "}
-                  <span className="text-accent-warm font-mono text-xs font-semibold ml-1">
+                  <span className="text-accent-warm font-sans text-xs font-semibold ml-1">
                     (2024–2027)
                   </span>
                 </p>
@@ -656,7 +673,7 @@ export default function About() {
                 <div className="p-1 rounded-full bg-white text-black group-hover:bg-accent-warm group-hover:text-white transition-colors">
                   <GitHubIcon className="w-4 h-4" />
                 </div>
-                <span className="font-mono text-sm tracking-tight">github.com/musxsid</span>
+                <span className="font-sans text-sm tracking-tight font-semibold">github.com/musxsid</span>
                 <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-accent-warm transition-colors ml-1" />
               </motion.a>
 
@@ -666,7 +683,7 @@ export default function About() {
                 rel="noreferrer"
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
-                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-white/5 hover:bg-white/10 text-white font-bold text-sm tracking-wide border border-white/20 hover:border-blue-400 backdrop-blur-xl transition-all group"
+                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-white/5 hover:bg-white/10 text-white font-bold text-sm tracking-wide border border-white/20 hover:border-accent-warm backdrop-blur-xl transition-all group"
               >
                 <div className="p-1 rounded-full bg-[#0a66c2] text-white">
                   <LinkedInIcon className="w-3.5 h-3.5" />

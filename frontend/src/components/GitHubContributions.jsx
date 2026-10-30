@@ -21,6 +21,7 @@ function GitHubIcon({ className = "w-4 h-4" }) {
 
 export default function GitHubContributions() {
   const [data, setData] = useState(null);
+  const [repoCount, setRepoCount] = useState(13);
   const [hoveredDay, setHoveredDay] = useState(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
   const containerRef = useRef(null);
@@ -30,6 +31,11 @@ export default function GitHubContributions() {
     portfolioApi.getGitHubContributions().then((res) => {
       if (isMounted) {
         setData(res);
+      }
+    });
+    portfolioApi.getGitHubProjects().then((repos) => {
+      if (isMounted && Array.isArray(repos) && repos.length > 0) {
+        setRepoCount(repos.length);
       }
     });
     return () => {
@@ -136,11 +142,17 @@ export default function GitHubContributions() {
         {/* ========================================================= */}
         {/* UNBOXED SECTION HEADER & LIVE PROFILE STRIP               */}
         {/* ========================================================= */}
-        <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12 pb-8 border-b border-white/10">
+        <motion.header
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.15 }}
+          transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12 pb-8 border-b border-white/10"
+        >
           <div>
             <div className="flex items-center gap-2 mb-3">
               <span className="w-2 h-2 rounded-full bg-accent-warm animate-pulse shadow-[0_0_8px_#ff7a45]" />
-              <span className="text-xs font-mono font-bold tracking-widest text-accent-warm uppercase">
+              <span className="text-xs font-sans font-bold tracking-widest text-accent-warm uppercase">
                 Continuous Delivery & Open Source
               </span>
             </div>
@@ -165,9 +177,9 @@ export default function GitHubContributions() {
               <div>
                 <p className="text-sm font-bold text-white flex items-center gap-1.5">
                   <span>musxsid</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#10b981]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-warm shadow-[0_0_6px_#ff7a45]" />
                 </p>
-                <p className="text-xs text-gray-400 font-mono">
+                <p className="text-xs text-gray-400 font-sans font-medium">
                   Siddharth • Active Contributor
                 </p>
               </div>
@@ -184,25 +196,32 @@ export default function GitHubContributions() {
               <ExternalLink className="w-3.5 h-3.5 ml-0.5" />
             </a>
           </div>
-        </header>
+        </motion.header>
 
         {/* ========================================================= */}
         {/* THE UNBOXED CONTRIBUTION MATRIX: White & Orange Theme     */}
         {/* ========================================================= */}
-        <div ref={containerRef} className="relative py-8 select-none">
+        <motion.div 
+          ref={containerRef} 
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.15 }}
+          transition={{ duration: 0.65, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="relative py-8 select-none"
+        >
           
           {/* Top Status Bar: Contributions Count & Live Streak Tracker */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 gap-3">
             <div className="flex items-center gap-3">
               <span className="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                {data?.totalContributions || 148} Contributions
+                {data?.totalContributions || 151} Contributions
               </span>
-              <span className="text-xs font-mono px-3 py-1 rounded-full bg-accent-warm/15 text-accent-warm border border-accent-warm/30 font-semibold">
+              <span className="text-xs font-sans px-3 py-1 rounded-full bg-accent-warm/15 text-accent-warm border border-accent-warm/30 font-semibold tracking-wide">
                 Past 52 Weeks
               </span>
             </div>
 
-            <div className="flex items-center gap-4 text-xs font-mono text-gray-400">
+            <div className="flex items-center gap-4 text-xs font-sans font-medium text-gray-400">
               <span className="flex items-center gap-1.5">
                 <Flame className="w-4 h-4 text-accent-warm" />
                 <strong className="text-white">{data?.currentStreak || 5}-Day</strong> Current Streak
@@ -220,7 +239,7 @@ export default function GitHubContributions() {
             <div className="min-w-[760px] max-w-full">
               
               {/* Month Labels Along the Top */}
-              <div className="flex justify-between pl-8 pr-2 pb-3 text-xs font-mono font-medium text-gray-400">
+              <div className="flex justify-between pl-8 pr-2 pb-3 text-xs font-sans font-medium text-gray-400">
                 {monthLabels.map((m, idx) => (
                   <span key={idx}>{m}</span>
                 ))}
@@ -230,7 +249,7 @@ export default function GitHubContributions() {
               <div className="flex gap-2 items-center">
                 
                 {/* Day Labels Mon, Wed, Fri */}
-                <div className="flex flex-col justify-between py-1 text-[0.7rem] font-mono font-medium text-gray-400 w-7 shrink-0 h-[106px]">
+                <div className="flex flex-col justify-between py-1 text-[0.7rem] font-sans font-medium text-gray-400 w-7 shrink-0 h-[106px]">
                   <span>Mon</span>
                   <span>Wed</span>
                   <span>Fri</span>
@@ -272,7 +291,7 @@ export default function GitHubContributions() {
                   top: `${tooltipPos.y}px`,
                   transform: `translate(${tooltipPos.alignX || "-50%"}, -100%)`,
                 }}
-                className="absolute pointer-events-none z-50 px-3.5 py-2 rounded-xl bg-black/95 border border-white/20 text-white text-xs font-mono shadow-[0_10px_25px_rgba(0,0,0,0.85)] backdrop-blur-xl whitespace-nowrap"
+                className="absolute pointer-events-none z-50 px-3.5 py-2 rounded-xl bg-black/95 border border-white/20 text-white text-xs font-sans font-medium shadow-[0_10px_25px_rgba(0,0,0,0.85)] backdrop-blur-xl whitespace-nowrap"
               >
                 {hoveredDay.count === 0 ? (
                   <span>No contributions on {formatDate(hoveredDay.date)}.</span>
@@ -291,7 +310,7 @@ export default function GitHubContributions() {
           </AnimatePresence>
 
           {/* Calendar Footer: Learn Link + White & Orange Legend */}
-          <div className="flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-white/10 text-xs text-gray-400 gap-3 font-mono">
+          <div className="flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-white/10 text-xs text-gray-400 gap-3 font-sans font-medium">
             <span className="flex items-center gap-1.5 text-gray-400">
               <Activity className="w-3.5 h-3.5 text-accent-warm" />
               <span>Continuous git commit telemetry • Updated hourly</span>
@@ -299,7 +318,7 @@ export default function GitHubContributions() {
 
             {/* WHITE & ORANGE APP THEME LEGEND */}
             <div className="flex items-center gap-2">
-              <span className="text-[0.7rem] text-gray-400 uppercase">Less</span>
+              <span className="text-[0.7rem] text-gray-400 uppercase tracking-wider">Less</span>
               {/* Level 0: White */}
               <span className="w-3.5 h-3.5 rounded-[3px] bg-white/[0.12] border border-white/10" title="0 contributions (White)" />
               {/* Level 1: Orange 40% */}
@@ -310,21 +329,28 @@ export default function GitHubContributions() {
               <span className="w-3.5 h-3.5 rounded-[3px] bg-accent-warm/90 border border-accent-warm" title="High activity" />
               {/* Level 4: Pure Warm Coral Solid */}
               <span className="w-3.5 h-3.5 rounded-[3px] bg-[#ff7a45] border border-white/70 shadow-[0_0_8px_#ff7a45]" title="Peak velocity" />
-              <span className="text-[0.7rem] text-gray-400 uppercase">More</span>
+              <span className="text-[0.7rem] text-gray-400 uppercase tracking-wider">More</span>
             </div>
           </div>
 
-        </div>
+        </motion.div>
 
         {/* ========================================================= */}
         {/* RECRUITER ARCHITECTURAL DOSSIER (OUT OF SQUARE DIVS!)     */}
         {/* Spacious, unboxed layout on a clean architectural grid    */}
         {/* ========================================================= */}
-        <section aria-label="Recruiter Key Engineering Metrics" className="pt-12 mt-6 border-t border-white/10">
+        <motion.section 
+          aria-label="Recruiter Key Engineering Metrics" 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="pt-12 mt-6 border-t border-white/10"
+        >
           <div className="mb-8">
             <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
               <span>Recruiter Overview</span>
-              <span className="text-xs font-mono font-normal px-2.5 py-0.5 rounded-full bg-white/10 text-gray-300 border border-white/15">
+              <span className="text-xs font-sans font-semibold tracking-wide px-2.5 py-0.5 rounded-full bg-white/10 text-gray-300 border border-white/15">
                 Technical Highlights
               </span>
             </h3>
@@ -333,20 +359,27 @@ export default function GitHubContributions() {
             </p>
           </div>
 
-          {/* 4 Unboxed Metric Pillars with Hairline Separators */}
+          {/* 4 Unboxed Metric Pillars with Interactive Scroll and Hover Motion */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 pt-4">
             
             {/* Pillar 1: Repositories & Architecture */}
-            <div className="flex flex-col relative group">
+            <motion.div 
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.08, ease: "easeOut" }}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              className="flex flex-col relative group cursor-default"
+            >
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-2.5 rounded-xl bg-accent-warm/15 text-accent-warm border border-accent-warm/30">
+                <div className="p-2.5 rounded-xl bg-accent-warm/15 text-accent-warm border border-accent-warm/30 group-hover:scale-105 group-hover:shadow-[0_0_15px_rgba(255,122,69,0.35)] transition-all duration-300">
                   <GitPullRequest className="w-5 h-5" />
                 </div>
                 <div>
                   <p className="font-display text-2xl sm:text-3xl font-black text-white group-hover:text-accent-warm transition-colors">
-                    12+
+                    {repoCount}+
                   </p>
-                  <p className="text-xs font-mono text-gray-400 uppercase tracking-wider">
+                  <p className="text-xs font-sans font-semibold text-gray-400 uppercase tracking-wider">
                     Repositories Built
                   </p>
                 </div>
@@ -354,19 +387,26 @@ export default function GitHubContributions() {
               <p className="text-xs text-gray-400 mt-2 leading-relaxed font-light">
                 Distributed SaaS, local LLM orchestration pipelines, audio streaming engines, and JWT microservices.
               </p>
-            </div>
+            </motion.div>
 
             {/* Pillar 2: Annual Commit Output */}
-            <div className="flex flex-col relative group">
+            <motion.div 
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.16, ease: "easeOut" }}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              className="flex flex-col relative group cursor-default"
+            >
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-2.5 rounded-xl bg-amber-400/15 text-amber-300 border border-amber-400/30">
+                <div className="p-2.5 rounded-xl bg-amber-400/15 text-amber-300 border border-amber-400/30 group-hover:scale-105 group-hover:shadow-[0_0_15px_rgba(251,191,36,0.35)] transition-all duration-300">
                   <Flame className="w-5 h-5" />
                 </div>
                 <div>
                   <p className="font-display text-2xl sm:text-3xl font-black text-white group-hover:text-amber-300 transition-colors">
-                    148+
+                    {data?.totalContributions || 151}+
                   </p>
-                  <p className="text-xs font-mono text-gray-400 uppercase tracking-wider">
+                  <p className="text-xs font-sans font-semibold text-gray-400 uppercase tracking-wider">
                     Annual Commits
                   </p>
                 </div>
@@ -374,19 +414,26 @@ export default function GitHubContributions() {
               <p className="text-xs text-gray-400 mt-2 leading-relaxed font-light">
                 Continuous delivery cadence with clean atomic commits, semantic versioning, and rigorous documentation.
               </p>
-            </div>
+            </motion.div>
 
             {/* Pillar 3: Engineering Consistency */}
-            <div className="flex flex-col relative group">
+            <motion.div 
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.24, ease: "easeOut" }}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              className="flex flex-col relative group cursor-default"
+            >
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-2.5 rounded-xl bg-emerald-400/15 text-emerald-300 border border-emerald-400/30">
+                <div className="p-2.5 rounded-xl bg-accent-warm/15 text-accent-warm border border-accent-warm/30 group-hover:scale-105 group-hover:shadow-[0_0_15px_rgba(255,122,69,0.35)] transition-all duration-300">
                   <Trophy className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="font-display text-2xl sm:text-3xl font-black text-white group-hover:text-emerald-300 transition-colors">
+                  <p className="font-display text-2xl sm:text-3xl font-black text-white group-hover:text-accent-warm transition-colors">
                     14 Days
                   </p>
-                  <p className="text-xs font-mono text-gray-400 uppercase tracking-wider">
+                  <p className="text-xs font-sans font-semibold text-gray-400 uppercase tracking-wider">
                     Longest Streak
                   </p>
                 </div>
@@ -394,19 +441,26 @@ export default function GitHubContributions() {
               <p className="text-xs text-gray-400 mt-2 leading-relaxed font-light">
                 Demonstrated stamina in iterative software sprints, feature delivery, bug isolation, and code refactoring.
               </p>
-            </div>
+            </motion.div>
 
             {/* Pillar 4: Polyglot Technology Stack */}
-            <div className="flex flex-col relative group">
+            <motion.div 
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.32, ease: "easeOut" }}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              className="flex flex-col relative group cursor-default"
+            >
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-2.5 rounded-xl bg-blue-400/15 text-blue-300 border border-blue-400/30">
+                <div className="p-2.5 rounded-xl bg-accent-warm/15 text-accent-warm border border-accent-warm/30 group-hover:scale-105 group-hover:shadow-[0_0_15px_rgba(255,122,69,0.35)] transition-all duration-300">
                   <Code2 className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="font-display text-2xl sm:text-3xl font-black text-white group-hover:text-blue-300 transition-colors">
+                  <p className="font-display text-2xl sm:text-3xl font-black text-white group-hover:text-accent-warm transition-colors">
                     5 Stacks
                   </p>
-                  <p className="text-xs font-mono text-gray-400 uppercase tracking-wider">
+                  <p className="text-xs font-sans font-semibold text-gray-400 uppercase tracking-wider">
                     Polyglot Runtimes
                   </p>
                 </div>
@@ -414,10 +468,10 @@ export default function GitHubContributions() {
               <p className="text-xs text-gray-400 mt-2 leading-relaxed font-light">
                 Java (Spring Boot), JavaScript/TypeScript (React 19), Go, Python, and C# (.NET Core).
               </p>
-            </div>
+            </motion.div>
 
           </div>
-        </section>
+        </motion.section>
 
       </div>
     </section>

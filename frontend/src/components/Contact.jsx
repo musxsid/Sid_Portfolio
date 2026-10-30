@@ -4,7 +4,7 @@ import { Send, User, Mail, MessageSquare } from "lucide-react";
 
 export default function Contact() {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px 0px" });
+  const isInView = useInView(sectionRef, { once: false, margin: "-100px 0px" });
 
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isHovering, setIsHovering] = useState(false);

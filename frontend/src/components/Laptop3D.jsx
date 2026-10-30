@@ -83,8 +83,8 @@ export default function Laptop3D({ scrollYProgress }) {
           <div className="absolute top-2 left-1/2 -translate-x-1/2 flex items-center justify-center gap-3 z-30">
             <div className="w-1 h-1 rounded-full bg-[#050505] shadow-[inset_0_1px_1px_rgba(0,0,0,1)]" />
             <div className="w-2.5 h-2.5 rounded-full bg-[#000] border border-[#1a1a1a] flex items-center justify-center shadow-[inset_0_1px_3px_rgba(0,0,0,1)] relative overflow-hidden">
-              <div className="w-1 h-1 rounded-full bg-blue-500/30 blur-[0.5px]" />
-              <motion.div style={{ opacity: screenGlow }} className="absolute top-[1px] right-[1px] w-[2px] h-[2px] rounded-full bg-green-500/80 animate-pulse" />
+              <div className="w-1 h-1 rounded-full bg-accent-warm/30 blur-[0.5px]" />
+              <motion.div style={{ opacity: screenGlow }} className="absolute top-[1px] right-[1px] w-[2px] h-[2px] rounded-full bg-accent-warm/80 animate-pulse" />
             </div>
             <div className="w-1 h-1 rounded-full bg-[#050505] shadow-[inset_0_1px_1px_rgba(0,0,0,1)]" />
           </div>
@@ -100,9 +100,9 @@ export default function Laptop3D({ scrollYProgress }) {
                 style={{ opacity: slide1Opacity, scale: slide1Scale, pointerEvents: "none" }}
                 className="absolute inset-0 flex flex-col items-center justify-center text-center px-8"
               >
-                <Globe className="w-20 h-20 text-blue-400 mb-6 drop-shadow-[0_0_20px_rgba(96,165,250,0.6)]" />
+                <Globe className="w-20 h-20 text-accent-warm mb-6 drop-shadow-[0_0_20px_rgba(255,122,69,0.6)]" />
                 <h3 className="font-display text-4xl font-bold text-white mb-3">Web Architecture</h3>
-                <p className="text-gray-400 font-mono text-xl">Building premium frontend experiences.</p>
+                <p className="text-gray-400 font-sans text-xl font-light">Building premium frontend experiences.</p>
               </motion.div>
 
               {/* Slide 2 */}
@@ -110,9 +110,9 @@ export default function Laptop3D({ scrollYProgress }) {
                 style={{ opacity: slide2Opacity, scale: slide2Scale, pointerEvents: "none" }}
                 className="absolute inset-0 flex flex-col items-center justify-center text-center px-8"
               >
-                <ShieldCheck className="w-20 h-20 text-green-400 mb-6 drop-shadow-[0_0_20px_rgba(74,222,128,0.6)]" />
+                <ShieldCheck className="w-20 h-20 text-accent-warm mb-6 drop-shadow-[0_0_20px_rgba(255,122,69,0.6)]" />
                 <h3 className="font-display text-4xl font-bold text-white mb-3">Enterprise Security</h3>
-                <p className="text-gray-400 font-mono text-xl">Configuring advanced authentication.</p>
+                <p className="text-gray-400 font-sans text-xl font-light">Configuring advanced authentication.</p>
               </motion.div>
 
               {/* Slide 3 */}
@@ -120,9 +120,9 @@ export default function Laptop3D({ scrollYProgress }) {
                 style={{ opacity: slide3Opacity, scale: slide3Scale, pointerEvents: "none" }}
                 className="absolute inset-0 flex flex-col items-center justify-center text-center px-8"
               >
-                <Database className="w-20 h-20 text-purple-400 mb-6 drop-shadow-[0_0_20px_rgba(192,132,252,0.6)]" />
+                <Database className="w-20 h-20 text-accent-warm mb-6 drop-shadow-[0_0_20px_rgba(255,122,69,0.6)]" />
                 <h3 className="font-display text-4xl font-bold text-white mb-3">Infinite Scalability</h3>
-                <p className="text-gray-400 font-mono text-xl">Architecting distributed databases.</p>
+                <p className="text-gray-400 font-sans text-xl font-light">Architecting distributed databases.</p>
               </motion.div>
 
               {/* Slide 4 - Redirect Downward */}
@@ -138,7 +138,7 @@ export default function Laptop3D({ scrollYProgress }) {
                   <ChevronDown className="w-20 h-20 text-accent-warm drop-shadow-[0_0_20px_rgba(255,107,53,0.6)]" />
                 </motion.div>
                 <h3 className="font-display text-4xl font-bold text-white mb-3">Explore Experience</h3>
-                <p className="text-gray-400 font-mono text-xl">Scroll down to continue.</p>
+                <p className="text-gray-400 font-sans text-xl font-light">Scroll down to continue.</p>
               </motion.div>
 
             </motion.div>

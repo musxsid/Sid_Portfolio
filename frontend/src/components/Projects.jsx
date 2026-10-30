@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { 
   ExternalLink, 
   Star, 
@@ -22,32 +22,23 @@ function GitHubIcon({ className = "w-4 h-4" }) {
   );
 }
 
-const LANGUAGE_STYLES = {
-  Java: { dot: "#ea580c", text: "text-orange-400", border: "border-orange-500/30", bg: "bg-orange-500/10" },
-  JavaScript: { dot: "#eab308", text: "text-yellow-400", border: "border-yellow-500/30", bg: "bg-yellow-500/10" },
-  TypeScript: { dot: "#3b82f6", text: "text-blue-400", border: "border-blue-500/30", bg: "bg-blue-500/10" },
-  "C#": { dot: "#a855f7", text: "text-purple-400", border: "border-purple-500/30", bg: "bg-purple-500/10" },
-  Go: { dot: "#06b6d4", text: "text-cyan-400", border: "border-cyan-500/30", bg: "bg-cyan-500/10" },
-  Python: { dot: "#10b981", text: "text-emerald-400", border: "border-emerald-500/30", bg: "bg-emerald-500/10" },
-  Kotlin: { dot: "#c084fc", text: "text-purple-400", border: "border-purple-500/30", bg: "bg-purple-500/10" },
-  Shell: { dot: "#84cc16", text: "text-lime-400", border: "border-lime-500/30", bg: "bg-lime-500/10" },
-  HTML: { dot: "#f97316", text: "text-orange-400", border: "border-orange-500/30", bg: "bg-orange-500/10" },
-  SCSS: { dot: "#ec4899", text: "text-pink-400", border: "border-pink-500/30", bg: "bg-pink-500/10" },
-  FreeMarker: { dot: "#06b6d4", text: "text-cyan-400", border: "border-cyan-500/30", bg: "bg-cyan-500/10" },
-  Code: { dot: "#ff7a45", text: "text-accent-warm", border: "border-accent-warm/30", bg: "bg-accent-warm/10" },
+const UNIFIED_LANG_STYLE = {
+  dot: "#ff7a45",
+  text: "text-accent-warm",
+  border: "border-accent-warm/25",
+  bg: "bg-accent-warm/10"
 };
+
+const LANGUAGE_STYLES = new Proxy({}, {
+  get: () => UNIFIED_LANG_STYLE
+});
 
 // Hand-crafted engineering highlights for all GitHub repositories
 const PROJECT_HIGHLIGHTS = {
-  simplynotes: [
-    { label: "Data Architecture", text: "Hierarchical workspace, folder, and markdown folio trees mapped via JPA/Hibernate." },
-    { label: "Security & Auth", text: "Stateless JWT auth pipeline with token rotation, Argon2 hashing, and UUID-partitioned storage." },
-    { label: "User Interface", text: "Liquid-glass interface powered by React 19, Tailwind CSS, and Framer Motion spring physics." }
-  ],
   simplyaudio: [
-    { label: "Data Architecture", text: "Hierarchical workspace, folder, and markdown folio trees mapped via JPA/Hibernate." },
-    { label: "Security & Auth", text: "Stateless JWT auth pipeline with token rotation, Argon2 hashing, and UUID-partitioned storage." },
-    { label: "User Interface", text: "Liquid-glass interface powered by React 19, Tailwind CSS, and Framer Motion spring physics." }
+    { label: "Event-Driven Broker", text: "Asynchronous RabbitMQ message queues decoupling audio ingestion from real-time analytics." },
+    { label: "Unified SSO Gateway", text: "Centralized Keycloak OAuth2/OIDC single sign-on with token inspection and RBAC policies." },
+    { label: "Containerized Mesh", text: "Docker Compose multi-service architecture isolating streaming endpoints, databases, and worker nodes." }
   ],
   "supervisor-feedback-analyzer": [
     { label: "Local LLM Inference", text: "Structured prompt pipelines utilizing Llama 3.2 via Ollama and Spring AI for deterministic local execution." },
@@ -184,24 +175,24 @@ function ProjectStagePreview({ project, images, title }) {
   // If no UI screenshots (e.g., backend service like Go Auth or JobHive)
   if (!images || images.length === 0) {
     return (
-      <div className="w-full h-full min-h-[380px] lg:min-h-[500px] bg-[#070a12] flex flex-col justify-between p-6 sm:p-8 font-mono">
+      <div className="w-full h-full min-h-[380px] lg:min-h-[500px] bg-[#070a12] flex flex-col justify-between p-6 sm:p-8 font-sans">
         {/* Terminal Chrome Header */}
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />
             <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
             <div className="w-3 h-3 rounded-full bg-[#27c93f]" />
-            <span className="ml-3 text-xs text-gray-400 font-mono">
+            <span className="ml-3 text-xs text-gray-400 font-sans font-medium">
               service://{project?.id || "backend"}.api
             </span>
           </div>
-          <span className="text-[0.7rem] text-accent-warm bg-accent-warm/10 px-2.5 py-0.5 rounded-full border border-accent-warm/20">
+          <span className="text-[0.7rem] font-sans font-semibold tracking-wide text-accent-warm bg-accent-warm/10 px-2.5 py-0.5 rounded-full border border-accent-warm/20">
             {project?.language || "GO"} MICROSERVICE
           </span>
         </div>
 
         {/* Live Terminal Output Mock */}
-        <div className="my-auto py-6 space-y-3">
+        <div className="my-auto py-6 space-y-3 font-mono">
           <div className="text-gray-500 text-xs">// Distributed service health probe</div>
           <div className="text-accent-warm text-xs sm:text-sm flex items-center gap-2">
             <span className="text-white">$</span> curl -sI https://api.musxsid.dev/{project?.id}/health
@@ -221,12 +212,12 @@ function ProjectStagePreview({ project, images, title }) {
         </div>
 
         {/* Terminal Footer */}
-        <div className="flex items-center justify-between text-xs text-gray-400 pt-3 border-t border-white/10">
-          <span className="flex items-center gap-2 text-accent-warm">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#10b981]" />
+        <div className="flex items-center justify-between text-xs font-sans text-gray-400 pt-3 border-t border-white/10">
+          <span className="flex items-center gap-2 text-accent-warm font-medium">
+            <span className="w-2 h-2 rounded-full bg-accent-warm animate-pulse shadow-[0_0_8px_#ff7a45]" />
             Cluster Node Online
           </span>
-          <span>100% Open Source</span>
+          <span className="font-medium text-gray-400">100% Open Source</span>
         </div>
       </div>
     );
@@ -245,11 +236,11 @@ function ProjectStagePreview({ project, images, title }) {
           <div className="w-3 h-3 rounded-full bg-[#27c93f]" />
         </div>
 
-        <div className="px-4 py-1 rounded-full bg-black/40 border border-white/10 text-[0.72rem] text-gray-300 font-mono tracking-tight max-w-[200px] sm:max-w-xs truncate text-center">
+        <div className="px-4 py-1 rounded-full bg-black/40 border border-white/10 text-[0.72rem] text-gray-300 font-sans font-medium tracking-wide max-w-[200px] sm:max-w-xs truncate text-center">
           {mockUrl}
         </div>
 
-        <div className="text-xs text-gray-500 font-mono">
+        <div className="text-xs text-gray-400 font-sans font-medium tabular-nums">
           {currentIndex + 1} / {images.length}
         </div>
       </div>
@@ -322,6 +313,36 @@ export default function Projects() {
   const containerRef = useRef(null);
   const stageRef = useRef(null);
   const trackRef = useRef(null);
+  const headerRef = useRef(null);
+
+  const { scrollYProgress: headerScroll } = useScroll({
+    target: headerRef,
+    offset: ["start 92%", "center 45%"],
+  });
+
+  // Scroll-synced color animation for "Selected Work."
+  // "Selected" starts as warm orange (#ff7a45), smoothly turning into crisp pure white (#ffffff) at the end of scroll
+  const selectedColor = useTransform(
+    headerScroll,
+    [0, 0.45, 1],
+    ["#ff7a45", "#f59e0b", "#ffffff"]
+  );
+
+  // "Work." starts pure white (#ffffff) and smoothly transforms into vibrant warm orange (#ff7a45) with glowing aura
+  const workColor = useTransform(
+    headerScroll,
+    [0, 0.45, 1],
+    ["#ffffff", "#ff9d75", "#ff7a45"]
+  );
+
+  const workGlow = useTransform(
+    headerScroll,
+    [0, 1],
+    ["0px 0px 0px rgba(255,122,69,0)", "0px 0px 24px rgba(255,122,69,0.55)"]
+  );
+
+  const headerY = useTransform(headerScroll, [0, 1], ["24px", "0px"]);
+  const headerOpacity = useTransform(headerScroll, [0, 0.25, 1], [0.35, 0.8, 1]);
 
   useEffect(() => {
     let isMounted = true;
@@ -396,10 +417,19 @@ export default function Projects() {
 
       <div className="section-container max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
-        {/* Section Header */}
-        <header className="flex flex-col items-center justify-center text-center mb-10 sm:mb-14">
-          <h2 className="font-display text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-white mb-3">
-            Selected <span className="text-accent-warm">Work.</span>
+        {/* Section Header with Scroll-Driven Color Changing Animation */}
+        <motion.header 
+          ref={headerRef}
+          style={{ y: headerY, opacity: headerOpacity }}
+          className="flex flex-col items-center justify-center text-center mb-10 sm:mb-14"
+        >
+          <h2 className="font-display text-5xl sm:text-6xl md:text-7xl font-black tracking-tight mb-3">
+            <motion.span style={{ color: selectedColor }} className="transition-colors duration-150">
+              Selected
+            </motion.span>{" "}
+            <motion.span style={{ color: workColor, textShadow: workGlow }} className="transition-colors duration-150">
+              Work.
+            </motion.span>
           </h2>
           <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
             Production backends, distributed microservices, and applied AI systems synchronized directly from GitHub.
@@ -430,7 +460,7 @@ export default function Projects() {
                   <button
                     key={proj.id || idx}
                     onClick={() => setActiveIndex(idx)}
-                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full font-mono text-xs whitespace-nowrap transition-all duration-300 cursor-pointer shrink-0 ${
+                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full font-sans text-xs whitespace-nowrap transition-all duration-300 cursor-pointer shrink-0 ${
                       isSelected
                         ? "bg-accent-warm text-white font-bold shadow-[0_0_16px_rgba(255,122,69,0.5)] scale-105"
                         : "bg-white/[0.04] text-gray-400 hover:text-white hover:bg-white/[0.08] border border-white/5"
@@ -440,10 +470,10 @@ export default function Projects() {
                       className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white shadow-[0_0_6px_#ffffff]" : ""}`} 
                       style={{ backgroundColor: isSelected ? "#ffffff" : pLang.dot }} 
                     />
-                    <span className={`text-[0.68rem] ${isSelected ? "text-white/90 font-bold" : "text-gray-500"}`}>
+                    <span className={`text-[0.68rem] font-display font-bold ${isSelected ? "text-white/90" : "text-gray-500"}`}>
                       {String(idx + 1).padStart(2, "0")}
                     </span>
-                    <span className="truncate max-w-[130px] sm:max-w-[180px]">{proj.title || proj.name}</span>
+                    <span className="truncate max-w-[130px] sm:max-w-[180px] font-medium">{proj.title || proj.name}</span>
                   </button>
                 );
               })}
@@ -461,13 +491,20 @@ export default function Projects() {
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-        </header>
+        </motion.header>
 
         {/* ========================================================= */}
         {/* INTERACTIVE CINEMA STAGE: Active Project Showcase         */}
         {/* ========================================================= */}
         {activeProject && (
-          <div ref={stageRef} className="relative w-full max-w-6xl mx-auto mb-20">
+          <motion.div 
+            ref={stageRef} 
+            initial={{ opacity: 0, y: 35 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.15 }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full max-w-6xl mx-auto mb-20"
+          >
             <AnimatePresence mode="wait">
               <motion.article
                 key={activeProject.id || activeIndex}
@@ -496,7 +533,7 @@ export default function Projects() {
                       {/* Top Minimalist Meta Line (No AI tags!) */}
                       <div className="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
                         <div className="flex items-center gap-2">
-                          <span className="font-mono text-xs font-bold text-accent-warm tracking-widest uppercase">
+                          <span className="font-display text-xs font-bold text-accent-warm tracking-wider uppercase">
                             {String(activeIndex + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
                           </span>
                           <span className="text-white/20">•</span>
@@ -509,7 +546,7 @@ export default function Projects() {
                         </div>
 
                         {/* GitHub Stars & Forks Pill */}
-                        <div className="flex items-center gap-2.5 text-xs text-gray-400 font-mono">
+                        <div className="flex items-center gap-2.5 text-xs text-gray-400 font-sans font-medium tabular-nums">
                           <span className="flex items-center gap-1 text-amber-300">
                             <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                             {activeProject.stars}
@@ -614,21 +651,28 @@ export default function Projects() {
                 </div>
               </motion.article>
             </AnimatePresence>
-          </div>
+          </motion.div>
         )}
 
         {/* ========================================================= */}
         {/* ARCHITECTURAL PROJECT DIRECTORY: OUT OF SQUARE DIVS!     */}
         {/* Clean, unboxed linear index with hairline borders         */}
         {/* ========================================================= */}
-        <section aria-label="Complete Projects Directory" className="pt-10 border-t border-white/10">
+        <motion.section 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.15 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          aria-label="Complete Projects Directory" 
+          className="pt-10 border-t border-white/10"
+        >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
               <div className="flex items-center gap-3 flex-wrap">
                 <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
                   Repository Index
                 </h3>
-                <span className="text-xs font-mono font-medium px-3 py-1 rounded-full bg-accent-warm/15 text-accent-warm border border-accent-warm/30">
+                <span className="text-xs font-sans font-semibold tracking-wide px-3 py-1 rounded-full bg-accent-warm/15 text-accent-warm border border-accent-warm/30">
                   {isExpanded
                     ? `Showing All ${projects.length} Repositories`
                     : `Showing Top 5 Major Systems • ${projects.length} Total`}
@@ -645,17 +689,17 @@ export default function Projects() {
               {projects.length > 5 && (
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-xs font-mono font-semibold text-gray-200 hover:text-white border border-white/10 hover:border-accent-warm/40 transition-all duration-200 cursor-pointer shadow-sm hover:scale-105 active:scale-95"
+                  className="group inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.06] hover:bg-white/[0.12] text-xs font-sans font-semibold text-gray-200 hover:text-white border border-white/15 hover:border-accent-warm/50 backdrop-blur-md transition-all duration-300 cursor-pointer shadow-[0_2px_12px_rgba(0,0,0,0.4)] hover:shadow-[0_0_20px_rgba(255,122,69,0.3)] hover:scale-105 active:scale-95"
                 >
                   {isExpanded ? (
                     <>
                       <span>Collapse to 5 Major</span>
-                      <ChevronUp className="w-3.5 h-3.5 text-accent-warm" />
+                      <ChevronUp className="w-3.5 h-3.5 text-accent-warm transition-transform group-hover:-translate-y-0.5" />
                     </>
                   ) : (
                     <>
                       <span>Show All ({projects.length})</span>
-                      <ChevronDown className="w-3.5 h-3.5 text-accent-warm" />
+                      <ChevronDown className="w-3.5 h-3.5 text-accent-warm transition-transform group-hover:translate-y-0.5" />
                     </>
                   )}
                 </button>
@@ -668,12 +712,6 @@ export default function Projects() {
             <AnimatePresence initial={false}>
               {displayedProjects.map((proj, idx) => {
                 const isSelected = idx === activeIndex;
-                const pLangStyle = LANGUAGE_STYLES[proj.language] || {
-                  dot: "#ff7a45",
-                  text: "text-accent-warm",
-                  border: "border-accent-warm/30",
-                  bg: "bg-accent-warm/10"
-                };
 
                 return (
                   <motion.div
@@ -681,109 +719,104 @@ export default function Projects() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.25, ease: "easeOut" }}
+                    transition={{ duration: 0.22, ease: "easeOut" }}
+                    whileHover={{
+                      x: 6,
+                      transition: { duration: 0.18, ease: "easeOut" }
+                    }}
                     onClick={() => {
                       setActiveIndex(idx);
                       scrollToStage();
                     }}
-                    className={`group py-5 px-3 sm:px-6 transition-all duration-300 cursor-pointer flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative ${
+                    className={`group py-4 px-3 sm:px-6 transition-all duration-200 cursor-pointer relative border-l-2 ${
                       isSelected
-                        ? "bg-white/[0.04] text-white"
-                        : "hover:bg-white/[0.02] text-gray-300"
+                        ? "bg-white/[0.05] border-accent-warm text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]"
+                        : "border-transparent hover:border-accent-warm/70 hover:bg-white/[0.03] text-gray-300"
                     }`}
                   >
-                    {/* Left Accent indicator when selected */}
-                    {isSelected && (
-                      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-accent-warm shadow-[0_0_12px_#ff7a45]" />
-                    )}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                      
+                      {/* Left Column (Cols 1-5): Number, Title, Language, Major Architecture Badge, Tagline */}
+                      <div className="lg:col-span-5 flex items-start gap-3.5 min-w-0">
+                        <span className="font-display text-xs sm:text-sm font-bold text-gray-500 w-7 shrink-0 pt-0.5 tabular-nums">
+                          {String(idx + 1).padStart(2, "0")}
+                        </span>
 
-                    {/* Left: Project Number, Name, Language, and Featured Major Badge */}
-                    <div className="flex items-start sm:items-center gap-4 min-w-[280px]">
-                      <span className="font-mono text-xs sm:text-sm font-bold text-gray-500 w-8">
-                        {String(idx + 1).padStart(2, "0")}
-                      </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 flex-wrap mb-1">
+                            <h4 className={`text-base font-bold tracking-tight transition-colors truncate ${
+                              isSelected ? "text-accent-warm" : "text-white group-hover:text-accent-warm"
+                            }`}>
+                              {proj.title || proj.name}
+                            </h4>
 
-                      <div>
-                        <div className="flex items-center gap-2.5 flex-wrap">
-                          <h4 className={`text-base sm:text-lg font-bold tracking-tight transition-colors ${
-                            isSelected ? "text-accent-warm" : "text-white group-hover:text-accent-warm"
-                          }`}>
-                            {proj.title || proj.name}
-                          </h4>
+                            <span className="px-2.5 py-0.5 rounded-full text-[0.68rem] font-sans font-semibold flex items-center gap-1.5 bg-accent-warm/10 border border-accent-warm/25 text-accent-warm shrink-0">
+                              <span className="w-1.5 h-1.5 rounded-full bg-accent-warm shadow-[0_0_6px_#ff7a45]" />
+                              {proj.language || "Code"}
+                            </span>
+                          </div>
 
-                          <span className={`px-2 py-0.5 rounded-full text-[0.68rem] font-semibold flex items-center gap-1 border ${pLangStyle.bg} ${pLangStyle.border} ${pLangStyle.text}`}>
-                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: pLangStyle.dot }} />
-                            {proj.language || "Code"}
+                          <p className="text-xs text-gray-400 font-light truncate">
+                            {proj.tagline || proj.description}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Middle Column (Cols 6-9): Tech Stack Chips - Exactly Aligned Across All Rows, Never Wraps */}
+                      <div className="hidden lg:flex lg:col-span-4 items-center gap-1.5 overflow-hidden">
+                        {proj.techStack?.slice(0, 3).map((tech) => (
+                          <span
+                            key={tech}
+                            className="px-2.5 py-0.5 text-[0.72rem] font-sans font-medium text-gray-300 bg-white/[0.04] rounded-full border border-white/10 shrink-0 hover:border-accent-warm/40 hover:text-white transition-colors"
+                          >
+                            {tech}
                           </span>
+                        ))}
+                        {proj.techStack?.length > 3 && (
+                          <span className="text-[0.7rem] text-gray-400 font-sans font-semibold px-2 py-0.5 bg-white/[0.03] rounded-full border border-white/5 shrink-0">
+                            +{proj.techStack.length - 3}
+                          </span>
+                        )}
+                      </div>
 
-                          {/* Standout Badge for 5 Major / Flagship Projects */}
-                          {proj.featured && (
-                            <span className="px-2.5 py-0.5 rounded-full text-[0.65rem] font-mono font-bold flex items-center gap-1.5 bg-accent-warm/15 text-accent-warm border border-accent-warm/30 shadow-[0_0_10px_rgba(255,122,69,0.25)]">
-                              <span className="w-1.5 h-1.5 rounded-full bg-accent-warm animate-pulse" />
-                              <span>Major Architecture</span>
+                      {/* Right Column (Cols 10-12): Stars, Forks, Action Spotlight Trigger & GitHub Icon */}
+                      <div className="lg:col-span-3 flex items-center justify-between lg:justify-end gap-4 shrink-0 pt-2 lg:pt-0">
+                        <div className="flex items-center gap-3 text-xs text-gray-400 font-sans font-medium tabular-nums">
+                          {proj.stars > 0 && (
+                            <span className="flex items-center gap-1 text-amber-300">
+                              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                              {proj.stars}
                             </span>
                           )}
+                          <span className="flex items-center gap-1">
+                            <GitFork className="w-3.5 h-3.5" />
+                            {proj.forks || 0}
+                          </span>
                         </div>
 
-                        <p className="text-xs text-gray-400 mt-0.5 font-light max-w-md line-clamp-1">
-                          {proj.tagline || proj.description}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Middle: Tech Chips (Visible on tablet/desktop) */}
-                    <div className="hidden md:flex items-center gap-1.5 flex-wrap max-w-md">
-                      {proj.techStack?.slice(0, 4).map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-2.5 py-0.5 text-[0.7rem] font-medium text-gray-300 bg-white/[0.03] rounded-full border border-white/5"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                      {proj.techStack?.length > 4 && (
-                        <span className="text-[0.7rem] text-gray-500 font-mono">
-                          +{proj.techStack.length - 4}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Right: Stars, Forks, Spotlight Trigger */}
-                    <div className="flex items-center justify-between lg:justify-end gap-5 shrink-0 pt-2 lg:pt-0">
-                      <div className="flex items-center gap-3 text-xs text-gray-400 font-mono">
-                        {proj.stars > 0 && (
-                          <span className="flex items-center gap-1 text-amber-300">
-                            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                            {proj.stars}
+                        <div className="flex items-center gap-3">
+                          <span className={`text-xs font-sans font-semibold flex items-center gap-1 transition-colors ${
+                            isSelected ? "text-accent-warm" : "text-gray-400 group-hover:text-white"
+                          }`}>
+                            {isSelected ? "Active on Stage" : "Load on Stage"}
+                            <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-accent-warm" />
                           </span>
-                        )}
-                        <span className="flex items-center gap-1">
-                          <GitFork className="w-3.5 h-3.5" />
-                          {proj.forks || 0}
-                        </span>
+
+                          {proj.githubUrl && (
+                            <a
+                              href={proj.githubUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="p-2 rounded-full bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-all border border-white/10 hover:border-accent-warm/40 cursor-pointer hover:scale-105 active:scale-95"
+                              aria-label={`Open ${proj.title} on GitHub`}
+                            >
+                              <GitHubIcon className="w-3.5 h-3.5" />
+                            </a>
+                          )}
+                        </div>
                       </div>
 
-                      <div className="flex items-center gap-3">
-                        <span className={`text-xs font-semibold flex items-center gap-1 transition-colors ${
-                          isSelected ? "text-accent-warm" : "text-gray-400 group-hover:text-white"
-                        }`}>
-                          {isSelected ? "Active on Stage" : "Load on Stage"}
-                          <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                        </span>
-
-                        {proj.githubUrl && (
-                          <a
-                            href={proj.githubUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="p-2 rounded-full bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-colors border border-white/10 cursor-pointer"
-                            aria-label={`Open ${proj.title} on GitHub`}
-                          >
-                            <GitHubIcon className="w-3.5 h-3.5" />
-                          </a>
-                        )}
-                      </div>
                     </div>
                   </motion.div>
                 );
@@ -793,7 +826,7 @@ export default function Projects() {
 
           {/* Bottom Expand / Collapse Toggle Bar */}
           {projects.length > 5 && (
-            <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-gray-400">
+            <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-sans font-medium text-gray-400">
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-accent-warm animate-pulse" />
                 <span>
@@ -805,7 +838,7 @@ export default function Projects() {
 
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="group inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-white border border-white/15 hover:border-accent-warm/50 backdrop-blur-xl transition-all duration-300 font-semibold cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.35)] hover:shadow-[0_0_20px_rgba(255,122,69,0.3)] hover:scale-105 active:scale-95"
+                className="group inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/15 hover:border-accent-warm/50 backdrop-blur-xl transition-all duration-300 font-sans font-semibold text-xs tracking-wide cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.35)] hover:shadow-[0_0_20px_rgba(255,122,69,0.3)] hover:scale-105 active:scale-95"
               >
                 {isExpanded ? (
                   <>
@@ -821,7 +854,7 @@ export default function Projects() {
               </button>
             </div>
           )}
-        </section>
+        </motion.section>
 
       </div>
     </section>

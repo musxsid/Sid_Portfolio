@@ -150,7 +150,7 @@ export default function Experience() {
 
           {/* Very faint glowing accents to give it depth */}
           <div className="absolute top-1/4 left-1/4 w-[30vw] h-[30vw] bg-accent-warm/5 rounded-full blur-[100px]" />
-          <div className="absolute bottom-1/4 right-1/4 w-[30vw] h-[30vw] bg-purple-500/5 rounded-full blur-[100px]" />
+          <div className="absolute bottom-1/4 right-1/4 w-[30vw] h-[30vw] bg-accent-warm/[0.03] rounded-full blur-[100px]" />
         </div>
 
         {/* Dynamic Heading */}

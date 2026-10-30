@@ -5,7 +5,7 @@ import { portfolioApi } from "../services/api";
 
 export default function Newsletter() {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-60px 0px" });
+  const isInView = useInView(sectionRef, { once: false, margin: "-60px 0px" });
 
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle"); // 'idle' | 'loading' | 'success' | 'error'
@@ -73,12 +73,12 @@ export default function Newsletter() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 max-w-md mx-auto flex items-center justify-center gap-3"
+              className="p-6 rounded-2xl bg-accent-warm/10 border border-accent-warm/30 text-accent-warm max-w-md mx-auto flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(255,122,69,0.2)]"
             >
-              <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" />
+              <CheckCircle2 className="w-6 h-6 text-accent-warm shrink-0" />
               <div className="text-left text-sm">
                 <p className="font-bold text-white">You're subscribed!</p>
-                <p className="text-xs text-emerald-300/80">Thank you for joining. First dispatch coming soon.</p>
+                <p className="text-xs text-accent-warm/80">Thank you for joining. First dispatch coming soon.</p>
               </div>
             </motion.div>
           ) : (

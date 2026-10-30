@@ -1,5 +1,14 @@
 import { useEffect, useRef } from "react";
 
+/**
+ * Minimalist Architectural Kinetic Grid & Refractive Spotlight Canvas
+ * Engineered specifically for the "Selected Work" section:
+ * - Minimal, uncluttered, luxury obsidian atmosphere
+ * - Interactive cursor-driven architectural crosshair illumination
+ * - Specular optical glow with smooth fluid inertia
+ * - Weightless ambient quanta motes with elastic magnetic deflection
+ * - High-DPI Retina support and 60-120 FPS performance
+ */
 export default function ProjectBackgroundCanvas() {
   const canvasRef = useRef(null);
 
@@ -10,44 +19,25 @@ export default function ProjectBackgroundCanvas() {
     if (!ctx) return;
 
     let animationFrameId;
-    let width = (canvas.width = canvas.offsetWidth);
-    let height = (canvas.height = canvas.offsetHeight);
+    let width = 0;
+    let height = 0;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    const handleResize = () => {
+    const resize = () => {
       if (!canvas) return;
-      width = canvas.width = canvas.offsetWidth;
-      height = canvas.height = canvas.offsetHeight;
+      const rect = canvas.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
-    window.addEventListener("resize", handleResize);
+    resize();
+    window.addEventListener("resize", resize);
 
-    // Warm luminous liquid & constellation particles
-    const particleCount = Math.min(Math.floor((width * height) / 22000), 65);
-    const particles = [];
-
-    const colors = [
-      "rgba(255, 122, 69, 0.75)",   // Warm Coral
-      "rgba(255, 179, 0, 0.65)",   // Golden Amber
-      "rgba(255, 255, 255, 0.55)",  // Pure Star White
-      "rgba(255, 107, 43, 0.70)",   // Deep Coral
-    ];
-
-    for (let i = 0; i < particleCount; i++) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        baseX: Math.random() * width,
-        baseY: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.45,
-        vy: (Math.random() - 0.5) * 0.45,
-        radius: Math.random() * 2 + 1,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        pulseOffset: Math.random() * Math.PI * 2,
-        pulseSpeed: 0.02 + Math.random() * 0.02,
-      });
-    }
-
-    let mouse = {
+    // Mouse coordinates with fluid spring damping
+    const mouse = {
       x: -1000,
       y: -1000,
       targetX: -1000,
@@ -57,8 +47,13 @@ export default function ProjectBackgroundCanvas() {
 
     const handleMouseMove = (e) => {
       const rect = canvas.getBoundingClientRect();
-      // Activate when mouse is over or near the project section
-      if (e.clientY >= rect.top - 120 && e.clientY <= rect.bottom + 120) {
+      // Activate when cursor is within or near the Projects section
+      if (
+        e.clientY >= rect.top - 80 &&
+        e.clientY <= rect.bottom + 80 &&
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right
+      ) {
         mouse.targetX = e.clientX - rect.left;
         mouse.targetY = e.clientY - rect.top;
         mouse.active = true;
@@ -76,155 +71,183 @@ export default function ProjectBackgroundCanvas() {
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave);
 
+    // Weightless Ambient Quanta (Just 16 minimal, breathing luminous motes)
+    const moteCount = 16;
+    const motes = [];
+    const moteColors = [
+      "rgba(255, 122, 69, 0.75)", // Signature Warm Coral
+      "rgba(255, 179, 0, 0.65)",  // Golden Amber
+      "rgba(255, 255, 255, 0.60)", // Pure Star White
+    ];
+
+    for (let i = 0; i < moteCount; i++) {
+      motes.push({
+        x: Math.random() * (width || 1200),
+        y: Math.random() * (height || 1800),
+        vx: (Math.random() - 0.5) * 0.28,
+        vy: -0.15 - Math.random() * 0.22, // Gentle upward buoyant drift
+        radius: Math.random() * 1.5 + 1.0,
+        color: moteColors[i % moteColors.length],
+        pulseOffset: Math.random() * Math.PI * 2,
+        pulseSpeed: 0.015 + Math.random() * 0.015,
+      });
+    }
+
     let time = 0;
 
     const render = () => {
-      time += 0.015;
+      time += 0.012;
       ctx.clearRect(0, 0, width, height);
 
-      // Smooth mouse interpolation with fluid inertia
+      // Smooth mouse interpolation
       if (mouse.active) {
-        mouse.x += (mouse.targetX - mouse.x) * 0.08;
-        mouse.y += (mouse.targetY - mouse.y) * 0.08;
+        mouse.x += (mouse.targetX - mouse.x) * 0.085;
+        mouse.y += (mouse.targetY - mouse.y) * 0.085;
       } else {
-        mouse.x += (-1000 - mouse.x) * 0.04;
-        mouse.y += (-1000 - mouse.y) * 0.04;
+        mouse.x += (-1000 - mouse.x) * 0.05;
+        mouse.y += (-1000 - mouse.y) * 0.05;
       }
 
-      // 1. Dynamic Interactive Specular Liquid Glow Following Cursor
-      if (mouse.x > -500 && mouse.y > -500) {
-        const glow = ctx.createRadialGradient(
+      const hasMouse = mouse.x > -500 && mouse.y > -500;
+
+      // 1. Soft Specular Optical Caustic Glow (Follows cursor smoothly)
+      if (hasMouse) {
+        const glowRadius = 380;
+        const radialGlow = ctx.createRadialGradient(
           mouse.x,
           mouse.y,
           0,
           mouse.x,
           mouse.y,
-          360
+          glowRadius
         );
-        glow.addColorStop(0, "rgba(255, 122, 69, 0.14)");
-        glow.addColorStop(0.35, "rgba(255, 179, 0, 0.06)");
-        glow.addColorStop(0.7, "rgba(255, 122, 69, 0.02)");
-        glow.addColorStop(1, "transparent");
-        ctx.fillStyle = glow;
+        radialGlow.addColorStop(0, "rgba(255, 122, 69, 0.11)");
+        radialGlow.addColorStop(0.35, "rgba(255, 179, 0, 0.04)");
+        radialGlow.addColorStop(0.7, "rgba(255, 122, 69, 0.012)");
+        radialGlow.addColorStop(1, "transparent");
+
+        ctx.fillStyle = radialGlow;
         ctx.fillRect(0, 0, width, height);
       }
 
-      // 2. Liquid Flowing Wave Streamlines with Interactive Cursor Deflection
-      const waveCount = 3;
-      for (let w = 0; w < waveCount; w++) {
-        ctx.beginPath();
-        const yOffset = (height / (waveCount + 1)) * (w + 1);
-        const waveFreq = 0.0018 + w * 0.0006;
-        const waveAmp = 28 + w * 12;
-        const speed = time * (0.6 + w * 0.2);
+      // 2. Minimalist Architectural Grid & Interactive Coordinate Crosshairs
+      const gridStep = 96; // Spacious architectural blueprint spacing
+      const mouseRadius = 260;
 
-        ctx.moveTo(0, yOffset + Math.sin(speed) * waveAmp);
+      // Draw faint baseline grid points
+      const startX = 0;
+      const startY = 0;
 
-        for (let x = 0; x <= width; x += 30) {
-          let mouseInfluence = 0;
-          if (mouse.x > -500 && mouse.y > -500) {
+      for (let x = startX; x < width; x += gridStep) {
+        for (let y = startY; y < height; y += gridStep) {
+          let alpha = 0.04;
+          let armLength = 3;
+          let isHovered = false;
+
+          if (hasMouse) {
             const dx = x - mouse.x;
-            const dy = yOffset - mouse.y;
+            const dy = y - mouse.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 260) {
-              const factor = 1 - dist / 260;
-              mouseInfluence = Math.sin(factor * Math.PI) * 28 * (dy < 0 ? -1 : 1);
+
+            if (dist < mouseRadius) {
+              const factor = 1 - dist / mouseRadius;
+              alpha = 0.04 + factor * 0.45;
+              armLength = 3 + factor * 5;
+              isHovered = true;
             }
           }
 
-          const y = yOffset + Math.sin(x * waveFreq + speed) * waveAmp + mouseInfluence;
-          ctx.lineTo(x, y);
-        }
+          ctx.beginPath();
+          // Horizontal tick of crosshair
+          ctx.moveTo(x - armLength, y);
+          ctx.lineTo(x + armLength, y);
+          // Vertical tick of crosshair
+          ctx.moveTo(x, y - armLength);
+          ctx.lineTo(x, y + armLength);
 
-        ctx.strokeStyle = w === 0
-          ? "rgba(255, 122, 69, 0.08)"
-          : w === 1
-          ? "rgba(255, 179, 0, 0.06)"
-          : "rgba(255, 122, 69, 0.04)";
-        ctx.lineWidth = 1.4;
-        ctx.stroke();
+          ctx.strokeStyle = isHovered
+            ? `rgba(255, 122, 69, ${alpha})`
+            : `rgba(255, 255, 255, ${alpha})`;
+          ctx.lineWidth = isHovered ? 1.2 : 0.75;
+          ctx.stroke();
+
+          // If close to cursor, draw small radiant center core
+          if (isHovered && alpha > 0.22) {
+            ctx.beginPath();
+            ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 179, 0, ${alpha * 0.9})`;
+            ctx.fill();
+          }
+        }
       }
 
-      // 3. Update Particles and Interactive Fluid Repulsion
-      particles.forEach((p) => {
-        p.x += p.vx;
-        p.y += p.vy;
+      // 3. Subtle Horizon Guideline with Gentle Cursor Deflection
+      const horizonY = height * 0.48;
+      ctx.beginPath();
+      ctx.moveTo(0, horizonY);
 
-        // Wrap edges seamlessly
-        if (p.x < 0) p.x = width;
-        if (p.x > width) p.x = 0;
-        if (p.y < 0) p.y = height;
-        if (p.y > height) p.y = 0;
+      for (let x = 0; x <= width; x += 40) {
+        let deflect = 0;
+        if (hasMouse) {
+          const dx = x - mouse.x;
+          const dy = horizonY - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 220) {
+            const factor = 1 - dist / 220;
+            deflect = Math.sin(factor * Math.PI) * 16 * (dy < 0 ? -1 : 1);
+          }
+        }
+        const wave = Math.sin(x * 0.002 + time * 0.8) * 4;
+        ctx.lineTo(x, horizonY + wave + deflect);
+      }
+
+      ctx.strokeStyle = "rgba(255, 122, 69, 0.05)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // 4. Weightless Ambient Quanta with Fluid Repulsion
+      motes.forEach((m) => {
+        m.x += m.vx;
+        m.y += m.vy;
+
+        // Wrap around seamlessly
+        if (m.x < 0) m.x = width;
+        if (m.x > width) m.x = 0;
+        if (m.y < 0) m.y = height;
+        if (m.y > height) m.y = 0;
 
         // Interactive elastic repulsion from cursor
-        if (mouse.x > -500 && mouse.y > -500) {
-          const dx = mouse.x - p.x;
-          const dy = mouse.y - p.y;
+        if (hasMouse) {
+          const dx = mouse.x - m.x;
+          const dy = mouse.y - m.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 150) {
-            const force = (1 - dist / 150) * 2.8;
-            p.x -= (dx / dist) * force;
-            p.y -= (dy / dist) * force;
+          if (dist < 140) {
+            const force = (1 - dist / 140) * 2.2;
+            m.x -= (dx / dist) * force;
+            m.y -= (dy / dist) * force;
           }
         }
-      });
 
-      // 4. Draw Interconnected Constellation Mesh Lines
-      const maxConnectDist = 110;
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const p1 = particles[i];
-          const p2 = particles[j];
-          const dx = p1.x - p2.x;
-          const dy = p1.y - p2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < maxConnectDist) {
-            const alpha = (1 - dist / maxConnectDist) * 0.22;
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(255, 122, 69, ${alpha})`;
-            ctx.lineWidth = 0.8;
-            ctx.stroke();
-          }
-        }
-      }
-
-      // 5. Draw Interactive Constellation Web to Cursor
-      if (mouse.x > -500 && mouse.y > -500) {
-        particles.forEach((p) => {
-          const dx = mouse.x - p.x;
-          const dy = mouse.y - p.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 180) {
-            const alpha = (1 - dist / 180) * 0.45;
-            ctx.beginPath();
-            ctx.moveTo(mouse.x, mouse.y);
-            ctx.lineTo(p.x, p.y);
-            ctx.strokeStyle = `rgba(255, 179, 0, ${alpha})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-        });
-      }
-
-      // 6. Draw Glowing Embers & Star Points
-      particles.forEach((p) => {
-        const pulse = 0.4 + 0.6 * Math.sin(time * 2 + p.pulseOffset);
-
+        // Draw ambient glowing mote
+        const pulse = 0.35 + 0.65 * Math.sin(time * 2 + m.pulseOffset);
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
+        ctx.arc(m.x, m.y, m.radius, 0, Math.PI * 2);
+        ctx.fillStyle = m.color;
         ctx.globalAlpha = pulse;
         ctx.fill();
 
-        // Subtle outer glow halo for larger embers
-        if (p.radius > 1.8) {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius * 2.8, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(255, 122, 69, 0.15)";
-          ctx.fill();
+        // Subtle halo for motes near cursor
+        if (hasMouse) {
+          const dx = mouse.x - m.x;
+          const dy = mouse.y - m.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 180) {
+            const auraAlpha = (1 - dist / 180) * 0.25;
+            ctx.beginPath();
+            ctx.arc(m.x, m.y, m.radius * 3, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 122, 69, ${auraAlpha})`;
+            ctx.fill();
+          }
         }
 
         ctx.globalAlpha = 1;
@@ -236,7 +259,7 @@ export default function ProjectBackgroundCanvas() {
     render();
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
       cancelAnimationFrame(animationFrameId);

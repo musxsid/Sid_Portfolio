@@ -1,4 +1,18 @@
-# IDE
+# Build outputs
+target/
+**/target/
+*.class
+*.jar
+*.war
+
+# Node & Frontend
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+.cache/
+
+# IDE & Editor
 .vscode/
 .idea/
 *.suo
@@ -8,5 +22,11 @@
 *.sw?
 .DS_Store
 
-# Agents
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+*.env
+
+# Agents & System
 .agents/

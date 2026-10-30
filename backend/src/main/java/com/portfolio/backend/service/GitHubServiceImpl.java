@@ -96,6 +96,9 @@ public class GitHubServiceImpl implements GitHubService {
             list = loadFromDatabaseOrFallback();
         }
 
+        // Ensure folders exist on disk for all active repositories
+        syncManagedProjectFolders(list);
+
         // Dynamically discover all images on backend disk on every fetch
         refreshDynamicImages(list);
 
@@ -108,8 +111,8 @@ public class GitHubServiceImpl implements GitHubService {
             if (dbRecord.isPresent() && dbRecord.get().getPayloadJson() != null) {
                 List<GitHubProjectDto> dbProjects = objectMapper.readValue(
                         dbRecord.get().getPayloadJson(),
-                        new TypeReference<List<GitHubProjectDto>>() {}
-                );
+                        new TypeReference<List<GitHubProjectDto>>() {
+                        });
                 if (dbProjects != null && !dbProjects.isEmpty()) {
                     cachedProjects = dbProjects;
                     return cachedProjects;
@@ -136,8 +139,7 @@ public class GitHubServiceImpl implements GitHubService {
             if (dbRecord.isPresent() && dbRecord.get().getPayloadJson() != null) {
                 GitHubContributionDataDto dbContrib = objectMapper.readValue(
                         dbRecord.get().getPayloadJson(),
-                        GitHubContributionDataDto.class
-                );
+                        GitHubContributionDataDto.class);
                 if (dbContrib != null && dbContrib.getDays() != null && !dbContrib.getDays().isEmpty()) {
                     cachedContributions = dbContrib;
                     contributionsCacheExpiry = now + CACHE_DURATION_MS;
@@ -161,12 +163,14 @@ public class GitHubServiceImpl implements GitHubService {
     }
 
     /**
-     * Incremental sync of repositories: keeps existing data intact and fetches/updates new data.
+     * Incremental sync of repositories: keeps existing data intact and
+     * fetches/updates new data.
      */
     public synchronized void syncRepositoriesFromGitHub() {
         long now = System.currentTimeMillis();
         try {
-            String url = String.format("https://api.github.com/users/%s/repos?sort=pushed&per_page=100", githubUsername);
+            String url = String.format("https://api.github.com/users/%s/repos?sort=pushed&per_page=100",
+                    githubUsername);
             HttpHeaders headers = new HttpHeaders();
             headers.set("User-Agent", "Sid-Portfolio-App/1.0");
             headers.set("Accept", "application/vnd.github.v3+json");
@@ -182,7 +186,8 @@ public class GitHubServiceImpl implements GitHubService {
                 List<GitHubProjectDto> freshProjects = new ArrayList<>();
 
                 for (JsonNode repo : reposNode) {
-                    if (repo.path("fork").asBoolean(false)) continue;
+                    if (repo.path("fork").asBoolean(false))
+                        continue;
 
                     String repoName = repo.path("name").asText();
                     String desc = repo.path("description").asText("");
@@ -200,7 +205,8 @@ public class GitHubServiceImpl implements GitHubService {
                         }
                     }
 
-                    GitHubProjectDto dto = enrichProject(repoName, desc, htmlUrl, homepage, language, topics, stars, forks, updatedAt);
+                    GitHubProjectDto dto = enrichProject(repoName, desc, htmlUrl, homepage, language, topics, stars,
+                            forks, updatedAt);
                     freshProjects.add(dto);
                 }
 
@@ -210,15 +216,115 @@ public class GitHubServiceImpl implements GitHubService {
 
                 // Save incremental update to database
                 saveSyncRecord("REPOSITORIES", objectMapper.writeValueAsString(freshProjects), freshProjects.size());
-                log.info("Successfully synced {} repositories to database with 2-hour timestamp.", freshProjects.size());
+                log.info("Successfully synced {} repositories to database with 2-hour timestamp.",
+                        freshProjects.size());
+
+                // Automatically manage & sync dedicated repository image folders on backend disk
+                syncManagedProjectFolders(freshProjects);
             }
         } catch (Exception e) {
-            log.warn("Live GitHub repository sync skipped or rate-limited: {}. Using stored database records.", e.getMessage());
+            log.warn("Live GitHub repository sync skipped or rate-limited: {}. Using stored database records.",
+                    e.getMessage());
         }
     }
 
     /**
-     * Live sync of contribution calendar from GitHub: parses exact days, levels, counts, and streaks.
+     * Automatically monitors, creates, and tracks separate folders for each GitHub repository on disk.
+     * When a new repository is added to GitHub, its dedicated images folder is created automatically.
+     * When a repository is deleted from GitHub, its folder is cleanly removed to maintain 100% sync integrity.
+     */
+    private void syncManagedProjectFolders(List<GitHubProjectDto> activeProjects) {
+        if (activeProjects == null || activeProjects.isEmpty()) return;
+
+        List<File> baseDirs = Arrays.asList(
+                new File("src/main/resources/static/projects"),
+                new File("projects"),
+                new File("backend/src/main/resources/static/projects"),
+                new File("backend/projects")
+        );
+
+        Set<String> activeFolderSlugs = new HashSet<>();
+        for (GitHubProjectDto p : activeProjects) {
+            String slug = p.getName().toLowerCase();
+            activeFolderSlugs.add(slug);
+            activeFolderSlugs.add(slug.replaceAll("[^a-z0-9-]", ""));
+            if (slug.contains("supervisor-feedback")) {
+                activeFolderSlugs.add("supervisor-feedback");
+            }
+            if (slug.contains("portfolio")) {
+                activeFolderSlugs.add("portfolio");
+            }
+            if (slug.contains("simplymusic")) {
+                activeFolderSlugs.add("simplymusic");
+            }
+        }
+
+        int createdCount = 0;
+        int cleanedCount = 0;
+
+        for (File baseDir : baseDirs) {
+            if (!baseDir.exists()) {
+                baseDir.mkdirs();
+            }
+
+            // 1. Ensure a dedicated folder exists for every active GitHub repository
+            for (GitHubProjectDto p : activeProjects) {
+                String folderName = p.getName().toLowerCase();
+                File projectDir = new File(baseDir, folderName);
+                if (!projectDir.exists()) {
+                    if (projectDir.mkdirs()) {
+                        createdCount++;
+                        log.info("[FolderSync] Created automated image folder for repository '{}' at: {}", p.getName(), projectDir.getAbsolutePath());
+                    }
+                }
+            }
+
+            // 2. Clean up folders for repositories that have been deleted on GitHub
+            File[] existingFolders = baseDir.listFiles(File::isDirectory);
+            if (existingFolders != null) {
+                for (File folder : existingFolders) {
+                    String folderName = folder.getName().toLowerCase();
+                    boolean isActive = activeFolderSlugs.contains(folderName);
+                    if (!isActive) {
+                        for (String slug : activeFolderSlugs) {
+                            if (slug.equals(folderName) || (folderName.length() >= 5 && slug.contains(folderName))) {
+                                isActive = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!isActive) {
+                        boolean deleted = deleteDirectoryRecursively(folder);
+                        if (deleted) {
+                            cleanedCount++;
+                            log.info("[FolderSync] Deleted orphaned folder '{}' for repository deleted on GitHub", folderName);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (createdCount > 0 || cleanedCount > 0) {
+            log.info("[FolderSync] Automated image folders synchronized: {} created, {} deleted.", createdCount, cleanedCount);
+        }
+    }
+
+    private boolean deleteDirectoryRecursively(File dir) {
+        if (dir.isDirectory()) {
+            File[] children = dir.listFiles();
+            if (children != null) {
+                for (File child : children) {
+                    deleteDirectoryRecursively(child);
+                }
+            }
+        }
+        return dir.delete();
+    }
+
+    /**
+     * Live sync of contribution calendar from GitHub: parses exact days, levels,
+     * counts, and streaks.
      */
     public synchronized void syncContributionsFromGitHub() {
         long now = System.currentTimeMillis();
@@ -236,14 +342,17 @@ public class GitHubServiceImpl implements GitHubService {
 
                 // 1. Total contributions
                 int totalContributions = 151;
-                Matcher totalMatcher = Pattern.compile("([0-9,]+)\\s+contributions\\s+in the last year", Pattern.CASE_INSENSITIVE).matcher(html);
+                Matcher totalMatcher = Pattern
+                        .compile("([0-9,]+)\\s+contributions\\s+in the last year", Pattern.CASE_INSENSITIVE)
+                        .matcher(html);
                 if (totalMatcher.find()) {
                     totalContributions = Integer.parseInt(totalMatcher.group(1).replace(",", ""));
                 }
 
                 // 2. Parse all days
                 // data-date="2025-10-26" id="contribution-day-component-0-0" data-level="0"
-                Pattern dayPattern = Pattern.compile("data-date=\"([0-9]{4}-[0-9]{2}-[0-9]{2})\"[^>]*id=\"([^\"]+)\"[^>]*data-level=\"([0-9])\"");
+                Pattern dayPattern = Pattern.compile(
+                        "data-date=\"([0-9]{4}-[0-9]{2}-[0-9]{2})\"[^>]*id=\"([^\"]+)\"[^>]*data-level=\"([0-9])\"");
                 Matcher dayMatcher = dayPattern.matcher(html);
 
                 List<GitHubContributionDataDto.Day> daysList = new ArrayList<>();
@@ -271,7 +380,8 @@ public class GitHubServiceImpl implements GitHubService {
                             .build());
                 }
 
-                // IMPORTANT: Sort chronologically by date so columns map correctly across 52 weeks
+                // IMPORTANT: Sort chronologically by date so columns map correctly across 52
+                // weeks
                 daysList.sort(Comparator.comparing(GitHubContributionDataDto.Day::getDate));
 
                 // Calculate streaks
@@ -282,7 +392,8 @@ public class GitHubServiceImpl implements GitHubService {
                 for (GitHubContributionDataDto.Day d : daysList) {
                     if (d.getCount() > 0) {
                         tempStreak++;
-                        if (tempStreak > longestStreak) longestStreak = tempStreak;
+                        if (tempStreak > longestStreak)
+                            longestStreak = tempStreak;
                     } else {
                         tempStreak = 0;
                     }
@@ -309,7 +420,8 @@ public class GitHubServiceImpl implements GitHubService {
 
                 // Persist to database record
                 saveSyncRecord("CONTRIBUTIONS", objectMapper.writeValueAsString(dto), daysList.size());
-                log.info("Successfully synced 100% accurate contributions ({} days, {} total) to DB.", daysList.size(), totalContributions);
+                log.info("Successfully synced 100% accurate contributions ({} days, {} total) to DB.", daysList.size(),
+                        totalContributions);
             }
         } catch (Exception e) {
             log.warn("Live contributions sync fallback to database/resource: {}", e.getMessage());
@@ -344,71 +456,185 @@ public class GitHubServiceImpl implements GitHubService {
         return getFallbackContributions();
     }
 
+    @Override
+    public List<String> findProjectImages(String repoName) {
+        if (repoName == null || repoName.isBlank())
+            return Collections.emptyList();
+        String targetSlug = repoName.toLowerCase().replaceAll("[^a-z0-9]", "");
+
+        List<File> baseDirs = Arrays.asList(
+                new File("src/main/resources/static/projects"),
+                new File("projects"),
+                new File("backend/src/main/resources/static/projects"),
+                new File("backend/projects"),
+                new File("D:/Programming/Sid_Portfolio/backend/src/main/resources/static/projects"),
+                new File("D:/Programming/Sid_Portfolio/backend/projects"),
+                new File("D:/Programming/Sid_Portfolio/frontend/public/projects"));
+
+        Set<String> imagePaths = new LinkedHashSet<>();
+
+        for (File baseDir : baseDirs) {
+            if (!baseDir.exists() || !baseDir.isDirectory())
+                continue;
+
+            File[] subDirs = baseDir.listFiles(File::isDirectory);
+            if (subDirs == null)
+                continue;
+
+            for (File subDir : subDirs) {
+                String folderName = subDir.getName();
+                String folderSlug = folderName.toLowerCase().replaceAll("[^a-z0-9]", "");
+
+                boolean match = folderSlug.equals(targetSlug)
+                        || (targetSlug.length() >= 5 && folderSlug.contains(targetSlug))
+                        || (folderSlug.length() >= 5 && targetSlug.contains(folderSlug));
+
+                if (!match) {
+                    if (targetSlug.contains("simplyaudio") && folderSlug.contains("simplyaudio")) {
+                        match = true;
+                    } else if (targetSlug.contains("supervisorfeedback") && folderSlug.contains("supervisorfeedback")) {
+                        match = true;
+                    } else if ((targetSlug.contains("portfolio") || targetSlug.contains("sidportfolio"))
+                            && (folderSlug.contains("portfolio") || folderSlug.contains("sidportfolio"))) {
+                        match = true;
+                    } else if (targetSlug.contains("simplymusic") && folderSlug.contains("simplymusic")) {
+                        match = true;
+                    }
+                }
+
+                if (match) {
+                    File[] files = subDir.listFiles((dir, name) -> {
+                        String lower = name.toLowerCase();
+                        return lower.endsWith(".jpg") || lower.endsWith(".jpeg")
+                                || lower.endsWith(".png") || lower.endsWith(".webp")
+                                || lower.endsWith(".svg") || lower.endsWith(".gif");
+                    });
+
+                    if (files != null && files.length > 0) {
+                        List<File> fileList = new ArrayList<>(Arrays.asList(files));
+                        fileList.sort((a, b) -> {
+                            String nameA = a.getName().toLowerCase();
+                            String nameB = b.getName().toLowerCase();
+                            boolean aIsLanding = nameA.contains("landing") || nameA.contains("home")
+                                    || nameA.contains("login");
+                            boolean bIsLanding = nameB.contains("landing") || nameB.contains("home")
+                                    || nameB.contains("login");
+                            if (aIsLanding && !bIsLanding)
+                                return -1;
+                            if (!aIsLanding && bIsLanding)
+                                return 1;
+                            return nameA.compareTo(nameB);
+                        });
+
+                        for (File f : fileList) {
+                            imagePaths.add("/projects/" + folderName + "/" + f.getName());
+                        }
+                    }
+                }
+            }
+            if (!imagePaths.isEmpty()) {
+                break;
+            }
+        }
+
+        return new ArrayList<>(imagePaths);
+    }
+
+    private void refreshDynamicImages(List<GitHubProjectDto> list) {
+        if (list == null)
+            return;
+        for (GitHubProjectDto proj : list) {
+            List<String> discovered = findProjectImages(proj.getName());
+            if (!discovered.isEmpty()) {
+                proj.setImages(discovered);
+            }
+        }
+    }
+
     private GitHubProjectDto enrichProject(String repoName, String desc, String htmlUrl, String homepage,
-                                          String language, List<String> topics, int stars, int forks, String updatedAt) {
+            String language, List<String> topics, int stars, int forks, String updatedAt) {
         String lowerName = repoName.toLowerCase();
         String title = repoName;
         String tagline = desc.isBlank() ? "Engineered with modern architecture" : desc;
-        List<String> images = new ArrayList<>();
         List<String> techStack = new ArrayList<>(topics);
 
         if (techStack.isEmpty() && language != null && !language.isBlank()) {
             techStack.add(language);
         }
 
-        // Project-specific enhancements matching Sid's local project folders
-        if (lowerName.contains("simplynotes")) {
-            title = "SimplyNotes";
-            tagline = "Collaborative Workspace with Hierarchical JPA Folios & JWT Security";
-            desc = "Designed a relational document store with nested workspaces, folders, and markdown folios using JPA/Hibernate. Features fine-grained JWT role authentication, UUID-partitioned asset storage, and instant read-only public sharing links.";
-            techStack = Arrays.asList("Spring Boot 3", "React 19", "MySQL", "Spring Security", "JWT", "Tailwind CSS", "Framer Motion");
-            images = Arrays.asList(
-                    "/projects/simplynotes/frontend - landing page.jpg",
-                    "/projects/simplynotes/frontend - login page .jpg",
-                    "/projects/simplynotes/user home page .jpg",
-                    "/projects/simplynotes/notes formatting options .jpg",
-                    "/projects/simplynotes/readonly shared note.jpg"
-            );
-        } else if (lowerName.contains("supervisor-feedback-analyzer")) {
+        // Dynamically find images on disk from backend static folders
+        List<String> images = findProjectImages(repoName);
+
+        // Project-specific enhancements matching Sid's authentic architecture
+        if (lowerName.contains("omnistay-erp") || lowerName.contains("omnistay")) {
+            title = "OmniStay ERP";
+            tagline = "Full-Stack Hotel Management & Relational Ledger System";
+            desc = "Full-stack hotel management and booking system built with Java 17, Spring Boot 4, PostgreSQL, and React 19. Links staff operations to a public guest portal. Uses a relational folio ledger for room charges, dynamic room matrix tracking, a POS module, an automated night audit, and an AI assistant for guest reviews.";
+            techStack = Arrays.asList("Java 17", "Spring Boot", "PostgreSQL", "React 19", "Hibernate JPA", "REST API",
+                    "Recharts");
+        } else if (lowerName.contains("simplyaudio")) {
+            title = "simplyAudio";
+            tagline = "Event-Driven Audio Microservices with RabbitMQ & Spring Boot";
+            desc = "Distributed, enterprise-grade music streaming and cataloging platform built with Spring Boot, React, and an asynchronous RabbitMQ event-driven architecture. Isolates media streaming, real-time analytics, and Keycloak SSO into independent Docker microservices.";
+            techStack = Arrays.asList("Spring Boot", "RabbitMQ", "Keycloak SSO", "Docker", "React 19", "MinIO S3", "Microservices");
+        } else if (lowerName.contains("supervisor-feedback-analyzer") || lowerName.contains("supervisor-feedback")) {
             title = "Supervisor Feedback Analyzer";
             tagline = "Deterministic Workplace Performance Analytics via Local Llama 3.2";
             desc = "End-to-end evaluation engine parsing unstructured reviews through local Llama 3.2 via Ollama and Spring AI. Implements structured JSON schema enforcement to compute evidence-backed KPI scores, leadership competency metrics, and growth trajectories.";
-            techStack = Arrays.asList("Llama 3.2", "Ollama", "Spring AI", "Spring Boot", "React 19", "REST APIs", "Tailwind CSS");
-            images = Arrays.asList(
-                    "/projects/supervisor-feedback/supervisor feedback analyzer - landing page .jpg",
-                    "/projects/supervisor-feedback/run analysis option.jpg",
-                    "/projects/supervisor-feedback/pompt engineering.jpg",
-                    "/projects/supervisor-feedback/results.jpg",
-                    "/projects/supervisor-feedback/results2.jpg"
-            );
-        } else if (lowerName.contains("simplymusic") || lowerName.contains("simplyaudio")) {
+            techStack = Arrays.asList("Llama 3.2", "Ollama", "Spring AI", "Spring Boot", "React 19", "REST APIs",
+                    "Tailwind CSS");
+        } else if (lowerName.contains("gibs-git_in_bits-main") || lowerName.contains("gibs")) {
+            title = "Git In Bits (GIBs)";
+            tagline = "Engineering Analytics Platform with Groq LLM Briefings";
+            desc = "Full-stack engineering analytics platform built with Spring Boot, React, and MongoDB. Syncs GitHub organization activity into a local database to compute velocity metrics, repository health scores, and structured AI briefings via Groq (Llama 3.3 70B).";
+            techStack = Arrays.asList("Spring Boot", "Java 21", "React 19", "MongoDB", "Groq AI", "Llama 3.3 70B",
+                    "Tailwind CSS", "TanStack Query");
+        } else if (lowerName.contains("sid_portfolio") || lowerName.contains("portfolio")) {
+            title = "Sid Portfolio";
+            tagline = "Creative Engineering Portfolio with Dynamic GitHub Ingestion";
+            desc = "Interactive portfolio built with React 19, Tailwind CSS 4, and Spring Boot. Features dynamic GitHub repository synchronizers, custom hardware-accelerated liquid glass shaders, and responsive 3D card physics.";
+            techStack = Arrays.asList("React 19", "Tailwind CSS 4", "Framer Motion", "Vite", "Spring Boot",
+                    "JavaScript");
+        } else if (lowerName.contains("go-auth-postgres")) {
+            title = "Go Auth Microservice";
+            tagline = "Low-Latency Authentication Engine with Argon2id & RS256 Tokens";
+            desc = "Developed a secure backend authentication system using Go, PostgreSQL, and Docker. Implemented JWT-based authentication, Argon2id/Bcrypt password hashing, and custom RBAC middleware for protected route access control.";
+            techStack = Arrays.asList("Go", "PostgreSQL", "Argon2id", "Docker", "JWT (RS256)", "REST APIs");
+        } else if (lowerName.contains("docuvault")) {
+            title = "DocuVault";
+            tagline = "Secure Document Ingestion & Vector Storage Pipeline";
+            desc = "Cryptographically secured document indexing pipeline built with Python. Features content chunking, vector embedding generation, and metadata indexing for low-latency retrieval.";
+            techStack = Arrays.asList("Python", "FastAPI", "Vector Embeddings", "Document Ingestion");
+        } else if (lowerName.contains("simplymusic")) {
             title = "SimplyMusic";
             tagline = "Distributed Audio Streaming Platform with Keycloak SSO & MinIO";
             desc = "Microservices ecosystem for audio streaming with centralized Keycloak OAuth2/OIDC single sign-on. Media assets are partitioned across MinIO S3 object storage while track indexes and playlists are managed through MongoDB and Redis.";
             techStack = Arrays.asList("Java 21", "Keycloak", "MinIO (S3)", "MongoDB", "Redis", "Docker", "React");
-            images = Arrays.asList(
-                    "/projects/simplymusic/image-1.png",
-                    "/projects/simplymusic/image-2.png"
-            );
-        } else if (lowerName.contains("sid_portfolio") || lowerName.contains("portfolio")) {
-            title = "Portfolio Website";
-            tagline = "Creative Engineering Portfolio with Dynamic GitHub Ingestion";
-            desc = "Interactive portfolio built with React 19, Tailwind CSS 4, and Spring Boot. Features dynamic GitHub repository synchronizers, custom hardware-accelerated liquid glass shaders, and responsive 3D card physics.";
-            techStack = Arrays.asList("React 19", "Tailwind CSS 4", "Framer Motion", "Vite", "Spring Boot", "Docker");
-            images = Arrays.asList(
-                    "/projects/portfolio/image-1.png",
-                    "/projects/portfolio/image-2.png"
-            );
+        } else if (lowerName.contains("triage")) {
+            title = "Triage";
+            tagline = "Automated Task Triage & Distributed Workflow Orchestration";
+            desc = "Automated incident routing and task dispatching system with real-time state evaluation and queue worker scheduling.";
+            techStack = Arrays.asList("JavaScript", "Node.js", "Queue Workers", "REST APIs");
         } else if (lowerName.contains("jobhive")) {
             title = "JobHive";
             tagline = "Enterprise Recruitment Platform with Entity Framework Core";
             desc = "Full-stack job portal built on .NET Core (MVC) and SQL Server. Implements multi-criteria vacancy filters, resume parsing, candidate application status workflows, and typed queries via Entity Framework Core.";
             techStack = Arrays.asList(".NET Core", "C#", "SQL Server", "Entity Framework", "MVC", "SCSS");
-        } else if (lowerName.contains("go-auth-postgres")) {
-            title = "Go Auth Microservice";
-            tagline = "Low-Latency Authentication Engine with Argon2id & RS256 Tokens";
-            desc = "Cloud-native microservice written in Go and PostgreSQL delivering sub-5ms auth verification. Utilizes Argon2id password hashing, RS256 asymmetric JWT key pairs, and connection pool tuning via pgx.";
-            techStack = Arrays.asList("Go", "PostgreSQL", "Argon2id", "Docker", "JWT (RS256)", "REST APIs");
+        } else if (lowerName.contains("superutility")) {
+            title = "SuperUtility";
+            tagline = "Cross-Platform Kotlin System Utilities & Concurrency Helpers";
+            desc = "Modular Kotlin utility library offering cross-platform extensions, coroutine schedulers, file stream processors, and system diagnostic probes.";
+            techStack = Arrays.asList("Kotlin", "Coroutines", "System Diagnostics", "Concurrency");
+        } else if (lowerName.contains("data-structures-and-algorithms")) {
+            title = "Data Structures & Algorithms";
+            tagline = "High-Performance Algorithmic Implementations & Complexity Analysis";
+            desc = "Curated repository of optimized data structures, algorithmic paradigms (dynamic programming, graph traversals, tree manipulations), and asymptotic runtime benchmarks.";
+            techStack = Arrays.asList("Java", "Algorithms", "Data Structures", "Dynamic Programming", "Graph Theory");
+        } else if (lowerName.contains("simplyaudio-workspace")) {
+            title = "SimplyAudio Workspace";
+            tagline = "Companion Orchestration Environment & Asset Pipeline";
+            desc = "Developer workspace orchestration environment managing microservices lifecycle, environment variables, and Docker network topologies.";
+            techStack = Arrays.asList("Docker", "Shell", "Microservices", "Workspace Config");
         }
 
         return GitHubProjectDto.builder()
@@ -430,18 +656,19 @@ public class GitHubServiceImpl implements GitHubService {
 
     private void sortProjects(List<GitHubProjectDto> list) {
         List<String> priority = Arrays.asList(
-                "simplynotes",
-                "supervisor-feedback-analyzer",
-                "simplymusic",
-                "simplyaudio",
-                "sid_portfolio",
-                "jobhive",
-                "go-auth-postgres",
-                "triage",
                 "omnistay-erp",
-                "omni-ride",
-                "superutility"
-        );
+                "simplyaudio",
+                "supervisor-feedback-analyzer",
+                "gibs-git_in_bits-main",
+                "sid_portfolio",
+                "go-auth-postgres",
+                "docuvault",
+                "simplymusic",
+                "triage",
+                "jobhive",
+                "superutility",
+                "data-structures-and-algorithms",
+                "simplyaudio-workspace");
 
         list.sort((a, b) -> {
             int idxA = -1;
@@ -458,9 +685,12 @@ public class GitHubServiceImpl implements GitHubService {
                     break;
                 }
             }
-            if (idxA != -1 && idxB != -1) return Integer.compare(idxA, idxB);
-            if (idxA != -1) return -1;
-            if (idxB != -1) return 1;
+            if (idxA != -1 && idxB != -1)
+                return Integer.compare(idxA, idxB);
+            if (idxA != -1)
+                return -1;
+            if (idxB != -1)
+                return 1;
             return 0;
         });
     }
@@ -470,7 +700,9 @@ public class GitHubServiceImpl implements GitHubService {
             ClassPathResource res = new ClassPathResource("github_repos_live.json");
             if (res.exists()) {
                 try (InputStream is = res.getInputStream()) {
-                    List<GitHubProjectDto> list = objectMapper.readValue(is, new TypeReference<List<GitHubProjectDto>>() {});
+                    List<GitHubProjectDto> list = objectMapper.readValue(is,
+                            new TypeReference<List<GitHubProjectDto>>() {
+                            });
                     if (list != null && !list.isEmpty()) {
                         return list;
                     }
@@ -481,12 +713,23 @@ public class GitHubServiceImpl implements GitHubService {
         }
 
         List<GitHubProjectDto> list = new ArrayList<>();
-        list.add(enrichProject("simplynotes", "Collaborative Workspace with Hierarchical JPA Folios & JWT Security", "https://github.com/musxsid/SimplyNotes", "", "Java", Arrays.asList("Spring Boot 3", "React 19", "MySQL"), 4, 1, "2026-08-15"));
-        list.add(enrichProject("supervisor-feedback-analyzer", "Deterministic Workplace Performance Analytics via Local Llama 3.2", "https://github.com/musxsid/supervisor-feedback-analyzer", "", "JavaScript", Arrays.asList("Llama 3.2", "Ollama", "Spring AI", "Spring Boot"), 3, 0, "2026-09-02"));
-        list.add(enrichProject("simplyMusic", "Distributed Audio Streaming Platform with Keycloak SSO & MinIO", "https://github.com/musxsid/simplyMusic", "", "Java", Arrays.asList("Java 21", "Keycloak", "MinIO", "MongoDB"), 2, 0, "2026-07-28"));
-        list.add(enrichProject("Sid_Portfolio", "Creative Engineering Portfolio with Dynamic GitHub Ingestion", "https://github.com/musxsid/Sid_Portfolio", "", "JavaScript", Arrays.asList("React 19", "Tailwind CSS 4", "Framer Motion", "Spring Boot"), 5, 1, "2026-10-25"));
-        list.add(enrichProject("JobHive", "Enterprise Recruitment Platform with Entity Framework Core", "https://github.com/musxsid/JobHive", "", "C#", Arrays.asList(".NET Core", "C#", "SQL Server"), 2, 0, "2025-08-20"));
-        list.add(enrichProject("go-auth-postgres", "Low-Latency Authentication Engine with Argon2id & RS256 Tokens", "https://github.com/musxsid/go-auth-postgres", "", "Go", Arrays.asList("Go", "PostgreSQL", "Docker", "JWT"), 2, 0, "2026-05-10"));
+        list.add(enrichProject("omnistay-erp",
+                "Full-stack hotel management and booking system built with Java 17, Spring Boot 4, PostgreSQL, and React 19.",
+                "https://github.com/musxsid/omnistay-erp", "", "Java",
+                Arrays.asList("Spring Boot", "PostgreSQL", "React 19"), 0, 0, "2026-08-25"));
+        list.add(enrichProject("simplyAudio", "Collaborative Workspace with Hierarchical JPA Folios & JWT Security",
+                "https://github.com/musxsid/simplyAudio", "", "Java",
+                Arrays.asList("Spring Boot 3", "React 19", "MySQL"), 4, 1, "2026-07-30"));
+        list.add(enrichProject("supervisor-feedback-analyzer",
+                "Deterministic Workplace Performance Analytics via Local Llama 3.2",
+                "https://github.com/musxsid/supervisor-feedback-analyzer", "", "JavaScript",
+                Arrays.asList("Llama 3.2", "Ollama", "Spring AI", "Spring Boot"), 3, 0, "2026-05-08"));
+        list.add(enrichProject("GIBs-Git_In_Bits-main", "Engineering Analytics Platform with Groq LLM Briefings",
+                "https://github.com/musxsid/GIBs-Git_In_Bits-main", "", "TypeScript",
+                Arrays.asList("Spring Boot", "React 19", "MongoDB"), 0, 0, "2026-08-13"));
+        list.add(enrichProject("Sid_Portfolio", "Creative Engineering Portfolio with Dynamic GitHub Ingestion",
+                "https://github.com/musxsid/Sid_Portfolio", "", "JavaScript",
+                Arrays.asList("React 19", "Tailwind CSS 4", "Framer Motion", "Spring Boot"), 5, 1, "2026-10-30"));
         return list;
     }
 
