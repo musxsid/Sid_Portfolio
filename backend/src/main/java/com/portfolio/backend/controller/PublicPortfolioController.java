@@ -49,10 +49,17 @@ public class PublicPortfolioController {
         return new ResponseEntity<>(savedLead, HttpStatus.CREATED);
     }
 
-    // Dynamic GitHub Repositories
+    // Dynamic GitHub Repositories (real-time sync + backend dynamic image discovery)
     @GetMapping("/github/projects")
-    public ResponseEntity<List<GitHubProjectDto>> getGitHubProjects() {
-        return ResponseEntity.ok(gitHubService.getProjects());
+    public ResponseEntity<List<GitHubProjectDto>> getGitHubProjects(
+            @RequestParam(value = "refresh", defaultValue = "false") boolean refresh) {
+        return ResponseEntity.ok(gitHubService.getProjects(refresh));
+    }
+
+    // Dynamic Image Discovery for a given project slug
+    @GetMapping("/projects/{repoName}/images")
+    public ResponseEntity<List<String>> getProjectImages(@PathVariable String repoName) {
+        return ResponseEntity.ok(gitHubService.findProjectImages(repoName));
     }
 
     // Dynamic GitHub Contribution Heatmap Widget Data

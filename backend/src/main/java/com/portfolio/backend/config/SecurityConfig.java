@@ -20,8 +20,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Allow CORS preflight requests
                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-                // Public Domain - all endpoints under /api/public/** are open to visitors
-                .requestMatchers("/api/public/**").permitAll()
+                // Public Domain & Static Assets - open to visitors and frontend ingestion
+                .requestMatchers("/api/public/**", "/projects/**", "/resume/**", "/static/**", "/error").permitAll()
                 // Admin Domain
                 .requestMatchers("/api/admin/**").authenticated()
                 // Any other request

@@ -32,23 +32,23 @@ export default function Newsletter() {
         setStatus("error");
         setErrorMessage(res.message || "Something went wrong. Please try again.");
       }
-    } catch (_err) {
+    } catch {
       setStatus("error");
       setErrorMessage("Unable to connect to newsletter service. Try again later.");
     }
   };
 
   return (
-    <section 
-      ref={sectionRef} 
-      id="newsletter" 
+    <section
+      ref={sectionRef}
+      id="newsletter"
       className="relative py-24 z-20 overflow-hidden bg-gradient-to-b from-[#0a0a0a] via-[#090d16] to-black"
     >
       {/* Background ambient lighting */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[300px] bg-accent-warm/10 blur-[160px] rounded-full pointer-events-none" />
 
       <div className="section-container max-w-4xl mx-auto px-6 relative z-10">
-        
+
         <motion.div
           initial={{ opacity: 0, y: 35 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -84,7 +84,7 @@ export default function Newsletter() {
           ) : (
             <form onSubmit={handleSubmit} className="max-w-md mx-auto">
               <div className="relative flex flex-col sm:flex-row gap-3 items-center">
-                
+
                 <div className="relative w-full">
                   <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                     <Mail className="w-4 h-4" />

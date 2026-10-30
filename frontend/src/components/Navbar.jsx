@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Download, Menu, X } from "lucide-react";
+import { portfolioApi } from "../services/api";
+
 const navLinks = [
   { label: "About Me", href: "#about" },
   { label: "Experience", href: "#experience" },
@@ -13,7 +15,19 @@ const navLinks = [
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const resumeUrl = "/resume/Siddharth_Resume.pdf";
+  const [resumeUrl, setResumeUrl] = useState("/resume/Siddharth Resume.pdf");
+
+  useEffect(() => {
+    let isMounted = true;
+    portfolioApi.getResume().then((url) => {
+      if (isMounted && url) {
+        setResumeUrl(url);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);

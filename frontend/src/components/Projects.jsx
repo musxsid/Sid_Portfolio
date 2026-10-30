@@ -7,7 +7,9 @@ import {
   ChevronLeft, 
   ChevronRight, 
   ArrowUpRight,
-  ArrowRight
+  ArrowRight,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 import ProjectBackgroundCanvas from "./ProjectBackgroundCanvas";
 import { portfolioApi } from "../services/api";
@@ -27,11 +29,22 @@ const LANGUAGE_STYLES = {
   "C#": { dot: "#a855f7", text: "text-purple-400", border: "border-purple-500/30", bg: "bg-purple-500/10" },
   Go: { dot: "#06b6d4", text: "text-cyan-400", border: "border-cyan-500/30", bg: "bg-cyan-500/10" },
   Python: { dot: "#10b981", text: "text-emerald-400", border: "border-emerald-500/30", bg: "bg-emerald-500/10" },
+  Kotlin: { dot: "#c084fc", text: "text-purple-400", border: "border-purple-500/30", bg: "bg-purple-500/10" },
+  Shell: { dot: "#84cc16", text: "text-lime-400", border: "border-lime-500/30", bg: "bg-lime-500/10" },
+  HTML: { dot: "#f97316", text: "text-orange-400", border: "border-orange-500/30", bg: "bg-orange-500/10" },
+  SCSS: { dot: "#ec4899", text: "text-pink-400", border: "border-pink-500/30", bg: "bg-pink-500/10" },
+  FreeMarker: { dot: "#06b6d4", text: "text-cyan-400", border: "border-cyan-500/30", bg: "bg-cyan-500/10" },
+  Code: { dot: "#ff7a45", text: "text-accent-warm", border: "border-accent-warm/30", bg: "bg-accent-warm/10" },
 };
 
-// Hand-crafted engineering highlights (No AI resume fluff)
+// Hand-crafted engineering highlights for all GitHub repositories
 const PROJECT_HIGHLIGHTS = {
   simplynotes: [
+    { label: "Data Architecture", text: "Hierarchical workspace, folder, and markdown folio trees mapped via JPA/Hibernate." },
+    { label: "Security & Auth", text: "Stateless JWT auth pipeline with token rotation, Argon2 hashing, and UUID-partitioned storage." },
+    { label: "User Interface", text: "Liquid-glass interface powered by React 19, Tailwind CSS, and Framer Motion spring physics." }
+  ],
+  simplyaudio: [
     { label: "Data Architecture", text: "Hierarchical workspace, folder, and markdown folio trees mapped via JPA/Hibernate." },
     { label: "Security & Auth", text: "Stateless JWT auth pipeline with token rotation, Argon2 hashing, and UUID-partitioned storage." },
     { label: "User Interface", text: "Liquid-glass interface powered by React 19, Tailwind CSS, and Framer Motion spring physics." }
@@ -46,10 +59,30 @@ const PROJECT_HIGHLIGHTS = {
     { label: "Media Storage", text: "High-throughput audio streaming and asset chunking partitioned across MinIO S3 object stores." },
     { label: "Data Ingestion", text: "Decoupled catalog indexing in MongoDB with sub-10ms Redis caching for instant playlist retrieval." }
   ],
-  "sid-portfolio": [
-    { label: "Live GitHub Ingestion", text: "Automated caching layer fetching real-time repository stars, forks, and commit activities." },
+  sid_portfolio: [
+    { label: "Live GitHub Ingestion", text: "Scheduled background cache layer synchronizing authentic repositories and contribution calendar." },
     { label: "Liquid Optics Shader", text: "Hardware-accelerated 2D canvas simulating fluid caustics, floating embers, and refractive waves." },
     { label: "Build Toolchain", text: "Zero-runtime CSS with Tailwind v4, Vite 8 bundle pipeline, and strict semantic HTML5 architecture." }
+  ],
+  "omnistay-erp": [
+    { label: "Relational Folio Ledger", text: "Multi-tenant folio billing engine processing room charges, restaurant POS tabs, and payments with ACID guarantees." },
+    { label: "Inventory Matrix", text: "Dynamic room availability grids, automated night audit batch processing, and guest check-in state machines." },
+    { label: "AI Review Analysis", text: "Spring Boot AI integration extracting structured guest sentiments and operational metrics." }
+  ],
+  "gibs-git_in_bits-main": [
+    { label: "Git Telemetry Sync", text: "Event ingestion pipeline pooling commits, pull requests, and CI/CD runs into MongoDB document stores." },
+    { label: "AI Briefing Engine", text: "Real-time velocity metrics and sprint summaries generated via Groq-accelerated Llama 3.3 70B models." },
+    { label: "Reactive Frontend", text: "TanStack Query and React 19 dashboard rendering real-time engineering velocity and health charts." }
+  ],
+  docuvault: [
+    { label: "Vector Pipeline", text: "Chunking and vectorization pipeline transforming multi-format documents into searchable semantic embeddings." },
+    { label: "Asynchronous API", text: "High-throughput FastAPI backend with background ingestion workers and deterministic similarity search." },
+    { label: "Cryptographic Storage", text: "Encrypted asset repositories with metadata indexing and token-based download expirations." }
+  ],
+  triage: [
+    { label: "Incident Dispatch", text: "Priority scoring engine dynamically clustering incident tickets and routing tasks to specialized responders." },
+    { label: "State Evaluation", text: "Real-time state machine evaluating SLA thresholds, escalations, and automated alerts." },
+    { label: "Queue Workers", text: "Concurrency-tuned background workers processing task assignment streams without race conditions." }
   ],
   jobhive: [
     { label: "Relational Domain", text: "Normalized SQL Server schema optimized for multi-parameter vacancy filtering and applications." },
@@ -60,8 +93,68 @@ const PROJECT_HIGHLIGHTS = {
     { label: "Sub-5ms Latency", text: "High-concurrency Go HTTP service engineered with tuned pgx connection pools and zero heap bloat." },
     { label: "Cryptographic Auth", text: "Password hashing via Argon2id with RS256 asymmetric JWT key signing and token blacklisting." },
     { label: "Cloud Native", text: "Containerized Docker microservice with structured logging, health probes, and graceful termination." }
+  ],
+  "omni-ride": [
+    { label: "Geo-Spatial Dispatch", text: "Proximity matching engine indexing real-time driver coordinates for sub-second ride allocation." },
+    { label: "Fare Calculation", text: "Dynamic surge pricing matrices computed across historical demand curves and distance vectors." },
+    { label: "State Machine", text: "Transaction-safe ride lifecycle transitions from booking and pickup to drop-off and payment capture." }
+  ],
+  superutility: [
+    { label: "Concurrency Utilities", text: "High-performance Kotlin coroutine dispatchers and parallel task aggregation primitives." },
+    { label: "System Diagnostics", text: "Cross-platform hardware telemetry probes measuring memory footprint, CPU load, and I/O latency." },
+    { label: "Stream Processors", text: "Zero-copy byte stream utilities optimizing file compression and network packet handling." }
+  ],
+  "data-structures-and-algorithms": [
+    { label: "Asymptotic Benchmarking", text: "Empirical runtime profiling and memory optimization across complex tree and graph data structures." },
+    { label: "Advanced Algorithms", text: "Clean implementations of network flow, dynamic programming, topological sorts, and disjoint sets." },
+    { label: "Test Rigor", text: "Unit test coverage verifying edge cases, recursion depth limits, and algorithmic correctness." }
+  ],
+  "news-aggregator": [
+    { label: "Multi-Provider Ingestion", text: "Parallel asynchronous fetching across global RSS channels and third-party news REST endpoints." },
+    { label: "De-duplication", text: "Content fingerprinting algorithm filtering out duplicate wire reports and press releases." },
+    { label: "In-Memory Cache", text: "Tiered client-side caching guaranteeing instant feed delivery and offline resilience." }
+  ],
+  "next-movieapp": [
+    { label: "Server-Side Rendering", text: "Next.js streaming architecture providing sub-second Time-to-First-Byte for media catalogs." },
+    { label: "Dynamic Filtering", text: "Multi-parameter search and genre matrix filters backed by TMDB API pagination." },
+    { label: "Responsive UI", text: "Tailwind CSS fluid media carousels and modal trailers engineered for desktop and touch screens." }
+  ],
+  "cia-restaurant-website": [
+    { label: "Hospitality UX", text: "Interactive menu categorization with dietary tag filters and chef specials showcases." },
+    { label: "Table Reservation", text: "Validation-hardened booking workflows capturing seating preferences and time slot availability." },
+    { label: "Micro-Interactions", text: "Lightweight CSS animations delivering a luxury culinary dining brand experience." }
   ]
 };
+
+// Dynamic fallback highlights for any repository (current or future live additions)
+function getProjectHighlights(project) {
+  if (!project) return [];
+  const pId = (project.id || "").toLowerCase();
+  const pName = (project.name || "").toLowerCase();
+  
+  const key = Object.keys(PROJECT_HIGHLIGHTS).find(
+    k => pId.includes(k) || pName.includes(k) || k.includes(pId)
+  );
+
+  if (key && PROJECT_HIGHLIGHTS[key]) {
+    return PROJECT_HIGHLIGHTS[key];
+  }
+
+  return [
+    {
+      label: "Architecture & Systems",
+      text: project.description || "Engineered with modular, decoupled architecture and production-grade reliability."
+    },
+    {
+      label: "Primary Runtime & Stack",
+      text: `Engineered using ${project.language || "modern standards"} with ${project.techStack?.slice(0, 4).join(", ") || "cloud-native patterns"}.`
+    },
+    {
+      label: "Open Source Cadence",
+      text: "Continuous delivery and git commit telemetry synchronized live from GitHub."
+    }
+  ];
+}
 
 function ProjectStagePreview({ project, images, title }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -224,9 +317,11 @@ function ProjectStagePreview({ project, images, title }) {
 export default function Projects() {
   const [projects, setProjects] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const containerRef = useRef(null);
   const stageRef = useRef(null);
+  const trackRef = useRef(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -239,6 +334,17 @@ export default function Projects() {
       isMounted = false;
     };
   }, []);
+
+  // Smoothly center the active timeline item in the scrollable track
+  useEffect(() => {
+    if (trackRef.current && trackRef.current.children[activeIndex]) {
+      trackRef.current.children[activeIndex].scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    }
+  }, [activeIndex]);
 
   const activeProject = projects[activeIndex] || projects[0];
   const nextProject = projects[(activeIndex + 1) % projects.length];
@@ -260,11 +366,8 @@ export default function Projects() {
     }
   };
 
-  const currentHighlights = activeProject
-    ? PROJECT_HIGHLIGHTS[activeProject.id] || [
-        { label: "Core Architecture", text: activeProject.description || "Production-grade system architecture." }
-      ]
-    : [];
+  const currentHighlights = getProjectHighlights(activeProject);
+  const displayedProjects = isExpanded ? projects : projects.slice(0, 5);
 
   const langStyle = activeProject?.language
     ? LANGUAGE_STYLES[activeProject.language] || {
@@ -302,25 +405,61 @@ export default function Projects() {
             Production backends, distributed microservices, and applied AI systems synchronized directly from GitHub.
           </p>
 
-          {/* Minimal Project Timeline Track (Clean, Unboxed, No Clunky Pills) */}
-          <div className="flex items-center justify-center gap-4 sm:gap-6 mt-6 flex-wrap font-mono text-xs text-gray-400">
-            {projects.map((proj, idx) => {
-              const isSelected = idx === activeIndex;
-              return (
-                <button
-                  key={proj.id || idx}
-                  onClick={() => setActiveIndex(idx)}
-                  className={`flex items-center gap-2 py-1 transition-all duration-300 cursor-pointer ${
-                    isSelected
-                      ? "text-accent-warm font-bold border-b-2 border-accent-warm scale-105"
-                      : "text-gray-400 hover:text-white border-b-2 border-transparent"
-                  }`}
-                >
-                  <span className="text-[0.7rem] opacity-70">0{idx + 1}</span>
-                  <span>{proj.title || proj.name}</span>
-                </button>
-              );
-            })}
+          {/* Responsive Project Timeline Track (Smooth Horizontal Scroll Rail) */}
+          <div className="relative w-full max-w-5xl mx-auto mt-8 flex items-center gap-2">
+            <button
+              onClick={() => {
+                if (trackRef.current) {
+                  trackRef.current.scrollBy({ left: -240, behavior: "smooth" });
+                }
+              }}
+              className="hidden sm:flex p-2 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all border border-white/10 cursor-pointer shrink-0"
+              aria-label="Scroll projects left"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            <div
+              ref={trackRef}
+              className="flex items-center gap-2 sm:gap-3 overflow-x-auto scrollbar-none py-2 px-1 w-full scroll-smooth"
+            >
+              {projects.map((proj, idx) => {
+                const isSelected = idx === activeIndex;
+                const pLang = LANGUAGE_STYLES[proj.language] || { dot: "#ff7a45" };
+                return (
+                  <button
+                    key={proj.id || idx}
+                    onClick={() => setActiveIndex(idx)}
+                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full font-mono text-xs whitespace-nowrap transition-all duration-300 cursor-pointer shrink-0 ${
+                      isSelected
+                        ? "bg-accent-warm text-white font-bold shadow-[0_0_16px_rgba(255,122,69,0.5)] scale-105"
+                        : "bg-white/[0.04] text-gray-400 hover:text-white hover:bg-white/[0.08] border border-white/5"
+                    }`}
+                  >
+                    <span 
+                      className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white shadow-[0_0_6px_#ffffff]" : ""}`} 
+                      style={{ backgroundColor: isSelected ? "#ffffff" : pLang.dot }} 
+                    />
+                    <span className={`text-[0.68rem] ${isSelected ? "text-white/90 font-bold" : "text-gray-500"}`}>
+                      {String(idx + 1).padStart(2, "0")}
+                    </span>
+                    <span className="truncate max-w-[130px] sm:max-w-[180px]">{proj.title || proj.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              onClick={() => {
+                if (trackRef.current) {
+                  trackRef.current.scrollBy({ left: 240, behavior: "smooth" });
+                }
+              }}
+              className="hidden sm:flex p-2 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all border border-white/10 cursor-pointer shrink-0"
+              aria-label="Scroll projects right"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
           </div>
         </header>
 
@@ -358,7 +497,7 @@ export default function Projects() {
                       <div className="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
                         <div className="flex items-center gap-2">
                           <span className="font-mono text-xs font-bold text-accent-warm tracking-widest uppercase">
-                            0{activeIndex + 1} / 0{projects.length}
+                            {String(activeIndex + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
                           </span>
                           <span className="text-white/20">•</span>
                           {activeProject.language && langStyle && (
@@ -485,136 +624,203 @@ export default function Projects() {
         <section aria-label="Complete Projects Directory" className="pt-10 border-t border-white/10">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
-              <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-                <span>Repository Index</span>
-                <span className="text-xs font-mono font-normal px-2.5 py-0.5 rounded-full bg-accent-warm/15 text-accent-warm border border-accent-warm/30">
-                  {projects.length} Total Repositories
+              <div className="flex items-center gap-3 flex-wrap">
+                <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+                  Repository Index
+                </h3>
+                <span className="text-xs font-mono font-medium px-3 py-1 rounded-full bg-accent-warm/15 text-accent-warm border border-accent-warm/30">
+                  {isExpanded
+                    ? `Showing All ${projects.length} Repositories`
+                    : `Showing Top 5 Major Systems • ${projects.length} Total`}
                 </span>
-              </h3>
-              <p className="text-gray-400 text-xs sm:text-sm mt-1">
-                Linear architectural catalog of all engineering repositories. Click any row to load on stage.
+              </div>
+              <p className="text-gray-400 text-xs sm:text-sm mt-1.5 font-light max-w-xl">
+                {isExpanded
+                  ? "Linear architectural catalog of all synchronized repositories. Click any row to load on stage."
+                  : "Highlighting top 5 primary systems and large-scale architectures recently engineered. Expand to explore all repositories."}
               </p>
             </div>
 
-            <div className="flex items-center gap-2 text-xs text-gray-400 font-mono">
-              <span className="w-2 h-2 rounded-full bg-accent-warm animate-pulse" />
-              <span>Interactive Directory</span>
+            <div className="flex items-center gap-3">
+              {projects.length > 5 && (
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-xs font-mono font-semibold text-gray-200 hover:text-white border border-white/10 hover:border-accent-warm/40 transition-all duration-200 cursor-pointer shadow-sm hover:scale-105 active:scale-95"
+                >
+                  {isExpanded ? (
+                    <>
+                      <span>Collapse to 5 Major</span>
+                      <ChevronUp className="w-3.5 h-3.5 text-accent-warm" />
+                    </>
+                  ) : (
+                    <>
+                      <span>Show All ({projects.length})</span>
+                      <ChevronDown className="w-3.5 h-3.5 text-accent-warm" />
+                    </>
+                  )}
+                </button>
+              )}
             </div>
           </div>
 
           {/* Unboxed Architectural List (Hairline Separators, No Boxy Cards) */}
-          <div className="divide-y divide-white/10 border-y border-white/10">
-            {projects.map((proj, idx) => {
-              const isSelected = idx === activeIndex;
-              const pLangStyle = LANGUAGE_STYLES[proj.language] || {
-                dot: "#ff7a45",
-                text: "text-accent-warm",
-                border: "border-accent-warm/30",
-                bg: "bg-accent-warm/10"
-              };
+          <div className="divide-y divide-white/10 border-y border-white/10 overflow-hidden">
+            <AnimatePresence initial={false}>
+              {displayedProjects.map((proj, idx) => {
+                const isSelected = idx === activeIndex;
+                const pLangStyle = LANGUAGE_STYLES[proj.language] || {
+                  dot: "#ff7a45",
+                  text: "text-accent-warm",
+                  border: "border-accent-warm/30",
+                  bg: "bg-accent-warm/10"
+                };
 
-              return (
-                <div
-                  key={proj.id || idx}
-                  onClick={() => {
-                    setActiveIndex(idx);
-                    scrollToStage();
-                  }}
-                  className={`group py-5 px-3 sm:px-6 transition-all duration-300 cursor-pointer flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative ${
-                    isSelected
-                      ? "bg-white/[0.04] text-white"
-                      : "hover:bg-white/[0.02] text-gray-300"
-                  }`}
-                >
-                  {/* Left Accent indicator when selected */}
-                  {isSelected && (
-                    <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-accent-warm shadow-[0_0_12px_#ff7a45]" />
-                  )}
+                return (
+                  <motion.div
+                    key={proj.id || idx}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                    onClick={() => {
+                      setActiveIndex(idx);
+                      scrollToStage();
+                    }}
+                    className={`group py-5 px-3 sm:px-6 transition-all duration-300 cursor-pointer flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative ${
+                      isSelected
+                        ? "bg-white/[0.04] text-white"
+                        : "hover:bg-white/[0.02] text-gray-300"
+                    }`}
+                  >
+                    {/* Left Accent indicator when selected */}
+                    {isSelected && (
+                      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-accent-warm shadow-[0_0_12px_#ff7a45]" />
+                    )}
 
-                  {/* Left: Project Number, Name, Language */}
-                  <div className="flex items-start sm:items-center gap-4 min-w-[280px]">
-                    <span className="font-mono text-xs sm:text-sm font-bold text-gray-500 w-8">
-                      0{idx + 1}
-                    </span>
+                    {/* Left: Project Number, Name, Language, and Featured Major Badge */}
+                    <div className="flex items-start sm:items-center gap-4 min-w-[280px]">
+                      <span className="font-mono text-xs sm:text-sm font-bold text-gray-500 w-8">
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
 
-                    <div>
-                      <div className="flex items-center gap-2.5 flex-wrap">
-                        <h4 className={`text-base sm:text-lg font-bold tracking-tight transition-colors ${
-                          isSelected ? "text-accent-warm" : "text-white group-hover:text-accent-warm"
-                        }`}>
-                          {proj.title || proj.name}
-                        </h4>
+                      <div>
+                        <div className="flex items-center gap-2.5 flex-wrap">
+                          <h4 className={`text-base sm:text-lg font-bold tracking-tight transition-colors ${
+                            isSelected ? "text-accent-warm" : "text-white group-hover:text-accent-warm"
+                          }`}>
+                            {proj.title || proj.name}
+                          </h4>
 
-                        <span className={`px-2 py-0.5 rounded-full text-[0.68rem] font-semibold flex items-center gap-1 border ${pLangStyle.bg} ${pLangStyle.border} ${pLangStyle.text}`}>
-                          <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: pLangStyle.dot }} />
-                          {proj.language || "Code"}
+                          <span className={`px-2 py-0.5 rounded-full text-[0.68rem] font-semibold flex items-center gap-1 border ${pLangStyle.bg} ${pLangStyle.border} ${pLangStyle.text}`}>
+                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: pLangStyle.dot }} />
+                            {proj.language || "Code"}
+                          </span>
+
+                          {/* Standout Badge for 5 Major / Flagship Projects */}
+                          {proj.featured && (
+                            <span className="px-2.5 py-0.5 rounded-full text-[0.65rem] font-mono font-bold flex items-center gap-1.5 bg-accent-warm/15 text-accent-warm border border-accent-warm/30 shadow-[0_0_10px_rgba(255,122,69,0.25)]">
+                              <span className="w-1.5 h-1.5 rounded-full bg-accent-warm animate-pulse" />
+                              <span>Major Architecture</span>
+                            </span>
+                          )}
+                        </div>
+
+                        <p className="text-xs text-gray-400 mt-0.5 font-light max-w-md line-clamp-1">
+                          {proj.tagline || proj.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Middle: Tech Chips (Visible on tablet/desktop) */}
+                    <div className="hidden md:flex items-center gap-1.5 flex-wrap max-w-md">
+                      {proj.techStack?.slice(0, 4).map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-2.5 py-0.5 text-[0.7rem] font-medium text-gray-300 bg-white/[0.03] rounded-full border border-white/5"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                      {proj.techStack?.length > 4 && (
+                        <span className="text-[0.7rem] text-gray-500 font-mono">
+                          +{proj.techStack.length - 4}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Right: Stars, Forks, Spotlight Trigger */}
+                    <div className="flex items-center justify-between lg:justify-end gap-5 shrink-0 pt-2 lg:pt-0">
+                      <div className="flex items-center gap-3 text-xs text-gray-400 font-mono">
+                        {proj.stars > 0 && (
+                          <span className="flex items-center gap-1 text-amber-300">
+                            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                            {proj.stars}
+                          </span>
+                        )}
+                        <span className="flex items-center gap-1">
+                          <GitFork className="w-3.5 h-3.5" />
+                          {proj.forks || 0}
                         </span>
                       </div>
 
-                      <p className="text-xs text-gray-400 mt-0.5 font-light max-w-md line-clamp-1">
-                        {proj.tagline || proj.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Middle: Tech Chips (Visible on tablet/desktop) */}
-                  <div className="hidden md:flex items-center gap-1.5 flex-wrap max-w-md">
-                    {proj.techStack?.slice(0, 4).map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2.5 py-0.5 text-[0.7rem] font-medium text-gray-300 bg-white/[0.03] rounded-full border border-white/5"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                    {proj.techStack?.length > 4 && (
-                      <span className="text-[0.7rem] text-gray-500 font-mono">
-                        +{proj.techStack.length - 4}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Right: Stars, Forks, Spotlight Trigger */}
-                  <div className="flex items-center justify-between lg:justify-end gap-5 shrink-0 pt-2 lg:pt-0">
-                    <div className="flex items-center gap-3 text-xs text-gray-400 font-mono">
-                      {proj.stars > 0 && (
-                        <span className="flex items-center gap-1 text-amber-300">
-                          <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                          {proj.stars}
+                      <div className="flex items-center gap-3">
+                        <span className={`text-xs font-semibold flex items-center gap-1 transition-colors ${
+                          isSelected ? "text-accent-warm" : "text-gray-400 group-hover:text-white"
+                        }`}>
+                          {isSelected ? "Active on Stage" : "Load on Stage"}
+                          <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                         </span>
-                      )}
-                      <span className="flex items-center gap-1">
-                        <GitFork className="w-3.5 h-3.5" />
-                        {proj.forks || 0}
-                      </span>
-                    </div>
 
-                    <div className="flex items-center gap-3">
-                      <span className={`text-xs font-semibold flex items-center gap-1 transition-colors ${
-                        isSelected ? "text-accent-warm" : "text-gray-400 group-hover:text-white"
-                      }`}>
-                        {isSelected ? "Active on Stage" : "Load on Stage"}
-                        <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                      </span>
-
-                      {proj.githubUrl && (
-                        <a
-                          href={proj.githubUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className="p-2 rounded-full bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-colors border border-white/10 cursor-pointer"
-                          aria-label={`Open ${proj.title} on GitHub`}
-                        >
-                          <GitHubIcon className="w-3.5 h-3.5" />
-                        </a>
-                      )}
+                        {proj.githubUrl && (
+                          <a
+                            href={proj.githubUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="p-2 rounded-full bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-colors border border-white/10 cursor-pointer"
+                            aria-label={`Open ${proj.title} on GitHub`}
+                          >
+                            <GitHubIcon className="w-3.5 h-3.5" />
+                          </a>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </div>
-              );
-            })}
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
           </div>
+
+          {/* Bottom Expand / Collapse Toggle Bar */}
+          {projects.length > 5 && (
+            <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-gray-400">
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-accent-warm animate-pulse" />
+                <span>
+                  {isExpanded
+                    ? `Displaying all ${projects.length} synchronized repositories from GitHub`
+                    : `Displaying 5 major architectures (${projects.length - 5} additional repositories collapsed)`}
+                </span>
+              </span>
+
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="group inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-white border border-white/15 hover:border-accent-warm/50 backdrop-blur-xl transition-all duration-300 font-semibold cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.35)] hover:shadow-[0_0_20px_rgba(255,122,69,0.3)] hover:scale-105 active:scale-95"
+              >
+                {isExpanded ? (
+                  <>
+                    <span>Collapse to 5 Major Systems</span>
+                    <ChevronUp className="w-4 h-4 text-accent-warm transition-transform group-hover:-translate-y-0.5" />
+                  </>
+                ) : (
+                  <>
+                    <span>Show All {projects.length} Repositories</span>
+                    <ChevronDown className="w-4 h-4 text-accent-warm transition-transform group-hover:translate-y-0.5" />
+                  </>
+                )}
+              </button>
+            </div>
+          )}
         </section>
 
       </div>

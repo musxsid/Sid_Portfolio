@@ -11,6 +11,7 @@ import {
   CheckCircle2
 } from "lucide-react";
 import AboutLiquidBackground from "./AboutLiquidBackground";
+import { portfolioApi } from "../services/api";
 
 function GitHubIcon({ className = "w-4 h-4" }) {
   return (
@@ -284,6 +285,19 @@ export default function About() {
 
   const [activeService, setActiveService] = useState(0);
   const [isMarqueeHovered, setIsMarqueeHovered] = useState(false);
+  const [resumeUrl, setResumeUrl] = useState("/resume/Siddharth Resume.pdf");
+
+  useEffect(() => {
+    let isMounted = true;
+    portfolioApi.getResume().then((url) => {
+      if (isMounted && url) {
+        setResumeUrl(url);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Technical skills extracted directly from Siddharth's uploaded resume
   const resumeSkills = [
@@ -389,8 +403,9 @@ export default function About() {
               </motion.a>
 
               <motion.a
-                href="/resume/Siddharth_Resume.pdf"
-                download
+                href={resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-accent-warm/70 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] font-bold text-sm tracking-wide hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2.5 cursor-pointer"

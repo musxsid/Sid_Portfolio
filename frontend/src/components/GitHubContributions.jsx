@@ -9,6 +9,7 @@ import {
   Activity
 } from "lucide-react";
 import { portfolioApi } from "../services/api";
+import GitHubBackgroundCanvas from "./GitHubBackgroundCanvas";
 
 function GitHubIcon({ className = "w-4 h-4" }) {
   return (
@@ -65,11 +66,31 @@ export default function GitHubContributions() {
     const rect = e.currentTarget.getBoundingClientRect();
     const containerRect = containerRef.current
       ? containerRef.current.getBoundingClientRect()
-      : { left: 0, top: 0 };
+      : { left: 0, top: 0, width: window.innerWidth };
+
+    const rawX = rect.left - containerRect.left + rect.width / 2;
+    const rawY = rect.top - containerRect.top - 10;
+
+    // Smart horizontal edge detection so tooltip never gets cut off on edges
+    const isNearRight = rawX > containerRect.width - 160;
+    const isNearLeft = rawX < 140;
+
+    let alignX = "-50%";
+    let caretLeft = "50%";
+
+    if (isNearRight) {
+      alignX = "-90%";
+      caretLeft = "90%";
+    } else if (isNearLeft) {
+      alignX = "-10%";
+      caretLeft = "10%";
+    }
 
     setTooltipPos({
-      x: rect.left - containerRect.left + rect.width / 2,
-      y: rect.top - containerRect.top - 10,
+      x: rawX,
+      y: rawY,
+      alignX,
+      caretLeft,
     });
     setHoveredDay(day);
   };
@@ -101,6 +122,11 @@ export default function GitHubContributions() {
       aria-label="GitHub Engineering Activity"
       className="relative min-h-screen py-24 md:py-32 w-full z-10 bg-[#070912] overflow-hidden flex flex-col justify-center"
     >
+      {/* Interactive Git Telemetry & Specular Spotlight Canvas Background */}
+      <div className="absolute inset-0 pointer-events-none [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)] z-0">
+        <GitHubBackgroundCanvas />
+      </div>
+
       {/* Warm Ambient Atmosphere (Full Screen Immersion) */}
       <div className="absolute top-1/4 left-1/4 w-[60vw] h-[450px] bg-accent-warm/[0.045] blur-[180px] rounded-full pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[50vw] h-[400px] bg-amber-500/[0.035] blur-[180px] rounded-full pointer-events-none" />
@@ -211,7 +237,7 @@ export default function GitHubContributions() {
                 </div>
 
                 {/* 52 Columns of White & Orange Squares */}
-                <div className="flex gap-[4px] flex-grow justify-between">
+                <div className="flex gap-[4px] flex-grow justify-between pr-4">
                   {weeks.map((week, wIdx) => (
                     <div key={wIdx} className="flex flex-col gap-[4px]">
                       {week.map((day, dIdx) => (
@@ -231,36 +257,38 @@ export default function GitHubContributions() {
               </div>
 
             </div>
-
-            {/* Interactive Floating Tooltip */}
-            <AnimatePresence>
-              {hoveredDay && (
-                <motion.div
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 5 }}
-                  transition={{ duration: 0.15 }}
-                  style={{
-                    left: `${tooltipPos.x}px`,
-                    top: `${tooltipPos.y}px`,
-                    transform: "translate(-50%, -100%)",
-                  }}
-                  className="absolute pointer-events-none z-50 px-3.5 py-2 rounded-xl bg-black/90 border border-white/20 text-white text-xs font-mono shadow-[0_10px_25px_rgba(0,0,0,0.8)] backdrop-blur-xl whitespace-nowrap"
-                >
-                  {hoveredDay.count === 0 ? (
-                    <span>No contributions on {formatDate(hoveredDay.date)}.</span>
-                  ) : (
-                    <span>
-                      <strong className="text-accent-warm font-bold">{hoveredDay.count} contribution{hoveredDay.count > 1 ? "s" : ""}</strong> on {formatDate(hoveredDay.date)}.
-                    </span>
-                  )}
-                  {/* Tooltip downward caret */}
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-solid border-t-black/90 border-t-4 border-x-transparent border-x-4 border-b-0" />
-                </motion.div>
-              )}
-            </AnimatePresence>
-
           </div>
+
+          {/* Interactive Floating Tooltip (Rendered outside scroll container to prevent edge clipping) */}
+          <AnimatePresence>
+            {hoveredDay && (
+              <motion.div
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 5 }}
+                transition={{ duration: 0.15 }}
+                style={{
+                  left: `${tooltipPos.x}px`,
+                  top: `${tooltipPos.y}px`,
+                  transform: `translate(${tooltipPos.alignX || "-50%"}, -100%)`,
+                }}
+                className="absolute pointer-events-none z-50 px-3.5 py-2 rounded-xl bg-black/95 border border-white/20 text-white text-xs font-mono shadow-[0_10px_25px_rgba(0,0,0,0.85)] backdrop-blur-xl whitespace-nowrap"
+              >
+                {hoveredDay.count === 0 ? (
+                  <span>No contributions on {formatDate(hoveredDay.date)}.</span>
+                ) : (
+                  <span>
+                    <strong className="text-accent-warm font-bold">{hoveredDay.count} contribution{hoveredDay.count > 1 ? "s" : ""}</strong> on {formatDate(hoveredDay.date)}.
+                  </span>
+                )}
+                {/* Tooltip downward caret aligned with hover target */}
+                <div 
+                  className="absolute top-full -mt-[1px] border-solid border-t-black/95 border-t-4 border-x-transparent border-x-4 border-b-0 -translate-x-1/2" 
+                  style={{ left: tooltipPos.caretLeft || "50%" }}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Calendar Footer: Learn Link + White & Orange Legend */}
           <div className="flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-white/10 text-xs text-gray-400 gap-3 font-mono">

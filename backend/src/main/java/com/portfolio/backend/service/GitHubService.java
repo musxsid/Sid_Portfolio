@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface GitHubService {
     List<GitHubProjectDto> getProjects();
+    List<GitHubProjectDto> getProjects(boolean forceRefresh);
     GitHubContributionDataDto getContributions();
+    List<String> findProjectImages(String repoName);
 }
-

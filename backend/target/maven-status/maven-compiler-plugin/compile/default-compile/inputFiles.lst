@@ -15,7 +15,9 @@ D:\Programming\Sid_Portfolio\backend\src\main\java\com\portfolio\backend\reposit
 D:\Programming\Sid_Portfolio\backend\src\main\java\com\portfolio\backend\domain\Skill.java
 D:\Programming\Sid_Portfolio\backend\src\main\java\com\portfolio\backend\domain\Resume.java
 D:\Programming\Sid_Portfolio\backend\src\main\java\com\portfolio\backend\dto\ProjectDto.java
+D:\Programming\Sid_Portfolio\backend\src\main\java\com\portfolio\backend\repository\GitHubSyncRecordRepository.java
 D:\Programming\Sid_Portfolio\backend\src\main\java\com\portfolio\backend\dto\NewsletterDto.java
+D:\Programming\Sid_Portfolio\backend\src\main\java\com\portfolio\backend\domain\GitHubSyncRecord.java
 D:\Programming\Sid_Portfolio\backend\src\main\java\com\portfolio\backend\domain\Lead.java
 D:\Programming\Sid_Portfolio\backend\src\main\java\com\portfolio\backend\domain\Project.java
 D:\Programming\Sid_Portfolio\backend\src\main\java\com\portfolio\backend\repository\NewsletterRepository.java

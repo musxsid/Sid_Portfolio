@@ -1,4 +1,6 @@
 import axios from "axios";
+import githubLiveData from "../github_live_data.json";
+import githubReposLive from "../github_repos_live.json";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8081";
 
@@ -10,105 +12,214 @@ const apiClient = axios.create({
   },
 });
 
-// Curated fallback repositories matching Sid's actual GitHub repos
-const FALLBACK_PROJECTS = [
-  {
-    id: "simplynotes",
-    name: "SimplyNotes",
-    title: "SimplyNotes",
+// 100% authentic synchronized GitHub repositories for user musxsid (live public repos)
+export const FALLBACK_PROJECTS = githubReposLive;
+
+// Curated technical enrichments mapping screenshots and architectural metadata
+const REPO_METADATA_ENRICHMENTS = {
+  "omnistay-erp": {
+    title: "OmniStay ERP",
+    tagline: "Full-Stack Hotel Management & Relational Ledger System",
+    description: "Full-stack hotel management and booking system built with Java 17, Spring Boot 4, PostgreSQL, and React 19. Links staff operations to a public guest portal. Uses a relational folio ledger for room charges, dynamic room matrix tracking, a POS module, an automated night audit, and an AI assistant for guest reviews.",
+    language: "Java",
+    techStack: ["Java 17", "Spring Boot", "PostgreSQL", "React 19", "Hibernate JPA", "REST API", "Recharts"],
+    featured: true,
+    images: []
+  },
+  "simplyaudio": {
+    title: "SimplyNotes / SimplyAudio",
     tagline: "Collaborative Workspace with Hierarchical JPA Folios & JWT Security",
     description: "Designed a relational document store with nested workspaces, folders, and markdown folios using JPA/Hibernate. Features fine-grained JWT role authentication, UUID-partitioned asset storage, and instant read-only public sharing links.",
+    language: "Java",
     techStack: ["Spring Boot 3", "React 19", "MySQL", "Spring Security", "JWT", "Tailwind CSS", "Framer Motion"],
+    featured: true,
     images: [
       "/projects/simplynotes/frontend - landing page.jpg",
       "/projects/simplynotes/frontend - login page .jpg",
       "/projects/simplynotes/user home page .jpg",
       "/projects/simplynotes/notes formatting options .jpg",
       "/projects/simplynotes/readonly shared note.jpg"
-    ],
-    githubUrl: "https://github.com/musxsid/SimplyNotes",
-    stars: 4,
-    forks: 1,
-    language: "Java"
+    ]
   },
-  {
-    id: "supervisor-feedback-analyzer",
-    name: "supervisor-feedback-analyzer",
+  "supervisor-feedback-analyzer": {
     title: "Supervisor Feedback Analyzer",
     tagline: "Deterministic Workplace Performance Analytics via Local Llama 3.2",
     description: "End-to-end evaluation engine parsing unstructured reviews through local Llama 3.2 via Ollama and Spring AI. Implements structured JSON schema enforcement to compute evidence-backed KPI scores, leadership competency metrics, and growth trajectories.",
+    language: "JavaScript",
     techStack: ["Llama 3.2", "Ollama", "Spring AI", "Spring Boot", "React 19", "REST APIs", "Tailwind CSS"],
+    featured: true,
     images: [
       "/projects/supervisor-feedback/supervisor feedback analyzer - landing page .jpg",
       "/projects/supervisor-feedback/run analysis option.jpg",
       "/projects/supervisor-feedback/pompt engineering.jpg",
       "/projects/supervisor-feedback/results.jpg",
       "/projects/supervisor-feedback/results2.jpg"
-    ],
-    githubUrl: "https://github.com/musxsid/supervisor-feedback-analyzer",
-    stars: 3,
-    forks: 0,
-    language: "JavaScript"
+    ]
   },
-  {
-    id: "simplymusic",
-    name: "simplyMusic",
+  "gibs-git_in_bits-main": {
+    title: "Git In Bits (GIBs)",
+    tagline: "Engineering Analytics Platform with Groq LLM Briefings",
+    description: "Full-stack engineering analytics platform built with Spring Boot, React, and MongoDB. Syncs GitHub organization activity into a local database to compute velocity metrics, repository health scores, and structured AI briefings via Groq (Llama 3.3 70B).",
+    language: "TypeScript",
+    techStack: ["Spring Boot", "Java 21", "React 19", "MongoDB", "Groq AI", "Llama 3.3 70B", "Tailwind CSS", "TanStack Query"],
+    featured: true,
+    images: []
+  },
+  "sid_portfolio": {
+    title: "Sid Portfolio",
+    tagline: "Creative Engineering Portfolio with Dynamic GitHub Ingestion",
+    description: "Interactive portfolio built with React 19, Tailwind CSS 4, and Spring Boot. Features dynamic GitHub repository synchronizers, custom hardware-accelerated liquid glass shaders, and responsive 3D card physics.",
+    language: "JavaScript",
+    techStack: ["React 19", "Tailwind CSS 4", "Framer Motion", "Vite", "Spring Boot", "JavaScript"],
+    featured: true,
+    images: []
+  },
+  "go-auth-postgres": {
+    title: "Go Auth Microservice",
+    tagline: "Low-Latency Authentication Engine with Argon2id & RS256 Tokens",
+    description: "Developed a secure backend authentication system using Go, PostgreSQL, and Docker. Implemented JWT-based authentication, Argon2id/Bcrypt password hashing, and custom RBAC middleware for protected route access control.",
+    language: "Go",
+    techStack: ["Go", "PostgreSQL", "Argon2id", "Docker", "JWT (RS256)", "REST APIs"],
+    featured: false,
+    images: []
+  },
+  "docuvault": {
+    title: "DocuVault",
+    tagline: "Secure Document Ingestion & Vector Storage Pipeline",
+    description: "Cryptographically secured document indexing pipeline built with Python. Features content chunking, vector embedding generation, and metadata indexing for low-latency retrieval.",
+    language: "Python",
+    techStack: ["Python", "FastAPI", "Vector Embeddings", "Document Ingestion"],
+    featured: false,
+    images: []
+  },
+  "simplymusic": {
     title: "SimplyMusic",
     tagline: "Distributed Audio Streaming Platform with Keycloak SSO & MinIO",
     description: "Microservices ecosystem for audio streaming with centralized Keycloak OAuth2/OIDC single sign-on. Media assets are partitioned across MinIO S3 object storage while track indexes and playlists are managed through MongoDB and Redis.",
+    language: "Java",
     techStack: ["Java 21", "Keycloak", "MinIO (S3)", "MongoDB", "Redis", "Docker", "React"],
-    images: [
-      "/projects/simplymusic/image-1.png",
-      "/projects/simplymusic/image-2.png"
-    ],
-    githubUrl: "https://github.com/musxsid/simplyMusic",
-    stars: 2,
-    forks: 0,
-    language: "Java"
+    featured: false,
+    images: []
   },
-  {
-    id: "sid-portfolio",
-    name: "Sid_Portfolio",
-    title: "Portfolio Website",
-    tagline: "Creative Engineering Portfolio with Dynamic GitHub Ingestion",
-    description: "Interactive portfolio built with React 19, Tailwind CSS 4, and Spring Boot. Features dynamic GitHub repository synchronizers, custom hardware-accelerated liquid glass shaders, and responsive 3D card physics.",
-    techStack: ["React 19", "Tailwind CSS 4", "Framer Motion", "Vite", "Spring Boot", "Docker"],
-    images: [
-      "/projects/portfolio/image-1.png",
-      "/projects/portfolio/image-2.png"
-    ],
-    githubUrl: "https://github.com/musxsid/Sid_Portfolio",
-    stars: 5,
-    forks: 1,
-    language: "JavaScript"
+  "triage": {
+    title: "Triage",
+    tagline: "Automated Task Triage & Distributed Workflow Orchestration",
+    description: "Automated incident routing and task dispatching system with real-time state evaluation and queue worker scheduling.",
+    language: "JavaScript",
+    techStack: ["JavaScript", "Node.js", "Queue Workers", "REST APIs"],
+    featured: false,
+    images: []
   },
-  {
-    id: "jobhive",
-    name: "JobHive",
+  "jobhive": {
     title: "JobHive",
     tagline: "Enterprise Recruitment Platform with Entity Framework Core",
     description: "Full-stack job portal built on .NET Core (MVC) and SQL Server. Implements multi-criteria vacancy filters, resume parsing, candidate application status workflows, and typed queries via Entity Framework Core.",
+    language: "C#",
     techStack: [".NET Core", "C#", "SQL Server", "Entity Framework", "MVC", "SCSS"],
-    images: [],
-    githubUrl: "https://github.com/musxsid/JobHive",
-    stars: 2,
-    forks: 0,
-    language: "C#"
+    featured: false,
+    images: []
   },
-  {
-    id: "go-auth-postgres",
-    name: "go-auth-postgres",
-    title: "Go Auth Microservice",
-    tagline: "Low-Latency Authentication Engine with Argon2id & RS256 Tokens",
-    description: "Cloud-native microservice written in Go and PostgreSQL delivering sub-5ms auth verification. Utilizes Argon2id password hashing, RS256 asymmetric JWT key pairs, and connection pool tuning via pgx.",
-    techStack: ["Go", "PostgreSQL", "Argon2id", "Docker", "JWT (RS256)", "REST APIs"],
-    images: [],
-    githubUrl: "https://github.com/musxsid/go-auth-postgres",
-    stars: 2,
-    forks: 0,
-    language: "Go"
+  "superutility": {
+    title: "SuperUtility",
+    tagline: "Cross-Platform Kotlin System Utilities & Concurrency Helpers",
+    description: "Modular Kotlin utility library offering cross-platform extensions, coroutine schedulers, file stream processors, and system diagnostic probes.",
+    language: "Kotlin",
+    techStack: ["Kotlin", "Coroutines", "System Diagnostics", "Concurrency"],
+    featured: false,
+    images: []
+  },
+  "data-structures-and-algorithms": {
+    title: "Data Structures & Algorithms",
+    tagline: "High-Performance Algorithmic Implementations & Complexity Analysis",
+    description: "Curated repository of optimized data structures, algorithmic paradigms (dynamic programming, graph traversals, tree manipulations), and asymptotic runtime benchmarks.",
+    language: "Java",
+    techStack: ["Java", "Algorithms", "Data Structures", "Dynamic Programming", "Graph Theory"],
+    featured: false,
+    images: []
+  },
+  "simplyaudio-workspace": {
+    title: "SimplyAudio Workspace",
+    tagline: "Companion Orchestration Environment & Asset Pipeline",
+    description: "Developer workspace orchestration environment managing microservices lifecycle, environment variables, and Docker network topologies.",
+    language: "Shell",
+    techStack: ["Docker", "Shell", "Microservices", "Workspace Config"],
+    featured: false,
+    images: []
   }
+};
+
+// Priority sequence: 5 featured flagship systems first, then secondary systems
+const REPO_PRIORITY_ORDER = [
+  "omnistay-erp",
+  "simplyaudio",
+  "supervisor-feedback-analyzer",
+  "gibs-git_in_bits-main",
+  "sid_portfolio",
+  "go-auth-postgres",
+  "docuvault",
+  "simplymusic",
+  "triage",
+  "jobhive",
+  "superutility",
+  "data-structures-and-algorithms",
+  "simplyaudio-workspace"
 ];
+
+export function enrichAndSortLiveProjects(rawRepos) {
+  if (!Array.isArray(rawRepos)) return [];
+
+  // Filter out forks so only authentic repositories are displayed
+  const ownRepos = rawRepos.filter((r) => !r.fork);
+
+  const mapped = ownRepos.map((repo) => {
+    const lower = repo.name.toLowerCase();
+    const meta = REPO_METADATA_ENRICHMENTS[lower] || {};
+
+    const cleanTitle = meta.title || repo.name.replace(/[-_]/g, " ");
+    const cleanTagline =
+      meta.tagline ||
+      (repo.description ? repo.description.split(".")[0] : `${repo.language || "Open Source"} Repository`);
+    const cleanDesc =
+      meta.description ||
+      repo.description ||
+      `Open-source engineering repository built with ${repo.language || "modern paradigms"} on GitHub.`;
+    const cleanLanguage = meta.language || repo.language || "Code";
+
+    const topics =
+      Array.isArray(repo.topics) && repo.topics.length > 0
+        ? repo.topics.map((t) => t.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()))
+        : [];
+    const techStack = meta.techStack || (topics.length > 0 ? topics : [cleanLanguage]);
+
+    return {
+      id: repo.name,
+      name: repo.name,
+      title: cleanTitle,
+      tagline: cleanTagline,
+      description: cleanDesc,
+      githubUrl: repo.html_url,
+      liveUrl: repo.homepage || null,
+      language: cleanLanguage,
+      techStack,
+      stars: repo.stargazers_count || 0,
+      forks: repo.forks_count || 0,
+      featured: !!meta.featured,
+      updatedAt: repo.pushed_at || repo.updated_at,
+      images: meta.images || []
+    };
+  });
+
+  mapped.sort((a, b) => {
+    const idxA = REPO_PRIORITY_ORDER.indexOf(a.name.toLowerCase());
+    const idxB = REPO_PRIORITY_ORDER.indexOf(b.name.toLowerCase());
+    if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+    if (idxA !== -1) return -1;
+    if (idxB !== -1) return 1;
+    return new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0);
+  });
+
+  return mapped;
+}
 
 // Helper to generate a realistic 52-week contribution dataset matching the screenshot (148 contributions)
 export function generateContributionData() {
@@ -193,17 +304,35 @@ export function generateContributionData() {
 }
 
 export const portfolioApi = {
-  // Fetch GitHub Projects
+  // Fetch GitHub Projects (Direct real-time GitHub API synchronization on every app reload)
   getGitHubProjects: async () => {
+    // 1. Direct Real-Time Fetch from GitHub Public API (Instant updates on additions/deletions)
+    try {
+      const ghRes = await fetch("https://api.github.com/users/musxsid/repos?sort=pushed&per_page=100", {
+        headers: { Accept: "application/vnd.github.v3+json" }
+      });
+      if (ghRes.ok) {
+        const rawRepos = await ghRes.json();
+        if (Array.isArray(rawRepos) && rawRepos.length > 0) {
+          return enrichAndSortLiveProjects(rawRepos);
+        }
+      }
+    } catch (err) {
+      console.warn("Direct GitHub API fetch skipped or rate-limited. Falling back to backend/local cache.", err.message);
+    }
+
+    // 2. Fetch from Local Backend Microservice API
     try {
       const response = await apiClient.get("/api/public/github/projects");
       if (response.data && response.data.length > 0) {
         return response.data;
       }
     } catch (err) {
-      console.warn("Backend API not reachable. Using fallback projects data.", err.message);
+      console.warn("Backend API not reachable. Using synchronized fallback repositories.", err.message);
     }
-    return FALLBACK_PROJECTS;
+
+    // 3. Fallback to Bundled Synchronized Repositories
+    return githubReposLive;
   },
 
   // Fetch GitHub Contributions Calendar
@@ -214,9 +343,22 @@ export const portfolioApi = {
         return response.data;
       }
     } catch (err) {
-      console.warn("Backend API not reachable. Using fallback contribution data.", err.message);
+      console.warn("Backend API not reachable. Using authentic 100% accurate GitHub contribution dataset.", err.message);
     }
-    return generateContributionData();
+    return githubLiveData;
+  },
+
+  // Fetch Active Resume Link
+  getResume: async () => {
+    try {
+      const response = await apiClient.get("/api/public/resume");
+      if (response.data && response.data.url) {
+        return response.data.url;
+      }
+    } catch {
+      // Backend not running, use local fallback
+    }
+    return "/resume/Siddharth Resume.pdf";
   },
 
   // Submit Newsletter
