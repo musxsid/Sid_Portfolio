@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Download, Menu, X } from "lucide-react";
-
 const navLinks = [
+  { label: "About Me", href: "#about" },
   { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
   { label: "Skills", href: "#skills" },
@@ -12,10 +12,12 @@ const navLinks = [
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const resumeUrl = "/resume/Siddharth_Resume.pdf";
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -33,11 +35,12 @@ export default function Navbar() {
     // Smart Offset: If the section is a massive sticky container (> 200vh),
     // scrolling to the very top yields a blank screen (scrollYProgress = 0).
     // We mathematically offset the target by 15% of its scrollable height.
-    // This perfectly lands you EXACTLY where the heading is fully animated in
-    // and sitting in the center of the screen, ready for the content to start.
+    // Otherwise, for normal sections, offset by 90px for floating navbar clearance.
     if (el.offsetHeight > window.innerHeight * 2) {
       const scrollableDistance = el.offsetHeight - window.innerHeight;
       targetY += scrollableDistance * 0.15;
+    } else {
+      targetY = Math.max(0, targetY - 90);
     }
 
     // Custom Smooth Scrolling Engine
@@ -57,9 +60,9 @@ export default function Navbar() {
       if (startTime === null) startTime = currentTime;
       const timeElapsed = currentTime - startTime;
       const progress = Math.min(timeElapsed / duration, 1);
-      
+
       window.scrollTo(0, startY + distance * easeInOutQuart(progress));
-      
+
       if (timeElapsed < duration) {
         requestAnimationFrame(animation);
       }
@@ -74,17 +77,15 @@ export default function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          isScrolled ? "py-4" : "py-8"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? "py-4" : "py-8"
+          }`}
       >
         <div className="section-container">
-          <div 
-            className={`mx-auto flex items-center justify-between transition-all duration-500 ${
-              isScrolled 
-                ? "bg-black/40 backdrop-blur-xl border border-white/10 rounded-full px-6 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.4)]" 
-                : "bg-transparent px-2"
-            }`}
+          <div
+            className={`mx-auto flex items-center justify-between transition-all duration-500 ${isScrolled
+              ? "bg-black/40 backdrop-blur-xl border border-white/10 rounded-full px-6 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+              : "bg-transparent px-2"
+              }`}
           >
             {/* Logo */}
             <a href="#" className="text-2xl font-black tracking-tighter text-white">
@@ -108,7 +109,9 @@ export default function Navbar() {
               <motion.a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                href="/resume.pdf"
+                href={resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2.5 px-6 py-3.5 text-[0.95rem] font-bold rounded-full bg-white text-black hover:bg-gray-200 transition-colors duration-300 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
               >
                 <Download className="w-4 h-4" /> Resume
@@ -160,7 +163,9 @@ export default function Navbar() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                href="/resume.pdf"
+                href={resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="mt-8 flex items-center justify-center gap-3 px-10 py-5 text-xl font-bold rounded-full bg-white text-black"
               >
                 <Download className="w-5 h-5" /> Download Resume

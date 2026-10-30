@@ -5,20 +5,51 @@ import { Send, User, Mail, MessageSquare } from "lucide-react";
 export default function Contact() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px 0px" });
-  
+
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isHovering, setIsHovering] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    // Add logic
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      alert("Please fill out all fields before sending!");
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "0cfe6ace-b08a-4e6f-ba27-3ec9a5a672fc",
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        }),
+      });
+      const result = await response.json();
+      if (result.success) {
+        setFormData({ name: "", email: "", message: "" });
+        alert("Message sent successfully!");
+      } else {
+        alert("Failed to send message: " + result.message);
+      }
+    } catch (error) {
+      console.error("Failed to send message", error);
+      alert("An error occurred while sending the message.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <section id="contact" ref={sectionRef} className="py-32 relative z-20 pb-48">
       <div className="section-container max-w-4xl">
-        
+
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -39,10 +70,12 @@ export default function Contact() {
           transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           className="perspective-container"
         >
-          <motion.form 
-            onSubmit={handleSubmit} 
-            whileHover={{ rotateX: 2, rotateY: -1, scale: 1.01 }}
-            className="premium-card p-10 sm:p-14 lg:p-20 flex flex-col gap-8 w-full transition-transform duration-500"
+          <motion.form
+            onSubmit={handleSubmit}
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            className="premium-card p-10 sm:p-14 lg:p-20 flex flex-col gap-8 w-full"
+            style={{ transitionProperty: "box-shadow, background-color, background" }}
           >
             <div className="flex flex-col sm:flex-row gap-8">
               <div className="floating-label-group flex-1">
@@ -52,7 +85,6 @@ export default function Contact() {
                   placeholder=" "
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
                 />
                 <label htmlFor="name" className="flex items-center gap-2">
                   <User className="w-4 h-4" /> Name
@@ -65,7 +97,6 @@ export default function Contact() {
                   placeholder=" "
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
                 />
                 <label htmlFor="email" className="flex items-center gap-2">
                   <Mail className="w-4 h-4" /> Email
@@ -80,7 +111,6 @@ export default function Contact() {
                 rows={5}
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                required
                 className="resize-none"
               ></textarea>
               <label htmlFor="message" className="flex items-center gap-2">
@@ -90,13 +120,14 @@ export default function Contact() {
 
             <motion.button
               type="submit"
-              onHoverStart={() => setIsHovering(true)}
+              disabled={isSubmitting}
+              onHoverStart={() => !isSubmitting && setIsHovering(true)}
               onHoverEnd={() => setIsHovering(false)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full sm:w-auto self-center mt-6 inline-flex items-center justify-center gap-3 px-12 py-5 rounded-full bg-white text-black font-bold text-[1.05rem] hover:bg-gray-200 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.15)] relative overflow-hidden"
+              whileHover={!isSubmitting ? { scale: 1.02 } : {}}
+              whileTap={!isSubmitting ? { scale: 0.98 } : {}}
+              className="w-full sm:w-auto self-center mt-6 inline-flex items-center justify-center gap-3 px-12 py-5 rounded-full bg-white text-black font-bold text-[1.05rem] hover:bg-gray-200 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.15)] relative overflow-hidden disabled:opacity-50"
             >
-              <span className="relative z-10">Send Message</span>
+              <span className="relative z-10">{isSubmitting ? "Sending..." : "Send Message"}</span>
               <motion.div
                 animate={{ x: isHovering ? 5 : 0 }}
                 transition={{ type: "spring", stiffness: 300 }}

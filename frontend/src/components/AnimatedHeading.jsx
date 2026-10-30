@@ -20,6 +20,12 @@ export default function AnimatedHeading({ text, scrollYProgress, className }) {
   const cleanText = hasPeriod ? text.slice(0, -1) : text;
   const nameArray = Array.from(cleanText);
 
+  const periodColor = useTransform(
+    scrollYProgress, 
+    [0.4, 0.55], 
+    ["#e55a28", "#ffffff"]
+  );
+
   return (
     <motion.h2 className={className}>
       {nameArray.map((letter, i) => (
@@ -32,11 +38,7 @@ export default function AnimatedHeading({ text, scrollYProgress, className }) {
         />
       ))}
       {hasPeriod && (
-        <motion.span 
-          style={{ 
-            color: useTransform(scrollYProgress, [0.4, 0.55], ["#e55a28", "#ffffff"]) 
-          }}
-        >
+        <motion.span style={{ color: periodColor }}>
           .
         </motion.span>
       )}

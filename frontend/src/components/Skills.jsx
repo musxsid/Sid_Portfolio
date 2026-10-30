@@ -1,7 +1,7 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 import { Server, Monitor, Wrench } from "lucide-react";
-import skillsData from "../data/skillsData";
+import portfolioData from "../data.json";
 
 const categoryMeta = {
   Backend: {
@@ -21,6 +21,26 @@ const categoryMeta = {
   },
 };
 
+function AnimatedSkillLetter({ char, i, total, scrollYProgress, activeColor }) {
+  const start = (i / total) * 0.1;
+  const end = start + 0.05;
+  const opacity = useTransform(scrollYProgress, [start, end], [0, 1]);
+  const y = useTransform(scrollYProgress, [start, end], ["20px", "0px"]);
+  
+  return (
+    <motion.span 
+      style={{ 
+        opacity, 
+        y, 
+        color: char === "." ? activeColor : "#ffffff" 
+      }} 
+      className="inline-block transition-colors duration-300"
+    >
+      {char === " " ? "\u00A0" : char}
+    </motion.span>
+  );
+}
+
 function SequentialHeading({ text, scrollYProgress }) {
   const letters = Array.from(text);
   
@@ -33,26 +53,16 @@ function SequentialHeading({ text, scrollYProgress }) {
 
   return (
     <h2 className="font-display text-[4rem] sm:text-[5rem] md:text-[6rem] font-black tracking-tighter drop-shadow-2xl flex">
-      {letters.map((char, i) => {
-        const start = (i / letters.length) * 0.1;
-        const end = start + 0.05;
-        const opacity = useTransform(scrollYProgress, [start, end], [0, 1]);
-        const y = useTransform(scrollYProgress, [start, end], ["20px", "0px"]);
-        
-        return (
-          <motion.span 
-            key={i} 
-            style={{ 
-              opacity, 
-              y, 
-              color: char === "." ? activeColor : "#ffffff" 
-            }} 
-            className="inline-block transition-colors duration-300"
-          >
-            {char === " " ? "\u00A0" : char}
-          </motion.span>
-        );
-      })}
+      {letters.map((char, i) => (
+        <AnimatedSkillLetter
+          key={i}
+          char={char}
+          i={i}
+          total={letters.length}
+          scrollYProgress={scrollYProgress}
+          activeColor={activeColor}
+        />
+      ))}
     </h2>
   );
 }
@@ -73,18 +83,18 @@ function LiquidGlassSkillCard({ category, skills, index, scrollYProgress }) {
   const sExit = Math.max(0, Math.min(1, exit));
   const sEnd = Math.min(1, end);
 
-  // Reduced travel distance for a much gentler motion
+  // Pop out from the dial
   const x = useTransform(
     scrollYProgress,
     [sStart, sEnter, sExit, sEnd],
-    ["-15vw", "0vw", "0vw", "15vw"]
+    ["-25vw", "0vw", "0vw", "25vw"]
   );
 
-  // Softened scaling
+  // Pop scaling effect
   const scale = useTransform(
     scrollYProgress,
     [sStart, sEnter, sExit, sEnd],
-    [0.85, 1, 1, 0.85]
+    [0.2, 1, 1, 0.2]
   );
 
   const opacity = useTransform(
@@ -98,7 +108,7 @@ function LiquidGlassSkillCard({ category, skills, index, scrollYProgress }) {
       style={{ x, scale, opacity, pointerEvents: opacity.get() > 0 ? "auto" : "none" }}
       className="absolute inset-0 flex items-center justify-start md:pl-20 w-full"
     >
-      <div className="w-[85vw] md:w-[450px] p-8 md:p-10 bg-white/5 backdrop-blur-3xl border border-white/20 shadow-[0_15px_50px_rgba(0,0,0,0.5)] rounded-[2.5rem]">
+      <div className="w-[85vw] md:w-[450px] p-8 md:p-10 bg-black/60 backdrop-blur-3xl border border-white/10 shadow-[0_15px_50px_rgba(0,0,0,0.8)] rounded-[2.5rem]">
         <div className="flex items-center gap-4 mb-8">
           <div className={`p-4 rounded-2xl ${meta.bg} border border-white/10 shadow-inner`}>
             <Icon className={`w-8 h-8 ${meta.color}`} />
@@ -122,56 +132,82 @@ function LiquidGlassSkillCard({ category, skills, index, scrollYProgress }) {
 
 export default function Skills() {
   const containerRef = useRef(null);
+  const [skillsData, setSkillsData] = useState({});
+
+  useEffect(() => {
+    try {
+      const grouped = portfolioData.skills.reduce((acc, skill) => {
+        if (!acc[skill.category]) acc[skill.category] = [];
+        acc[skill.category].push({ name: skill.skillName });
+        return acc;
+      }, {});
+      // Fallback to empty categories if none exist yet
+      if (Object.keys(grouped).length === 0) {
+        grouped.Backend = [];
+        grouped.Frontend = [];
+        grouped.Tools = [];
+      }
+      setSkillsData(grouped);
+    } catch (error) {
+      console.error("Failed to load skills", error);
+    }
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
   // Calculate rotation to perfectly align 0deg, 120deg, and 240deg notches with 3 o'clock (0deg CSS space)
   const dialRotation = useTransform(
-    scrollYProgress, 
+    smoothProgress, 
     [0, 0.2, 0.5, 0.8, 1], 
     [80, 0, -120, -240, -320]
   );
 
-  const headingY = useTransform(scrollYProgress, [0, 0.2], ["30vh", "8vh"]);
+  const headingY = useTransform(smoothProgress, [0, 0.2], ["30vh", "8vh"]);
 
   // Dynamic Background Colors synced to the active skill category
-  const bgOpacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1.0], [0, 1, 1, 0]);
+  const bgOpacity = useTransform(smoothProgress, [0, 0.1, 0.9, 1.0], [0, 1, 1, 0]);
   const bgColor = useTransform(
-    scrollYProgress,
+    smoothProgress,
     [0, 0.35, 0.65, 1],
     ["#140a05", "#050a14", "#05140a", "#140a05"] // Deep Orange -> Deep Blue -> Deep Emerald
   );
 
   // Dynamic Glow Colors for the Dial Center and Pointer
   const activeColor = useTransform(
-    scrollYProgress,
+    smoothProgress,
     [0, 0.35, 0.65, 1],
     ["#e55a28", "#3b82f6", "#34d399", "#34d399"]
   );
   const activeShadow = useTransform(
-    scrollYProgress,
+    smoothProgress,
     [0, 0.35, 0.65, 1],
     ["0px 0px 20px #e55a28", "0px 0px 20px #3b82f6", "0px 0px 20px #34d399", "0px 0px 20px #34d399"]
   );
 
   // Dynamic Notch Glows - They only glow when aligned with 3 o'clock!
-  const notch0Color = useTransform(scrollYProgress, [0.15, 0.2, 0.25], ["#ffffff40", "#e55a28", "#ffffff40"]);
-  const notch0Shadow = useTransform(scrollYProgress, [0.15, 0.2, 0.25], ["0px 0px 0px transparent", "0px 0px 20px #e55a28", "0px 0px 0px transparent"]);
+  const notch0Color = useTransform(smoothProgress, [0.15, 0.2, 0.25], ["#ffffff40", "#e55a28", "#ffffff40"]);
+  const notch0Shadow = useTransform(smoothProgress, [0.15, 0.2, 0.25], ["0px 0px 0px transparent", "0px 0px 20px #e55a28", "0px 0px 0px transparent"]);
 
-  const notch1Color = useTransform(scrollYProgress, [0.45, 0.5, 0.55], ["#ffffff40", "#3b82f6", "#ffffff40"]);
-  const notch1Shadow = useTransform(scrollYProgress, [0.45, 0.5, 0.55], ["0px 0px 0px transparent", "0px 0px 20px #3b82f6", "0px 0px 0px transparent"]);
+  const notch1Color = useTransform(smoothProgress, [0.45, 0.5, 0.55], ["#ffffff40", "#3b82f6", "#ffffff40"]);
+  const notch1Shadow = useTransform(smoothProgress, [0.45, 0.5, 0.55], ["0px 0px 0px transparent", "0px 0px 20px #3b82f6", "0px 0px 0px transparent"]);
 
-  const notch2Color = useTransform(scrollYProgress, [0.75, 0.8, 0.85], ["#ffffff40", "#34d399", "#ffffff40"]);
-  const notch2Shadow = useTransform(scrollYProgress, [0.75, 0.8, 0.85], ["0px 0px 0px transparent", "0px 0px 20px #34d399", "0px 0px 0px transparent"]);
+  const notch2Color = useTransform(smoothProgress, [0.75, 0.8, 0.85], ["#ffffff40", "#34d399", "#ffffff40"]);
+  const notch2Shadow = useTransform(smoothProgress, [0.75, 0.8, 0.85], ["0px 0px 0px transparent", "0px 0px 20px #34d399", "0px 0px 0px transparent"]);
 
   // Scroll-interactive fluid background orbs
-  const orb1Y = useTransform(scrollYProgress, [0, 1], ["-20vh", "80vh"]);
-  const orb2Y = useTransform(scrollYProgress, [0, 1], ["80vh", "-20vh"]);
-  const orb1X = useTransform(scrollYProgress, [0, 1], ["-10vw", "40vw"]);
-  const orb2X = useTransform(scrollYProgress, [0, 1], ["80vw", "30vw"]);
+  const orb1Y = useTransform(smoothProgress, [0, 1], ["-20vh", "80vh"]);
+  const orb2Y = useTransform(smoothProgress, [0, 1], ["80vh", "-20vh"]);
+  const orb1X = useTransform(smoothProgress, [0, 1], ["-10vw", "40vw"]);
+  const orb2X = useTransform(smoothProgress, [0, 1], ["80vw", "30vw"]);
 
   return (
     <section ref={containerRef} id="skills" className="relative h-[400vh] w-full z-10 bg-[#0a0a0a]">
@@ -195,7 +231,7 @@ export default function Skills() {
           style={{ y: headingY }}
           className="absolute top-0 z-40 flex items-center justify-center w-full pointer-events-none mt-10"
         >
-          <SequentialHeading text="Arsenal." scrollYProgress={scrollYProgress} />
+          <SequentialHeading text="Arsenal." scrollYProgress={smoothProgress} />
         </motion.div>
 
         <div className="absolute top-[20vh] md:top-[15vh] w-full h-[80vh] flex flex-col md:flex-row items-center justify-center z-20 px-4 md:px-10">
@@ -266,7 +302,7 @@ export default function Skills() {
                 category={category} 
                 skills={skills} 
                 index={index} 
-                scrollYProgress={scrollYProgress} 
+                scrollYProgress={smoothProgress} 
               />
             ))}
           </div>

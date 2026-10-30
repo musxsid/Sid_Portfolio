@@ -46,7 +46,9 @@ export default function Footer() {
           </motion.a>
           <motion.a
             whileHover={{ scale: 1.1, y: -2 }}
-            href="#"
+            href="https://www.linkedin.com/in/siddharth-shakyawal/"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-gray-400 hover:text-white transition-colors duration-300"
             aria-label="LinkedIn"
           >
@@ -54,7 +56,7 @@ export default function Footer() {
           </motion.a>
           <motion.a
             whileHover={{ scale: 1.1, y: -2 }}
-            href="mailto:contact@example.com"
+            href="mailto:siddharthshakya2004@gmail.com"
             className="text-gray-400 hover:text-white transition-colors duration-300"
             aria-label="Email"
           >

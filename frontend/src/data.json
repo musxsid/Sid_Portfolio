@@ -1,0 +1,98 @@
+{
+  "resumeUrl": "/resume.pdf",
+  "experience": [
+    {
+      "id": 1,
+      "roleTitle": "Software Developer Intern in IT Department",
+      "company": "AngelBot AI Pvt Ltd.",
+      "location": "New Delhi, India",
+      "projectName": "",
+      "duration": "24th June 2026 - Present",
+      "currentlyDoing": true,
+      "description": "- Selected for an onsite Software Internship.\n- Assisting with internal IT operations and software development tasks under the supervision of Mr. Sumit Shrotriya."
+    },
+    {
+      "id": 2,
+      "roleTitle": "Software Developer Intern",
+      "company": "CodeArrest Softwares Pvt. Ltd.",
+      "location": "Kota, India",
+      "projectName": "JobHive - Online Job Application Portal",
+      "duration": "24 June 2025 - 23 Aug 2025",
+      "currentlyDoing": false,
+      "description": "- Developed a full-stack job portal using .NET Core (MVC) and SQL Server.\n- Implemented job filtering based on title, salary, and location.\n- Designed responsive UI for improved user experience.\n- Integrated Entity Framework Core for efficient database operations."
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "title": "SimplyNotes",
+      "tagline": "Full-Stack Productivity SaaS",
+      "description": "Engineered a hierarchical data structure for Workspaces, Folders, and Notes using JPA/Hibernate. Features a high-fidelity 'Glassmorphism' UI with Framer Motion, secure JWT authentication, UUID mapped file uploads, and public-sharing logic for generating read-only note links.",
+      "tags": "React.js, Spring Boot, Java, MySQL, Spring Security, Tailwind CSS, Framer Motion",
+      "images": [
+        "/projects/simply-notes-1.png",
+        "/projects/simply-notes-2.png",
+        "/projects/simply-notes-3.png",
+        "/projects/simply-notes-4.png"
+      ],
+      "imageUrl": "/projects/simply-notes-1.png",
+      "githubUrl": "https://github.com/musxsid/SimplyNotes"
+    },
+    {
+      "id": 2,
+      "title": "Supervisor Feedback Analyzer",
+      "tagline": "AI-Powered Feedback Analyzer",
+      "description": "Developed a full-stack AI-powered system integrating Llama 3.2 to analyze unstructured feedback. Features prompt engineering, JSON extraction, and a structured dashboard displaying scoring, KPI mapping, evidence tagging, gap analysis, and follow-up questions.",
+      "tags": "React.js, Spring Boot, Ollama (Llama 3.2), REST APIs",
+      "images": ["https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"],
+      "imageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop",
+      "githubUrl": "https://github.com/musxsid/supervisor-feedback-analyzer"
+    },
+    {
+      "id": 3,
+      "title": "SimplyMusic",
+      "tagline": "Audio Microservices Ecosystem",
+      "description": "A full-stack audio microservices ecosystem featuring JWT authentication via Keycloak, S3-compatible media storage with MinIO, NoSQL indexing using MongoDB, and a sleek React frontend.",
+      "tags": "React, Keycloak, MinIO, MongoDB, Java",
+      "images": ["https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=2070&auto=format&fit=crop"],
+      "imageUrl": "https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=2070&auto=format&fit=crop",
+      "githubUrl": "https://github.com/musxsid/simplyMusic"
+    },
+    {
+      "id": 4,
+      "title": "Portfolio Website",
+      "tagline": "A sleek, animated developer portfolio",
+      "description": "Built using React, Tailwind CSS, and Framer Motion, featuring smooth scrolling, complex scroll-linked fluid animations, and premium dark-mode UI aesthetics.",
+      "tags": "React, Tailwind, Vite, Framer Motion",
+      "images": ["https://images.unsplash.com/photo-1507238692062-5a042e971924?q=80&w=2070&auto=format&fit=crop"],
+      "imageUrl": "https://images.unsplash.com/photo-1507238692062-5a042e971924?q=80&w=2070&auto=format&fit=crop",
+      "githubUrl": "https://github.com/musxsid/Sid_Portfolio"
+    }
+  ],
+  "skills": [
+    { "id": 1, "skillName": "Java", "category": "Backend" },
+    { "id": 2, "skillName": "Kotlin", "category": "Backend" },
+    { "id": 3, "skillName": "C#", "category": "Backend" },
+    { "id": 4, "skillName": "Python", "category": "Backend" },
+    { "id": 5, "skillName": "C++", "category": "Backend" },
+    { "id": 6, "skillName": "Spring Boot", "category": "Backend" },
+    { "id": 7, "skillName": ".NET Core", "category": "Backend" },
+    { "id": 8, "skillName": "REST APIs", "category": "Backend" },
+    
+    { "id": 9, "skillName": "HTML", "category": "Frontend" },
+    { "id": 10, "skillName": "CSS", "category": "Frontend" },
+    { "id": 11, "skillName": "JavaScript", "category": "Frontend" },
+    { "id": 12, "skillName": "React", "category": "Frontend" },
+
+    { "id": 13, "skillName": "MySQL", "category": "Tools" },
+    { "id": 14, "skillName": "PostgresSQL", "category": "Tools" },
+    { "id": 15, "skillName": "SQL Server", "category": "Tools" },
+    { "id": 16, "skillName": "Firebase", "category": "Tools" },
+    { "id": 17, "skillName": "Git", "category": "Tools" },
+    { "id": 18, "skillName": "GitHub", "category": "Tools" },
+    { "id": 19, "skillName": "IntelliJ IDEA", "category": "Tools" },
+    { "id": 20, "skillName": "VS Code", "category": "Tools" },
+    { "id": 21, "skillName": "Visual Studio", "category": "Tools" },
+    { "id": 22, "skillName": "UiPath Studio", "category": "Tools" }
+  ]
+}
