@@ -571,7 +571,7 @@ function FormattedChatMessage({ text }) {
 const INITIAL_MESSAGES = [
   {
     type: 'bot',
-    text: "Hello! I am **AURA**, Siddharth's AI assistant. I have verified access to Siddharth's 13 GitHub repositories (including `simplyAudio`, `OmniStay ERP`, and `DocuVault`), system architectures, verified work experience, and official resume.\n\nAsk me anything about his technical stack, engineering decisions, or career background!\n\n📌 **Source:** Official Portfolio System & GitHub Ledger"
+    text: "Hello! I am **AURA**, Siddharth's AI assistant. Ask me anything about his technical stack, engineering decisions, or career background!"
   }
 ];
 
