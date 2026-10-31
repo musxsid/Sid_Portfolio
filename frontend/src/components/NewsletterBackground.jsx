@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 
 /**
- * NewsletterBackground: Minimalist Celestial Grid & Refractive Ambient Horizon
- * Engineered specifically for the full-screen Newsletter section:
- * - 100% wave-free: clean, dark luxury obsidian atmosphere
- * - Interactive cursor-driven warm coral & amber optical caustic glow
- * - Architectural blueprint crosshairs that dynamically illuminate and expand near cursor
- * - Weightless stardust quanta with delicate constellation connections and elastic deflection
- * - Retina DPR support and silky-smooth 60-120 FPS performance
+ * NewsletterBackground: Minimalist Kinetic Grid & Ambient Quanta Spotlight
+ * Engineered specifically for the Newsletter section:
+ * - Minimal, quiet, luxury obsidian atmosphere (no distracting rolling waves)
+ * - Interactive cursor-driven warm amber/coral spotlight with fluid spring inertia
+ * - Microscopic architectural crosshairs that subtly illuminate as the cursor passes
+ * - Sparse, weightless stardust motes with faint constellation connections
+ * - High-DPI Retina support and 60-120 FPS performance
  */
 export default function NewsletterBackground() {
   const canvasRef = useRef(null);
@@ -48,8 +48,8 @@ export default function NewsletterBackground() {
     const handleMouseMove = (e) => {
       const rect = canvas.getBoundingClientRect();
       if (
-        e.clientY >= rect.top - 100 &&
-        e.clientY <= rect.bottom + 100 &&
+        e.clientY >= rect.top - 80 &&
+        e.clientY <= rect.bottom + 80 &&
         e.clientX >= rect.left &&
         e.clientX <= rect.right
       ) {
@@ -70,122 +70,106 @@ export default function NewsletterBackground() {
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave);
 
-    // Weightless Ambient Quanta Motes (Sparse, breathing, luxury)
-    const moteCount = 18;
+    // Minimal Ambient Quanta (Just 14 subtle, breathing luminous motes)
+    const moteCount = 14;
     const motes = [];
     const moteColors = [
-      "rgba(255, 122, 69, 0.70)", // Warm Coral
-      "rgba(255, 185, 70, 0.60)", // Amber Gold
-      "rgba(255, 255, 255, 0.55)", // Starlight White
+      "rgba(255, 122, 69, 0.65)", // Warm Coral
+      "rgba(255, 185, 70, 0.55)", // Amber Gold
+      "rgba(255, 255, 255, 0.50)", // Starlight White
     ];
 
     for (let i = 0; i < moteCount; i++) {
       motes.push({
-        x: Math.random() * (width || 1400),
-        y: Math.random() * (height || 900),
-        vx: (Math.random() - 0.5) * 0.28,
-        vy: (Math.random() - 0.5) * 0.22,
-        radius: Math.random() * 1.5 + 0.8,
+        x: Math.random() * (width || 1200),
+        y: Math.random() * (height || 600),
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.2,
+        radius: Math.random() * 1.4 + 0.8,
         color: moteColors[i % moteColors.length],
-        baseAlpha: Math.random() * 0.4 + 0.25,
-        pulseSpeed: 0.018 + Math.random() * 0.015,
+        baseAlpha: Math.random() * 0.35 + 0.2,
+        pulseSpeed: 0.015 + Math.random() * 0.015,
         phase: Math.random() * Math.PI * 2,
       });
     }
 
-    // Grid configuration for minimal architectural crosshairs
-    const gridStep = 110;
-    const mouseRadius = 260;
+    // Grid spacing for architectural coordinate crosses
+    const gridSpacing = 120;
+    const crossSize = 3;
 
+    // Render loop
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Smooth fluid spring damping
-      mouse.x += (mouse.targetX - mouse.x) * 0.08;
-      mouse.y += (mouse.targetY - mouse.y) * 0.08;
+      // Smooth mouse spring inertia
+      mouse.x += (mouse.targetX - mouse.x) * 0.07;
+      mouse.y += (mouse.targetY - mouse.y) * 0.07;
 
-      const hasMouse = mouse.active && mouse.x > -500;
+      // ─── 1. Minimal Architectural Crosshair Grid with Interactive Illumination ───
+      const cols = Math.ceil(width / gridSpacing);
+      const rows = Math.ceil(height / gridSpacing);
 
-      // ─── 1. Soft Specular Optical Caustic Glow (Follows cursor smoothly) ───
-      if (hasMouse) {
-        const glowRadius = 400;
-        const radialGlow = ctx.createRadialGradient(
+      for (let c = 0; c <= cols; c++) {
+        const gx = c * gridSpacing;
+        for (let r = 0; r <= rows; r++) {
+          const gy = r * gridSpacing;
+
+          let crossAlpha = 0.035;
+
+          // Light up crosshairs near cursor
+          if (mouse.active && mouse.x > -500) {
+            const dx = gx - mouse.x;
+            const dy = gy - mouse.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 220) {
+              const proximity = 1 - dist / 220;
+              crossAlpha += proximity * 0.22;
+            }
+          }
+
+          ctx.strokeStyle = `rgba(255, 255, 255, ${crossAlpha})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(gx - crossSize, gy);
+          ctx.lineTo(gx + crossSize, gy);
+          ctx.moveTo(gx, gy - crossSize);
+          ctx.lineTo(gx, gy + crossSize);
+          ctx.stroke();
+        }
+      }
+
+      // ─── 2. Interactive Soft Ambient Spotlight ───
+      if (mouse.active && mouse.x > -500) {
+        const spotlight = ctx.createRadialGradient(
           mouse.x,
           mouse.y,
           0,
           mouse.x,
           mouse.y,
-          glowRadius
+          340
         );
-        radialGlow.addColorStop(0, "rgba(255, 122, 69, 0.09)");
-        radialGlow.addColorStop(0.35, "rgba(255, 185, 70, 0.035)");
-        radialGlow.addColorStop(0.7, "rgba(255, 122, 69, 0.01)");
-        radialGlow.addColorStop(1, "transparent");
+        spotlight.addColorStop(0, "rgba(255, 122, 69, 0.07)");
+        spotlight.addColorStop(0.4, "rgba(234, 88, 12, 0.025)");
+        spotlight.addColorStop(1, "transparent");
 
-        ctx.fillStyle = radialGlow;
-        ctx.fillRect(0, 0, width, height);
+        ctx.fillStyle = spotlight;
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 340, 0, Math.PI * 2);
+        ctx.fill();
       }
 
-      // ─── 2. Minimalist Architectural Crosshair Grid ───
-      const cols = Math.ceil(width / gridStep);
-      const rows = Math.ceil(height / gridStep);
-
-      for (let c = 0; c <= cols; c++) {
-        const gx = c * gridStep;
-        for (let r = 0; r <= rows; r++) {
-          const gy = r * gridStep;
-
-          let alpha = 0.035;
-          let armLength = 3;
-          let isNear = false;
-
-          if (hasMouse) {
-            const dx = gx - mouse.x;
-            const dy = gy - mouse.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-
-            if (dist < mouseRadius) {
-              const factor = 1 - dist / mouseRadius;
-              alpha = 0.035 + factor * 0.4;
-              armLength = 3 + factor * 4.5;
-              isNear = true;
-            }
-          }
-
-          ctx.beginPath();
-          ctx.moveTo(gx - armLength, gy);
-          ctx.lineTo(gx + armLength, gy);
-          ctx.moveTo(gx, gy - armLength);
-          ctx.lineTo(gx, gy + armLength);
-
-          ctx.strokeStyle = isNear
-            ? `rgba(255, 122, 69, ${alpha})`
-            : `rgba(255, 255, 255, ${alpha})`;
-          ctx.lineWidth = isNear ? 1.1 : 0.75;
-          ctx.stroke();
-
-          // Micro glowing bead at crosshair center when near cursor
-          if (isNear && alpha > 0.2) {
-            ctx.beginPath();
-            ctx.arc(gx, gy, 1.2, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 185, 70, ${alpha * 0.9})`;
-            ctx.fill();
-          }
-        }
-      }
-
-      // ─── 3. Delicate Constellation Filaments Between Close Motes ───
+      // ─── 3. Minimal Constellation Filaments Between Close Motes ───
       for (let i = 0; i < motes.length; i++) {
         for (let j = i + 1; j < motes.length; j++) {
           const dx = motes[i].x - motes[j].x;
           const dy = motes[i].y - motes[j].y;
           const distSq = dx * dx + dy * dy;
-          const maxDist = 120;
+          const maxDist = 110;
           if (distSq < maxDist * maxDist) {
             const dist = Math.sqrt(distSq);
-            const alpha = (1 - dist / maxDist) * 0.14;
+            const alpha = (1 - dist / maxDist) * 0.12;
             ctx.strokeStyle = `rgba(255, 122, 69, ${alpha})`;
-            ctx.lineWidth = 0.75;
+            ctx.lineWidth = 0.7;
             ctx.beginPath();
             ctx.moveTo(motes[i].x, motes[i].y);
             ctx.lineTo(motes[j].x, motes[j].y);
@@ -194,37 +178,37 @@ export default function NewsletterBackground() {
         }
       }
 
-      // ─── 4. Weightless Stardust Quanta Motes ───
+      // ─── 4. Weightless Stardust Quanta ───
       motes.forEach((m) => {
         m.x += m.vx;
         m.y += m.vy;
         m.phase += m.pulseSpeed;
 
-        if (m.x < -15) m.x = width + 15;
-        if (m.x > width + 15) m.x = -15;
-        if (m.y < -15) m.y = height + 15;
-        if (m.y > height + 15) m.y = -15;
+        if (m.x < -10) m.x = width + 10;
+        if (m.x > width + 10) m.x = -10;
+        if (m.y < -10) m.y = height + 10;
+        if (m.y > height + 10) m.y = -10;
 
-        // Interactive elastic deflection from cursor
-        if (hasMouse) {
+        // Subtle elastic deflection from cursor
+        if (mouse.active) {
           const dx = m.x - mouse.x;
           const dy = m.y - mouse.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 130 && dist > 1) {
-            const force = (1 - dist / 130) * 1.3;
+          if (dist < 120 && dist > 1) {
+            const force = (1 - dist / 120) * 1.1;
             m.x += (dx / dist) * force;
             m.y += (dy / dist) * force;
           }
         }
 
-        const currentAlpha = m.baseAlpha + Math.sin(m.phase) * 0.18;
+        const currentAlpha = m.baseAlpha + Math.sin(m.phase) * 0.15;
         ctx.save();
         ctx.beginPath();
         ctx.arc(m.x, m.y, m.radius, 0, Math.PI * 2);
         ctx.fillStyle = m.color;
         ctx.shadowColor = m.color;
-        ctx.shadowBlur = 7;
-        ctx.globalAlpha = Math.max(0.1, Math.min(1, currentAlpha));
+        ctx.shadowBlur = 6;
+        ctx.globalAlpha = Math.max(0.08, Math.min(1, currentAlpha));
         ctx.fill();
         ctx.restore();
       });
@@ -246,7 +230,7 @@ export default function NewsletterBackground() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none z-0"
-      style={{ opacity: 0.95 }}
+      style={{ opacity: 0.9 }}
     />
   );
 }
