@@ -471,8 +471,8 @@ Your mission is to assist recruiters, engineers, founders, and visitors with 100
 ### CRITICAL GROUNDING & ACCURACY POLICY:
 - You MUST answer ANY question a recruiter or client could ask about Siddharth from an evaluation standpoint, including: why to hire him, his technical superpowers, growth areas/weaknesses, crisis management, target roles, availability, system design philosophy, culture fit, location, contact information, education, internships, and repositories.
 - DO NOT invent, extrapolate, or hallucinate skills, experiences, dates, or repositories not explicitly listed below.
-- MANDATORY SOURCE CITATION: At the very end of EVERY single response, you MUST append a verified source line in this exact format:
-  📌 **Source:** [Specific Source, e.g. 'Official Resume', 'GitHub @musxsid/<repo>', 'Experience at Angel Bot AI', 'Portfolio Arsenal', etc.]
+- STRUCTURED OUTPUT WITHOUT RAW EMOJIS: Do NOT use raw emojis in headers or bullets; the frontend automatically renders theme-matched vector icons for categories.
+- DO NOT append trailing source citation footers (such as 'Source:' or citation blocks). Structure responses cleanly with clear headings and bullet lists.
 
 ### STRICT OUTPUT FORMATTING RULES:
 1. NEVER USE MARKDOWN TABLES (do NOT use '| col | col |' syntax). Tables break on mobile screens.
@@ -607,7 +607,7 @@ function buildLocalFallbackResponse(userQuery) {
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 🎯 Why You Should Hire Siddharth Shakyawal
+      response: `### Why You Should Hire Siddharth Shakyawal
 
 Siddharth is a high-velocity **Software Engineer specializing in Backend Systems, Event-Driven Microservices, and Applied AI**. Here is the evidence-backed value proposition he brings to your engineering team:
 
@@ -630,9 +630,7 @@ Siddharth is a high-velocity **Software Engineer specializing in Backend Systems
   - **Availability:** Ready for immediate onboarding with zero notice period delays.
   - **Relocation:** Actively open to on-site relocation across major tech hubs (**Pune, Bengaluru, Delhi NCR, Hyderabad, Mumbai**) as well as remote/hybrid teams.
 
-📄 [Download Siddharth's Resume (PDF)](/api/public/resume/file) | 💼 [Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)
-
-📌 **Source:** Official Resume & Verified Production Engineering Records`
+[Download Siddharth's Resume (PDF)](/api/public/resume/file) | [Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)`
     };
   }
 
@@ -645,7 +643,7 @@ Siddharth is a high-velocity **Software Engineer specializing in Backend Systems
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### ⚡ Core Strengths & Engineering Superpowers
+      response: `### Core Strengths & Engineering Superpowers
 
 Siddharth's technical expertise spans distributed backend engineering, deterministic AI orchestration, and high-concurrency systems:
 
@@ -664,9 +662,7 @@ Siddharth's technical expertise spans distributed backend engineering, determini
 - **5. High-Velocity End-to-End Ownership:**
   Autonomous engineering execution—from relational schema design and API contracts to modular React 19 UI integration and Docker Compose deployment.
 
-📄 [Download Siddharth's Resume (PDF)](/api/public/resume/file)
-
-📌 **Source:** Official Resume / Technical Competency Audit`
+[Download Siddharth's Resume (PDF)](/api/public/resume/file)`
     };
   }
 
@@ -680,7 +676,7 @@ Siddharth's technical expertise spans distributed backend engineering, determini
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 🔍 Areas of Growth & Constructive Self-Awareness
+      response: `### Areas of Growth & Constructive Self-Awareness
 
 Siddharth maintains a growth-oriented, transparent approach to professional development:
 
@@ -694,9 +690,7 @@ Siddharth maintains a growth-oriented, transparent approach to professional deve
 
 - **3. High Architectural Perfectionism:**
   - *Context:* Siddharth naturally leans toward rigorous architectural purity—striving for 0% hallucinations in AI, sub-5ms auth latencies, and strict database isolation.
-  - *Growth Action:* He has actively embraced agile pragmatism: prioritizing rapid iterative delivery, MVP validation, and user feedback cycles without compromising foundational security or reliability.
-
-📌 **Source:** Professional Self-Assessment & Engineering Trajectory`
+  - *Growth Action:* He has actively embraced agile pragmatism: prioritizing rapid iterative delivery, MVP validation, and user feedback cycles without compromising foundational security or reliability.`
     };
   }
 
@@ -711,7 +705,7 @@ Siddharth maintains a growth-oriented, transparent approach to professional deve
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 🛡️ Handling Pressure, Critical Bugs & Complex Problem Solving
+      response: `### Handling Pressure, Critical Bugs & Complex Problem Solving
 
 Siddharth approaches high-pressure situations with methodical root-cause isolation and data-backed engineering. Key examples from production:
 
@@ -728,9 +722,7 @@ Siddharth approaches high-pressure situations with methodical root-cause isolati
 - **3. Multi-Terminal Concurrency & Ledger Integrity in OmniStay ERP:**
   - *The Challenge:* Preventing race conditions and double charges during concurrent guest checkout operations and automated night audit batch processing.
   - *The Solution:* Implemented PostgreSQL row-level pessimistic locking and atomic transaction boundaries across folio records.
-  - *The Outcome:* Guaranteed 100% financial ledger consistency and reconciliation with batch audit runtimes under 500ms.
-
-📌 **Source:** Production Experience Records (Angel Bot AI & OmniStay ERP)`
+  - *The Outcome:* Guaranteed 100% financial ledger consistency and reconciliation with batch audit runtimes under 500ms.`
     };
   }
 
@@ -746,21 +738,21 @@ Siddharth approaches high-pressure situations with methodical root-cause isolati
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 💼 Target Roles, Availability & Relocation
+      response: `### Target Roles, Availability & Relocation
 
 Here is Siddharth's current professional availability and role preferences:
 
-- **🎯 Target Engineering Roles:**
+- **Target Engineering Roles:**
   - **Backend Engineer / SDE I (Backend)** (Java / Spring Boot, Go, Python)
   - **Software Development Engineer (Full Stack)** (Java / Spring Boot + React 19)
   - **Applied AI / AI Systems Engineer** (Structured RAG, LLM Orchestration, Spring AI)
   - **Distributed Systems / Microservices Engineer**
 
-- **⏱️ Availability & Notice Period:**
+- **Availability & Notice Period:**
   - **Notice Period:** **Immediate Joiner** (0 days). No notice period or non-compete constraints.
   - **Earliest Start Date:** Immediate / Flexible based on hiring pipeline.
 
-- **📍 Location & Relocation:**
+- **Location & Relocation:**
   - **Current Locations:** Kota, Rajasthan (324010) & Lavasa, Pune (Christ University BCA 2024–2027).
   - **On-Site Relocation:** **100% Open to Relocate** immediately to key tech hubs across India, including:
     - **Pune, Maharashtra**
@@ -770,9 +762,7 @@ Here is Siddharth's current professional availability and role preferences:
     - **Mumbai, Maharashtra**
   - **Work Modes:** Open to **On-site**, **Hybrid**, or **Remote** software engineering roles globally.
 
-📫 [Contact Siddharth Directly](mailto:siddharthshakya2004@gmail.com) | 📄 [Download Resume (PDF)](/api/public/resume/file)
-
-📌 **Source:** Official Resume / Candidate Availability Status`
+[Contact Siddharth Directly](mailto:siddharthshakya2004@gmail.com) | [Download Resume (PDF)](/api/public/resume/file)`
     };
   }
 
@@ -785,7 +775,7 @@ Here is Siddharth's current professional availability and role preferences:
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 🏛️ System Design & Architectural Principles
+      response: `### System Design & Architectural Principles
 
 Siddharth designs backend and AI systems around five core engineering tenets:
 
@@ -802,9 +792,7 @@ Siddharth designs backend and AI systems around five core engineering tenets:
   Authentication and authorization are verified at every layer: stateless RS256 JWT tokens, Keycloak SSO, sub-5ms Argon2id hashing in Go, and in-memory server session guards against IDOR exploits.
 
 - **5. Containerized Environment Parity:**
-  Ensures zero 'works on my machine' issues by defining reproducible multi-stage Docker builds and Docker Compose meshes for all services, databases, and message brokers.
-
-📌 **Source:** Engineering Architecture Guidelines & GitHub Repositories`
+  Ensures zero 'works on my machine' issues by defining reproducible multi-stage Docker builds and Docker Compose meshes for all services, databases, and message brokers.`
     };
   }
 
@@ -817,7 +805,7 @@ Siddharth designs backend and AI systems around five core engineering tenets:
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 🤝 Culture Fit, Collaboration & Work Ethic
+      response: `### Culture Fit, Collaboration & Work Ethic
 
 Siddharth brings a strong engineering mindset, high autonomy, and collaborative ethos to technical teams:
 
@@ -833,9 +821,7 @@ Siddharth brings a strong engineering mindset, high autonomy, and collaborative 
 - **4. Relentless Curiosity & Continuous Learning:**
   Self-driven learner who proactively tracks modern industry standards—mastering Spring AI, React 19, Go microservices, and modern Docker architectures ahead of the curve.
 
-📄 [Download Siddharth's Resume (PDF)](/api/public/resume/file) | 💼 [Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)
-
-📌 **Source:** Peer & Supervisor Collaboration History (Official Resume)`
+[Download Siddharth's Resume (PDF)](/api/public/resume/file) | [Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)`
     };
   }
 
@@ -852,7 +838,7 @@ Siddharth brings a strong engineering mindset, high autonomy, and collaborative 
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 📬 Contact & Professional Links
+      response: `### Contact & Professional Links
 
 You can connect directly with Siddharth through any of the verified channels below:
 
@@ -861,9 +847,7 @@ You can connect directly with Siddharth through any of the verified channels bel
 - **Location:** Kota, Rajasthan (324010) & Pune, India (Open to Relocation / Remote)
 - **LinkedIn:** [linkedin.com/in/siddharth-shakyawal-925889356](https://linkedin.com/in/siddharth-shakyawal-925889356)
 - **GitHub:** [github.com/musxsid](https://github.com/musxsid)
-- **Resume:** [Download Siddharth's Resume (PDF)](/api/public/resume/file)
-
-📌 **Source:** Official Resume & Portfolio Contact Section`
+- **Resume:** [Download Siddharth's Resume (PDF)](/api/public/resume/file)`
     };
   }
 
@@ -877,7 +861,7 @@ You can connect directly with Siddharth through any of the verified channels bel
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 📍 Location & Relocation Availability
+      response: `### Location & Relocation Availability
 
 Siddharth Shakyawal is primarily based in **Kota, Rajasthan (324010), India**, and is currently pursuing his degree in **Lavasa, Pune (Maharashtra)** at Christ University.
 
@@ -885,9 +869,7 @@ Siddharth Shakyawal is primarily based in **Kota, Rajasthan (324010), India**, a
 - **Academic Location:** Christ University, Lavasa, Pune
 - **Work & Relocation Preference:** Actively open to **on-site relocation** (Pune, Bengaluru, Delhi NCR, Hyderabad, Mumbai, etc.) as well as hybrid and remote software engineering opportunities worldwide.
 
-📫 **Direct Contact:** [siddharthshakya2004@gmail.com](mailto:siddharthshakya2004@gmail.com) | **Phone:** +91 9256265129
-
-📌 **Source:** Official Resume & Biographical Records`
+**Direct Contact:** [siddharthshakya2004@gmail.com](mailto:siddharthshakya2004@gmail.com) | **Phone:** +91 9256265129`
     };
   }
 
@@ -900,16 +882,14 @@ Siddharth Shakyawal is primarily based in **Kota, Rajasthan (324010), India**, a
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 🎓 Academic Background & Education
+      response: `### Academic Background & Education
 
 - **Degree:** Bachelor of Computer Applications (BCA)
 - **Institution:** Christ University, Lavasa, Pune
 - **Duration:** 2024 – 2027
 - **Core Competencies:** Distributed computing, data structures & algorithms, relational database systems, and applied AI systems engineering.
 
-📄 [Download Siddharth's Resume (PDF)](/api/public/resume/file)
-
-📌 **Source:** Official Resume / Education Section`
+[Download Siddharth's Resume (PDF)](/api/public/resume/file)`
     };
   }
 
@@ -923,7 +903,7 @@ Siddharth Shakyawal is primarily based in **Kota, Rajasthan (324010), India**, a
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 💼 Production Work Experience
+      response: `### Production Work Experience
 
 Siddharth has completed two verified engineering internships:
 
@@ -939,9 +919,7 @@ Siddharth has completed two verified engineering internships:
    - **Platform:** JobHive – Online Job Application Portal
    - **Tech Stack:** .NET Core (MVC), C#, SQL Server, Entity Framework Core, HTML, CSS, JavaScript
    - Implemented multi-parameter filtering across title, compensation, and location, optimizing query execution by 35%.
-   - Integrated Entity Framework Core with indexed relational schemas ensuring 100% transactional consistency.
-
-📌 **Source:** Official Resume / Production Work Experience`
+   - Integrated Entity Framework Core with indexed relational schemas ensuring 100% transactional consistency.`
     };
   }
 
@@ -954,7 +932,7 @@ Siddharth has completed two verified engineering internships:
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### ⚡ Siddharth's Technical Arsenal
+      response: `### Siddharth's Technical Arsenal
 
 Grounded directly in his official resume and production systems:
 
@@ -965,9 +943,7 @@ Grounded directly in his official resume and production systems:
 - **Databases & Storage:** PostgreSQL, MongoDB, MySQL, SQL Server, Redis, MinIO (S3), Firebase
 - **DevOps & Infrastructure:** Git, GitHub, Docker, Docker Compose, Postman, Maven
 
-📄 [Download Verified Resume (PDF)](/api/public/resume/file)
-
-📌 **Source:** Official Resume & Portfolio Arsenal`
+[Download Verified Resume (PDF)](/api/public/resume/file)`
     };
   }
 
@@ -976,18 +952,16 @@ Grounded directly in his official resume and production systems:
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 📄 Siddharth Shakyawal — Official Resume
+      response: `### Siddharth Shakyawal — Official Resume
 
 You can inspect or download Siddharth's authentic, up-to-date resume directly:
 
-👉 **[Download Siddharth's Resume (PDF)](/api/public/resume/file)**
+**[Download Siddharth's Resume (PDF)](/api/public/resume/file)**
 
 - **Summary:** Software Engineer specializing in Backend Systems & Applied AI/ML.
 - **Education:** BCA at Christ University, Lavasa, Pune (2024–2027).
 - **Location:** Kota, Rajasthan (324010) & Pune (Open to Relocation & Remote).
-- **Contact:** [siddharthshakya2004@gmail.com](mailto:siddharthshakya2004@gmail.com) | +91 9256265129
-
-📌 **Source:** Official Resume (PDF)`
+- **Contact:** [siddharthshakya2004@gmail.com](mailto:siddharthshakya2004@gmail.com) | +91 9256265129`
     };
   }
 
@@ -996,7 +970,7 @@ You can inspect or download Siddharth's authentic, up-to-date resume directly:
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 🎧 simplyAudio — Event-Driven Audio Microservices Platform
+      response: `### simplyAudio — Event-Driven Audio Microservices Platform
 
 A distributed, high-concurrency music streaming and cataloging platform engineered by Siddharth.
 
@@ -1005,9 +979,7 @@ A distributed, high-concurrency music streaming and cataloging platform engineer
 - **Centralized Security:** Keycloak OAuth2 / OIDC single sign-on with fine-grained RBAC.
 - **Object Storage:** High-throughput audio chunking partitioned across MinIO S3-compatible cloud storage.
 
-🔗 **Explore Repository:** [simplyAudio on GitHub](https://github.com/musxsid/simplyAudio)
-
-📌 **Source:** GitHub Repository [musxsid/simplyAudio]`
+**Explore Repository:** [simplyAudio on GitHub](https://github.com/musxsid/simplyAudio)`
     };
   }
 
@@ -1016,7 +988,7 @@ A distributed, high-concurrency music streaming and cataloging platform engineer
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 🏨 OmniStay ERP — Hotel Management & Relational Ledger
+      response: `### OmniStay ERP — Hotel Management & Relational Ledger
 
 A full-stack enterprise hotel management and booking system built with **Java 17**, **Spring Boot**, **PostgreSQL**, and **React 19**.
 
@@ -1024,9 +996,7 @@ A full-stack enterprise hotel management and booking system built with **Java 17
 - **Night Audit Service:** Automated batch service executing daily roll-forwards and occupancy metrics in <500ms.
 - **AI Review Analyzer:** Built-in LLM integration extracting structured guest sentiments and operational insights with 95%+ precision.
 
-🔗 **Explore Repository:** [omnistay-erp on GitHub](https://github.com/musxsid/omnistay-erp)
-
-📌 **Source:** GitHub Repository [musxsid/omnistay-erp] & Official Resume`
+**Explore Repository:** [omnistay-erp on GitHub](https://github.com/musxsid/omnistay-erp)`
     };
   }
 
@@ -1035,16 +1005,14 @@ A full-stack enterprise hotel management and booking system built with **Java 17
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 🧠 Supervisor Feedback Analyzer — Workplace Performance Analytics
+      response: `### Supervisor Feedback Analyzer — Workplace Performance Analytics
 
 An end-to-end evaluation platform utilizing local LLM inference via **Ollama (Llama 3.2)**, **Spring AI**, **Spring Boot**, and **React 19**.
 
 - **Deterministic Schema Enforcement:** Parses multi-dimensional unstructured performance reviews into structured JSON without hallucinations.
 - **Organizational Analytics:** Computes evidence-backed managerial competency scores, sentiment telemetry, and growth trajectories.
 
-🔗 **Explore Repository:** [supervisor-feedback-analyzer on GitHub](https://github.com/musxsid/supervisor-feedback-analyzer)
-
-📌 **Source:** GitHub Repository [musxsid/supervisor-feedback-analyzer]`
+**Explore Repository:** [supervisor-feedback-analyzer on GitHub](https://github.com/musxsid/supervisor-feedback-analyzer)`
     };
   }
 
@@ -1053,16 +1021,14 @@ An end-to-end evaluation platform utilizing local LLM inference via **Ollama (Ll
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 📊 Git In Bits (GIBs) — Engineering Intelligence Platform
+      response: `### Git In Bits (GIBs) — Engineering Intelligence Platform
 
 Full-stack engineering intelligence platform engineered by Siddharth at Angel Bot AI.
 
 - **Tech Stack:** Spring Boot 3, React 19, MongoDB, Spring AI, Groq (Llama 3.3 70B), Docker
 - **Key Engineering:** Ingests GitHub PR velocities and code churn (+2.7M lines), computes 5-dimension health scores (0-100), and generates structured RAG briefings with <1.2s latency.
 
-🔗 **Explore Repository:** [Git In Bits (GIBs) on GitHub](https://github.com/musxsid/GIBs-Git_In_Bits-main)
-
-📌 **Source:** Experience Record (Angel Bot AI) & GitHub [musxsid/GIBs-Git_In_Bits-main]`
+**Explore Repository:** [Git In Bits (GIBs) on GitHub](https://github.com/musxsid/GIBs-Git_In_Bits-main)`
     };
   }
 
@@ -1071,15 +1037,13 @@ Full-stack engineering intelligence platform engineered by Siddharth at Angel Bo
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 📑 DocuVault — Secure Document Ingestion & Semantic Search Pipeline
+      response: `### DocuVault — Secure Document Ingestion & Semantic Search Pipeline
 
 Enterprise document intelligence platform engineered with **Python**, **FastAPI**, and **Vector Embeddings**.
 
 - Implements automated content chunking, cosine similarity retrieval, and AES-256 encrypted storage for sensitive enterprise documents.
 
-🔗 **Explore Repository:** [DocuVault on GitHub](https://github.com/musxsid/DocuVault)
-
-📌 **Source:** GitHub Repository [musxsid/DocuVault]`
+**Explore Repository:** [DocuVault on GitHub](https://github.com/musxsid/DocuVault)`
     };
   }
 
@@ -1088,15 +1052,13 @@ Enterprise document intelligence platform engineered with **Python**, **FastAPI*
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 🔒 Go Auth Microservice — Cloud-Native Low Latency Auth
+      response: `### Go Auth Microservice — Cloud-Native Low Latency Auth
 
 High-concurrency authentication engine engineered in **Go** with **PostgreSQL** and **Docker**.
 
 - Implements Argon2id password hashing, RS256 asymmetric JWT signing with key rotation, and pgx connection pools achieving **<5ms request handling**.
 
-🔗 **Explore Repository:** [go-auth-postgres on GitHub](https://github.com/musxsid/go-auth-postgres)
-
-📌 **Source:** GitHub Repository [musxsid/go-auth-postgres]`
+**Explore Repository:** [go-auth-postgres on GitHub](https://github.com/musxsid/go-auth-postgres)`
     };
   }
 
@@ -1105,15 +1067,13 @@ High-concurrency authentication engine engineered in **Go** with **PostgreSQL** 
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 💼 JobHive — Online Recruitment Portal
+      response: `### JobHive — Online Recruitment Portal
 
 Full-stack recruitment portal built on **.NET Core (MVC)**, **C#**, **SQL Server**, and **Entity Framework Core**.
 
 - Engineered multi-role applicant tracking and multi-parameter filtering, reducing query execution time by 35%.
 
-🔗 **Explore Repository:** [JobHive on GitHub](https://github.com/musxsid/JobHive)
-
-📌 **Source:** Official Resume & GitHub [musxsid/JobHive]`
+**Explore Repository:** [JobHive on GitHub](https://github.com/musxsid/JobHive)`
     };
   }
 
@@ -1122,16 +1082,14 @@ Full-stack recruitment portal built on **.NET Core (MVC)**, **C#**, **SQL Server
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### ⚡ Sid Portfolio — Creative Engineering Platform
+      response: `### Sid Portfolio — Creative Engineering Platform
 
 Interactive developer portfolio built with **React 19**, **Tailwind CSS 4**, **Spring Boot 3**, and **PostgreSQL**.
 
 - Real-time GitHub repository and contribution sync directly into PostgreSQL.
 - Hardware-accelerated canvas shaders, interactive aerospace chronometer skills radar, and grounded AURA AI assistant.
 
-🔗 **Explore Repository:** [Sid Portfolio on GitHub](https://github.com/musxsid/Sid_Portfolio)
-
-📌 **Source:** GitHub Repository [musxsid/Sid_Portfolio]`
+**Explore Repository:** [Sid Portfolio on GitHub](https://github.com/musxsid/Sid_Portfolio)`
     };
   }
 
@@ -1140,7 +1098,7 @@ Interactive developer portfolio built with **React 19**, **Tailwind CSS 4**, **S
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 🚀 Verified Software Engineering Projects
+      response: `### Verified Software Engineering Projects
 
 Siddharth has engineered **13 verified repositories** on GitHub across distributed backends, microservices, and applied AI:
 
@@ -1153,9 +1111,7 @@ Siddharth has engineered **13 verified repositories** on GitHub across distribut
 7. **[JobHive](https://github.com/musxsid/JobHive)** — .NET Core recruitment portal with Entity Framework Core.
 8. **[Sid Portfolio](https://github.com/musxsid/Sid_Portfolio)** — Real-time engineering portfolio with dynamic GitHub sync.
 
-🔗 **Explore All Repositories:** [GitHub Profile (@musxsid)](https://github.com/musxsid)
-
-📌 **Source:** GitHub Live Repositories & Official Resume`
+**Explore All Repositories:** [GitHub Profile (@musxsid)](https://github.com/musxsid)`
     };
   }
 
@@ -1167,7 +1123,7 @@ Siddharth has engineered **13 verified repositories** on GitHub across distribut
     return {
       success: true,
       model: "AURA Grounded Knowledge Engine",
-      response: `### 👨‍💻 About Siddharth Shakyawal
+      response: `### About Siddharth Shakyawal
 
 Siddharth is a **Software Engineer** specializing in **Backend Systems** and **Applied AI/ML**, proficient in Python, Java (Spring Boot), Go, and React.
 
@@ -1176,9 +1132,7 @@ Siddharth is a **Software Engineer** specializing in **Backend Systems** and **A
 - **Experience:** Software Developer Intern at Angel Bot AI (Delhi) and CodeArrest Softwares (Kota).
 - **Key Expertise:** Structured RAG pipelines, deterministic LLM orchestration, event-driven microservices (RabbitMQ), ACID relational folio ledgers, and container meshes.
 
-📄 [Download Siddharth's Resume (PDF)](/api/public/resume/file) [Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)
-
-📌 **Source:** Official Resume / Summary & Executive Profile`
+[Download Siddharth's Resume (PDF)](/api/public/resume/file) [Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)`
     };
   }
 
@@ -1186,21 +1140,19 @@ Siddharth is a **Software Engineer** specializing in **Backend Systems** and **A
   return {
     success: true,
     model: "AURA Grounded Knowledge Engine",
-    response: `### ⚡ AURA — Siddharth's Portfolio Intelligence
+    response: `### AURA — Siddharth's Portfolio Intelligence
 
 I am trained on Siddharth Shakyawal's official resume, verified work experience, GitHub repositories, and system architecture.
 
 I can provide full details on:
-- **📍 Location & Relocation:** Based in Kota, Rajasthan / Pune (open to on-site relocation & remote)
-- **🎓 Academics:** BCA at Christ University, Pune (2024–2027)
-- **💼 Internships:** Production experience at Angel Bot AI & CodeArrest Softwares
-- **⚡ Tech Stack:** Java (Spring Boot), Python, Go, React 19, RabbitMQ, Docker
-- **🚀 Projects:** [simplyAudio](https://github.com/musxsid/simplyAudio), [OmniStay ERP](https://github.com/musxsid/omnistay-erp), [Git in Bits](https://github.com/musxsid/GIBs-Git_In_Bits-main), and 10 others
-- **📄 Official Resume:** [Download Resume (PDF)](/api/public/resume/file)
+- **Location & Relocation:** Based in Kota, Rajasthan / Pune (open to on-site relocation & remote)
+- **Academics:** BCA at Christ University, Pune (2024–2027)
+- **Internships:** Production experience at Angel Bot AI & CodeArrest Softwares
+- **Tech Stack:** Java (Spring Boot), Python, Go, React 19, RabbitMQ, Docker
+- **Projects:** [simplyAudio](https://github.com/musxsid/simplyAudio), [OmniStay ERP](https://github.com/musxsid/omnistay-erp), [Git in Bits](https://github.com/musxsid/GIBs-Git_In_Bits-main), and 10 others
+- **Official Resume:** [Download Resume (PDF)](/api/public/resume/file)
 
-What specific information would you like to explore?
-
-📌 **Source:** Official Resume & Portfolio Index`
+What specific information would you like to explore?`
   };
 }
 

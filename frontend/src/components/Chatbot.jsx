@@ -14,7 +14,15 @@ import {
   FileText,
   Mail,
   CheckCircle2,
-  Lock
+  Lock,
+  MapPin,
+  GraduationCap,
+  Briefcase,
+  Code2,
+  FolderGit2,
+  Cpu,
+  Zap,
+  Layers
 } from 'lucide-react';
 import { portfolioApi, API_BASE_URL } from '../services/api';
 
@@ -119,6 +127,55 @@ function LinkedInIcon({ className = "w-3.5 h-3.5" }) {
 }
 
 
+
+function stripEmojis(str) {
+  if (!str || typeof str !== 'string') return '';
+  return str
+    .replace(/\p{Extended_Pictographic}/gu, '')
+    .replace(/[\uFE00-\uFE0F\u200D]/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
+function getCategoryIcon(label) {
+  if (!label) return null;
+  const l = label.toLowerCase();
+  if (l.includes('location') || l.includes('relocation') || l.includes('city') || l.includes('address') || l.includes('based in')) {
+    return <MapPin className="w-3.5 h-3.5 text-accent-warm" />;
+  }
+  if (l.includes('academic') || l.includes('education') || l.includes('degree') || l.includes('university') || l.includes('college')) {
+    return <GraduationCap className="w-3.5 h-3.5 text-accent-warm" />;
+  }
+  if (l.includes('intern') || l.includes('experience') || l.includes('career') || l.includes('work') || l.includes('company') || l.includes('role')) {
+    return <Briefcase className="w-3.5 h-3.5 text-accent-warm" />;
+  }
+  if (l.includes('tech stack') || l.includes('stack') || l.includes('language') || l.includes('framework') || l.includes('backend') || l.includes('frontend') || l.includes('skill')) {
+    return <Code2 className="w-3.5 h-3.5 text-accent-warm" />;
+  }
+  if (l.includes('project') || l.includes('repo') || l.includes('github') || l.includes('codebase')) {
+    return <FolderGit2 className="w-3.5 h-3.5 text-accent-warm" />;
+  }
+  if (l.includes('resume') || l.includes('cv') || l.includes('profile') || l.includes('document')) {
+    return <FileText className="w-3.5 h-3.5 text-accent-warm" />;
+  }
+  if (l.includes('ai') || l.includes('rag') || l.includes('llm') || l.includes('model') || l.includes('neural')) {
+    return <Cpu className="w-3.5 h-3.5 text-accent-warm" />;
+  }
+  if (l.includes('performance') || l.includes('speed') || l.includes('latency') || l.includes('metric') || l.includes('impact') || l.includes('kpi') || l.includes('expertise')) {
+    return <Zap className="w-3.5 h-3.5 text-accent-warm" />;
+  }
+  if (l.includes('database') || l.includes('sql') || l.includes('cache') || l.includes('storage') || l.includes('ledger')) {
+    return <Layers className="w-3.5 h-3.5 text-accent-warm" />;
+  }
+  if (l.includes('security') || l.includes('auth') || l.includes('sso') || l.includes('jwt')) {
+    return <Lock className="w-3.5 h-3.5 text-accent-warm" />;
+  }
+  if (l.includes('contact') || l.includes('email') || l.includes('phone') || l.includes('reach')) {
+    return <Mail className="w-3.5 h-3.5 text-accent-warm" />;
+  }
+  return null;
+}
+
 function renderLinkPill(title, url, key) {
   const resolvedUrl = (url && url.startsWith("/api")) ? `${API_BASE_URL}${url}` : url;
   const isGitHub = url.toLowerCase().includes("github.com");
@@ -148,7 +205,7 @@ function renderLinkPill(title, url, key) {
 
     return (
       <span key={key} className="inline-flex items-center gap-1.5 align-middle flex-wrap my-0.5">
-        <strong className="text-white font-bold">{title}</strong>
+        <strong className="text-white font-bold">{stripEmojis(title)}</strong>
         <a
           href={resolvedUrl}
           target="_blank"
@@ -165,7 +222,7 @@ function renderLinkPill(title, url, key) {
   }
 
   if (isLinkedIn) {
-    const cleanTitle = (title || "Connect on LinkedIn").replace(/^[📬\s]+/, "");
+    const cleanTitle = stripEmojis(title || "Connect on LinkedIn");
     return (
       <a
         key={key}
@@ -182,7 +239,7 @@ function renderLinkPill(title, url, key) {
   }
 
   if (isResume) {
-    const cleanTitle = (title || "Download Siddharth's Resume (PDF)").replace(/^[📄\s]+/, "");
+    const cleanTitle = stripEmojis(title || "Download Siddharth's Resume (PDF)");
     return (
       <a
         key={key}
@@ -208,7 +265,7 @@ function renderLinkPill(title, url, key) {
         className="inline-flex items-center gap-1.5 px-3 py-1 my-0.5 rounded-full bg-white/[0.06] hover:bg-accent-warm text-gray-200 hover:text-white border border-white/15 hover:border-accent-warm font-sans font-semibold text-xs transition-all shadow-sm active:scale-95 cursor-pointer align-middle"
       >
         <Mail className="w-3 h-3 shrink-0 text-accent-warm" />
-        <span>{title || email}</span>
+        <span>{stripEmojis(title || email)}</span>
       </a>
     );
   }
@@ -221,7 +278,7 @@ function renderLinkPill(title, url, key) {
       rel="noopener noreferrer"
       className="text-accent-warm font-semibold hover:underline inline-flex items-center gap-0.5 underline-offset-2 transition-colors mx-0.5 align-middle"
     >
-      <span>{title || url}</span>
+      <span>{stripEmojis(title || url)}</span>
       <ExternalLink className="w-3 h-3 inline ml-0.5 opacity-80" />
     </a>
   );
@@ -229,8 +286,8 @@ function renderLinkPill(title, url, key) {
 
 function parseInlineFormatting(str) {
   if (!str) return null;
-  // Clean raw HTML break tags, remove pipes between or before links, and strip leading emoji pins
-  const cleaned = str
+  // Clean raw HTML break tags, remove pipes between or before links, and strip emojis
+  const cleaned = stripEmojis(str)
     .replace(/<br\s*\/?>/gi, " ")
     .replace(/(?<=\))\s*\|\s*(?=\[|\*\*\[)/g, " ")
     .replace(/\|\s*(?=\[|\*\*\[)/g, " ")
@@ -320,13 +377,13 @@ function FormattedChatMessage({ text }) {
 
     // Source provenance line detection:
     // Matches: 📌 **Source:** ... or 📌 Source: ... or **Source:** ... or Source: ...
-    const sourceMatch = trimmed.match(/^(?:📌\s*)?(?:\*\*)?Sources?(?:\*\*)?:(?:\*\*)?\s*(.+)$/i);
+        const sourceMatch = trimmed.match(/^(?:📌\s*)?(?:\*\*)?Sources?(?:\*\*)?:(?:\*\*)?\s*(.+)$/i);
     if (sourceMatch) {
       if (currentTable) {
         blocks.push({ type: 'table', rows: currentTable });
         currentTable = null;
       }
-      blocks.push({ type: 'source', text: sourceMatch[1].trim() });
+      // Completely omit source provenance footer per user specification
       continue;
     }
 
@@ -461,7 +518,7 @@ function FormattedChatMessage({ text }) {
             <div key={idx} className="flex items-center gap-2 mt-3.5 mb-2 pb-1.5 border-b border-white/10">
               <span className="w-1.5 h-4 rounded-full bg-accent-warm shadow-[0_0_8px_#ff7a45]" />
               <h4 className="font-display font-extrabold text-white text-sm sm:text-base tracking-tight">
-                {parseInlineFormatting(block.text)}
+                {parseInlineFormatting(stripEmojis(block.text))}
               </h4>
             </div>
           );
@@ -490,26 +547,44 @@ function FormattedChatMessage({ text }) {
           );
         }
 
-        if (block.type === 'bullet') {
-          const keyValMatch = block.text.match(/^\*\*([^*]+)\*\*:\s*(.*)$/);
+                if (block.type === 'bullet') {
+          const cleanLine = stripEmojis(block.text);
+          const keyValMatch = cleanLine.match(/^\*\*\s*([^*:]+?)(?::)?\s*\*\*(?::)?\s*(.*)$/);
           if (keyValMatch) {
-            const label = keyValMatch[1];
-            const val = keyValMatch[2];
+            const label = keyValMatch[1].trim();
+            const val = keyValMatch[2].trim();
+            const icon = getCategoryIcon(label);
+
             return (
-              <div key={idx} className="flex items-start gap-2.5 my-1.5 p-2 rounded-xl bg-white/[0.02] hover:bg-white/[0.045] border border-white/5 hover:border-accent-warm/25 transition-all duration-200">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent-warm shrink-0 mt-2 shadow-[0_0_8px_#ff7a45]" />
+              <div
+                key={idx}
+                className="group flex items-start gap-2.5 my-1.5 p-2 rounded-xl bg-white/[0.02] hover:bg-white/[0.045] border border-white/5 hover:border-accent-warm/25 transition-all duration-200"
+              >
+                {icon ? (
+                  <div className="w-6 h-6 rounded-lg bg-accent-warm/10 border border-accent-warm/25 flex items-center justify-center shrink-0 mt-0.5 text-accent-warm shadow-[0_0_8px_rgba(255,122,69,0.15)] group-hover:scale-105 transition-transform">
+                    {icon}
+                  </div>
+                ) : (
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-warm shrink-0 mt-2 shadow-[0_0_8px_#ff7a45]" />
+                )}
                 <div className="flex-1 text-xs sm:text-[0.84rem] min-w-0">
-                  <span className="font-bold text-white tracking-tight mr-1.5 font-sans">{label}:</span>
-                  <span className="text-gray-300 font-light leading-relaxed">{parseInlineFormatting(val)}</span>
+                  <span className="font-bold text-white tracking-tight mr-1.5 font-sans">
+                    {label}:
+                  </span>
+                  <span className="text-gray-300 font-light leading-relaxed">
+                    {parseInlineFormatting(val)}
+                  </span>
                 </div>
               </div>
             );
           }
 
           return (
-            <div key={idx} className="flex items-start gap-2.5 my-1 leading-relaxed text-gray-200">
+            <div key={idx} className="flex items-start gap-2.5 my-1.5 leading-relaxed text-gray-200">
               <span className="w-1.5 h-1.5 rounded-full bg-accent-warm shrink-0 mt-2 shadow-[0_0_8px_#ff7a45]" />
-              <div className="flex-1 text-xs sm:text-[0.84rem]">{parseInlineFormatting(block.text)}</div>
+              <div className="flex-1 text-xs sm:text-[0.84rem]">
+                {parseInlineFormatting(cleanLine)}
+              </div>
             </div>
           );
         }
@@ -526,36 +601,7 @@ function FormattedChatMessage({ text }) {
         }
 
         if (block.type === 'source') {
-          return (
-            <div key={idx} className="mt-4 pt-3.5 border-t border-white/10">
-              {/* Header Badge */}
-              <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="flex items-center gap-1.5 text-[0.68rem] font-sans font-extrabold tracking-wider text-accent-warm uppercase">
-                  <ShieldCheck className="w-3.5 h-3.5 text-accent-warm shrink-0 drop-shadow-[0_0_8px_rgba(255,122,69,0.7)]" />
-                  <span>Verified Provenance & Citation</span>
-                </span>
-                <span className="text-[0.62rem] text-emerald-400 font-sans font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 flex items-center gap-1 shrink-0 shadow-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  Authentic Record
-                </span>
-              </div>
-
-              {/* Structured Source Card */}
-              <div className="p-3 rounded-xl bg-gradient-to-r from-accent-warm/[0.08] via-white/[0.02] to-transparent border border-accent-warm/25 shadow-inner backdrop-blur-md flex items-start gap-3">
-                <div className="w-7 h-7 rounded-lg bg-accent-warm/15 border border-accent-warm/30 flex items-center justify-center shrink-0 mt-0.5 text-accent-warm shadow-[0_0_10px_rgba(255,122,69,0.2)]">
-                  <BookmarkCheck className="w-4 h-4" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <span className="text-[0.65rem] font-mono text-gray-400 uppercase tracking-wider block mb-0.5">
-                    Citation Origin
-                  </span>
-                  <div className="text-xs text-gray-200 font-medium leading-relaxed font-sans">
-                    {parseInlineFormatting(block.text)}
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
+          return null;
         }
 
         return (
