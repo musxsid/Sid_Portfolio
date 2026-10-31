@@ -54,16 +54,16 @@ export default function Newsletter() {
     <section
       ref={sectionRef}
       id="newsletter"
-      className="relative py-24 sm:py-28 z-20 overflow-hidden bg-gradient-to-b from-[#0a0a0a] via-[#090d16] to-black"
+      className="relative min-h-screen w-full flex items-center justify-center py-20 sm:py-24 z-20 overflow-hidden bg-gradient-to-b from-[#0a0a0a] via-[#090d16] to-black"
     >
       {/* Premium Minimal & Interactive Background Animation */}
       <NewsletterBackground />
 
       {/* Ambient Subtle Depth Lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[65vw] h-[320px] bg-accent-warm/[0.06] blur-[170px] rounded-full pointer-events-none z-0" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[75vw] h-[360px] bg-accent-warm/[0.06] blur-[180px] rounded-full pointer-events-none z-0" />
 
-      {/* Widened Section Container */}
-      <div className="section-container max-w-5xl xl:max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+      {/* Full-Screen Section Container */}
+      <div className="section-container max-w-5xl xl:max-w-6xl w-full mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center justify-center">
 
         {/* Liquid-Glass Frosted Card with Refined Subtle Specular Sheen */}
         <motion.div
@@ -74,14 +74,14 @@ export default function Newsletter() {
           initial={{ opacity: 0, y: 35 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="group relative rounded-3xl sm:rounded-[36px] bg-gradient-to-b from-white/[0.06] via-[#090d16]/45 to-black/60 border border-white/[0.12] hover:border-white/[0.20] p-8 sm:p-12 md:p-16 backdrop-blur-3xl backdrop-saturate-[150%] shadow-[0_20px_60px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.12)] text-center overflow-hidden transition-all duration-500"
+          className="group relative w-full rounded-3xl sm:rounded-[36px] bg-gradient-to-b from-white/[0.06] via-[#090d16]/45 to-black/60 border border-white/[0.12] hover:border-white/[0.20] p-10 sm:p-14 md:p-20 backdrop-blur-3xl backdrop-saturate-[150%] shadow-[0_20px_60px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.12)] text-center overflow-hidden transition-all duration-500"
         >
           {/* Subtle Muted Mouse Glare (Softened & Non-Glossy) */}
           <div
             className="absolute inset-0 pointer-events-none transition-opacity duration-500 ease-out z-10"
             style={{
               opacity: isHovered ? 1 : 0,
-              background: `radial-gradient(480px circle at ${glarePos.x}% ${glarePos.y}%, rgba(255,255,255,0.07) 0%, rgba(255,122,69,0.03) 35%, transparent 70%)`,
+              background: `radial-gradient(450px circle at ${glarePos.x}% ${glarePos.y}%, rgba(255,255,255,0.05) 0%, rgba(255,122,69,0.02) 35%, transparent 70%)`,
             }}
           />
 
