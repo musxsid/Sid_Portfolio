@@ -45,11 +45,11 @@ export default function Newsletter() {
       id="newsletter"
       className="relative py-28 sm:py-32 z-20 overflow-hidden bg-gradient-to-b from-[#0a0a0a] via-[#090d16] to-black"
     >
-      {/* Interactive Celestial Stardust & Constellation Mesh Canvas */}
+      {/* Interactive Harmonic Signal Loops & Tech-Cyan Quantum Quanta */}
       <NewsletterBackground />
 
-      {/* Ambient Subtle Depth Lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[340px] bg-accent-warm/[0.06] blur-[180px] rounded-full pointer-events-none z-0" />
+      {/* Ambient Subtle Depth Lighting Harmonized with Section Theme */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[340px] bg-gradient-to-r from-sky-500/[0.05] via-indigo-500/[0.04] to-accent-warm/[0.03] blur-[180px] rounded-full pointer-events-none z-0" />
 
       {/* Widened Section Container */}
       <div className="section-container max-w-5xl xl:max-w-6xl mx-auto px-4 sm:px-6 relative z-10">

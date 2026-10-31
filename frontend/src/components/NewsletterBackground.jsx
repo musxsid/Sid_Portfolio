@@ -1,14 +1,13 @@
 import { useEffect, useRef } from "react";
 
 /**
- * NewsletterBackground: Interactive Celestial Stardust & Gravitational Constellation Mesh
- * Designed specifically for the Newsletter section:
- * - Minimal, quiet, luxury obsidian atmosphere
- * - Weightless stardust quanta (warm coral, golden amber, starlight white)
- * - Elastic gravitational attraction towards the cursor with silky spring inertia
- * - Hair-thin dynamic constellation filaments between close particles
- * - Soft volumetric ambient horizon glow that reacts organically to mouse movement
- * - High-DPI Retina scaling and 60-120 FPS performance
+ * NewsletterBackground: Interactive Harmonic Signal Loops & Tech-Cyan Quantum Quanta
+ * Designed specifically and exclusively for the Newsletter section ("Stay in the Loop"):
+ * - Distinct, bespoke color palette: Electric Azure, Deep Indigo, Starlight White, and Warm Coral accents
+ * - Flowing parametric topological flux loops that breathe and elastically flex toward cursor
+ * - Silky dual-tone chromatic spotlight following mouse with spring inertia
+ * - Luminous dispatch packets and dual-tone dynamic connection filaments
+ * - 60-120 FPS high-performance Retina rendering
  */
 export default function NewsletterBackground() {
   const canvasRef = useRef(null);
@@ -49,8 +48,8 @@ export default function NewsletterBackground() {
     const handleMouseMove = (e) => {
       const rect = canvas.getBoundingClientRect();
       if (
-        e.clientY >= rect.top - 80 &&
-        e.clientY <= rect.bottom + 80 &&
+        e.clientY >= rect.top - 100 &&
+        e.clientY <= rect.bottom + 100 &&
         e.clientX >= rect.left &&
         e.clientX <= rect.right
       ) {
@@ -71,47 +70,65 @@ export default function NewsletterBackground() {
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave);
 
-    // ─── Celestial Stardust Quanta Configuration ───
-    const particleCount = 38;
-    const particles = [];
-    const colors = [
-      "rgba(255, 122, 69,",   // Signature Warm Coral
-      "rgba(255, 185, 70,",   // Golden Amber
-      "rgba(255, 255, 255,",  // Starlight White
-      "rgba(147, 197, 253,",  // Deep Space Azure
+    // ─── App Theme Color Palette (Electric Azure, Tech Indigo, Starlight, Coral) ───
+    const quantumColors = [
+      { prefix: "rgba(56, 189, 248,", hex: "#38bdf8" },   // Electric Azure
+      { prefix: "rgba(96, 165, 250,", hex: "#60a5fa" },   // Tech Cobalt
+      { prefix: "rgba(129, 140, 248,", hex: "#818cf8" },  // Ethereal Indigo
+      { prefix: "rgba(255, 255, 255,", hex: "#ffffff" },  // Starlight White
+      { prefix: "rgba(255, 122, 69,", hex: "#ff7a45" },   // Warm Coral Accent
     ];
 
-    for (let i = 0; i < particleCount; i++) {
-      particles.push({
-        x: Math.random() * (width || 1200),
-        y: Math.random() * (height || 600),
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.3,
-        radius: Math.random() * 1.6 + 0.8,
-        colorPrefix: colors[i % colors.length],
-        alpha: Math.random() * 0.4 + 0.25,
-        pulseSpeed: 0.015 + Math.random() * 0.02,
-        phase: Math.random() * Math.PI * 2,
-        originX: Math.random() * (width || 1200),
-        originY: Math.random() * (height || 600),
+    // ─── 1. Flowing Topological "Loop" Streamlines ───
+    const streamCount = 3;
+    const streams = [];
+    for (let i = 0; i < streamCount; i++) {
+      streams.push({
+        baseYRatio: 0.28 + i * 0.22,
+        speed: 0.0008 + i * 0.0004,
+        frequency: 0.0022 + i * 0.0006,
+        amplitude: 28 + i * 14,
+        phase: i * 1.8,
+        packets: [
+          { progress: Math.random(), speed: 0.0018 + Math.random() * 0.0015, size: 2.2 },
+          { progress: Math.random(), speed: 0.0012 + Math.random() * 0.0012, size: 1.6 }
+        ]
       });
     }
 
-    let frame = 0;
+    // ─── 2. Weightless Quantum Stardust Particles (30 clean, non-cluttered motes) ───
+    const particleCount = 30;
+    const particles = [];
+    for (let i = 0; i < particleCount; i++) {
+      const colorObj = quantumColors[i % quantumColors.length];
+      particles.push({
+        x: Math.random() * (width || 1200),
+        y: Math.random() * (height || 600),
+        vx: (Math.random() - 0.5) * 0.32,
+        vy: (Math.random() - 0.5) * 0.26,
+        radius: Math.random() * 1.6 + 0.9,
+        colorObj,
+        alpha: Math.random() * 0.35 + 0.3,
+        pulseSpeed: 0.015 + Math.random() * 0.02,
+        phase: Math.random() * Math.PI * 2,
+      });
+    }
+
+    let time = 0;
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
       // Smooth mouse spring inertia
-      mouse.x += (mouse.targetX - mouse.x) * 0.07;
-      mouse.y += (mouse.targetY - mouse.y) * 0.07;
-      frame++;
+      mouse.x += (mouse.targetX - mouse.x) * 0.075;
+      mouse.y += (mouse.targetY - mouse.y) * 0.075;
+      time += 1;
 
       const hasMouse = mouse.active && mouse.x > -500;
 
-      // ─── 1. Ambient Volumetric Horizon Light (Follows Cursor) ───
+      // ─── A. Volumetric Dual-Tone Chromatic Spotlight (Under Cursor) ───
       if (hasMouse) {
-        const glowRadius = 360;
+        const glowRadius = 340;
         const radialGlow = ctx.createRadialGradient(
           mouse.x,
           mouse.y,
@@ -120,32 +137,88 @@ export default function NewsletterBackground() {
           mouse.y,
           glowRadius
         );
-        radialGlow.addColorStop(0, "rgba(255, 122, 69, 0.08)");
-        radialGlow.addColorStop(0.4, "rgba(234, 88, 12, 0.025)");
-        radialGlow.addColorStop(0.8, "rgba(255, 122, 69, 0.005)");
+        radialGlow.addColorStop(0, "rgba(56, 189, 248, 0.07)");     // Electric Cyan Core
+        radialGlow.addColorStop(0.35, "rgba(99, 102, 241, 0.035)"); // Tech Indigo Mid
+        radialGlow.addColorStop(0.7, "rgba(255, 122, 69, 0.015)");  // Subtle Coral Rim
         radialGlow.addColorStop(1, "transparent");
 
         ctx.fillStyle = radialGlow;
         ctx.fillRect(0, 0, width, height);
       }
 
-      // ─── 2. Faint Concentric Orbital Horizon Rings (Background Depth) ───
-      ctx.save();
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.02)";
-      ctx.lineWidth = 1;
-      ctx.setLineDash([4, 10]);
-      const centerX = width * 0.5;
-      const centerY = height * 0.5;
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, Math.min(width, height) * 0.35, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, Math.min(width, height) * 0.55, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.restore();
+      // ─── B. Elegant Parametric "Loop" Stream Currents ───
+      streams.forEach((stream, sIdx) => {
+        const baseY = height * stream.baseYRatio;
+        const points = [];
+        const step = 20;
 
-      // ─── 3. Dynamic Hair-Thin Constellation Filaments ───
-      const connectionDist = 115;
+        ctx.save();
+        ctx.beginPath();
+
+        for (let x = -20; x <= width + 20; x += step) {
+          let y = baseY + Math.sin(x * stream.frequency + time * stream.speed + stream.phase) * stream.amplitude;
+
+          // Elastic magnetic bend toward cursor
+          if (hasMouse) {
+            const dx = mouse.x - x;
+            const dy = mouse.y - y;
+            const dist = Math.hypot(dx, dy);
+            const influenceRadius = 240;
+            if (dist < influenceRadius && dist > 1) {
+              const pull = (1 - dist / influenceRadius) * 28;
+              y += (dy / dist) * pull;
+            }
+          }
+
+          if (x === -20) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+          points.push({ x, y });
+        }
+
+        // Gradient for the stream line
+        const streamGrad = ctx.createLinearGradient(0, 0, width, 0);
+        if (sIdx === 0) {
+          streamGrad.addColorStop(0, "rgba(56, 189, 248, 0.01)");
+          streamGrad.addColorStop(0.5, "rgba(56, 189, 248, 0.07)");
+          streamGrad.addColorStop(1, "rgba(99, 102, 241, 0.01)");
+        } else if (sIdx === 1) {
+          streamGrad.addColorStop(0, "rgba(99, 102, 241, 0.01)");
+          streamGrad.addColorStop(0.5, "rgba(129, 140, 248, 0.08)");
+          streamGrad.addColorStop(1, "rgba(56, 189, 248, 0.01)");
+        } else {
+          streamGrad.addColorStop(0, "rgba(56, 189, 248, 0.01)");
+          streamGrad.addColorStop(0.5, "rgba(255, 122, 69, 0.05)");
+          streamGrad.addColorStop(1, "rgba(56, 189, 248, 0.01)");
+        }
+
+        ctx.strokeStyle = streamGrad;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Render traveling dispatch packet motes along the stream
+        stream.packets.forEach((packet) => {
+          packet.progress += packet.speed;
+          if (packet.progress > 1) packet.progress = 0;
+
+          const approxIdx = Math.floor(packet.progress * (points.length - 1));
+          const pt = points[approxIdx] || points[0];
+
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, packet.size, 0, Math.PI * 2);
+          ctx.fillStyle = sIdx === 2 ? "rgba(255, 122, 69, 0.75)" : "rgba(56, 189, 248, 0.85)";
+          ctx.shadowColor = sIdx === 2 ? "rgba(255, 122, 69, 0.8)" : "rgba(56, 189, 248, 0.9)";
+          ctx.shadowBlur = 8;
+          ctx.fill();
+        });
+
+        ctx.restore();
+      });
+
+      // ─── C. Dual-Tone Dynamic Connection Filaments ───
+      const connectionDist = 110;
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
@@ -154,9 +227,9 @@ export default function NewsletterBackground() {
 
           if (distSq < connectionDist * connectionDist) {
             const dist = Math.sqrt(distSq);
-            let alpha = (1 - dist / connectionDist) * 0.16;
+            let alpha = (1 - dist / connectionDist) * 0.15;
 
-            // Highlight connections near cursor
+            // Highlight near cursor
             if (hasMouse) {
               const midX = (particles[i].x + particles[j].x) * 0.5;
               const midY = (particles[i].y + particles[j].y) * 0.5;
@@ -166,7 +239,16 @@ export default function NewsletterBackground() {
               }
             }
 
-            ctx.strokeStyle = `rgba(255, 122, 69, ${alpha})`;
+            const lineGrad = ctx.createLinearGradient(
+              particles[i].x,
+              particles[i].y,
+              particles[j].x,
+              particles[j].y
+            );
+            lineGrad.addColorStop(0, `${particles[i].colorObj.prefix} ${alpha})`);
+            lineGrad.addColorStop(1, `${particles[j].colorObj.prefix} ${alpha})`);
+
+            ctx.strokeStyle = lineGrad;
             ctx.lineWidth = 0.75;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
@@ -176,42 +258,39 @@ export default function NewsletterBackground() {
         }
       }
 
-      // ─── 4. Update and Render Stardust Quanta Motes ───
+      // ─── D. Update & Render Quantum Quanta Particles ───
       particles.forEach((p) => {
         p.x += p.vx;
         p.y += p.vy;
         p.phase += p.pulseSpeed;
 
-        // Wrap around canvas boundaries smoothly
         if (p.x < -20) p.x = width + 20;
         if (p.x > width + 20) p.x = -20;
         if (p.y < -20) p.y = height + 20;
         if (p.y > height + 20) p.y = -20;
 
-        // Interactive Gravitational Spring & Elastic Deflection
+        // Elastic gravitational drift toward cursor
         if (hasMouse) {
           const dx = mouse.x - p.x;
           const dy = mouse.y - p.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          const pullRadius = 180;
+          const pullRadius = 170;
 
           if (dist < pullRadius && dist > 2) {
-            // Gentle gravitational drift toward cursor with elastic spring
-            const force = (1 - dist / pullRadius) * 0.65;
+            const force = (1 - dist / pullRadius) * 0.55;
             p.x += (dx / dist) * force;
             p.y += (dy / dist) * force;
           }
         }
 
-        const dynamicAlpha = Math.max(0.12, Math.min(1, p.alpha + Math.sin(p.phase) * 0.18));
-        const color = `${p.colorPrefix} ${dynamicAlpha})`;
+        const dynamicAlpha = Math.max(0.15, Math.min(0.9, p.alpha + Math.sin(p.phase) * 0.16));
 
         ctx.save();
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = color;
-        ctx.shadowColor = `${p.colorPrefix} 0.8)`;
-        ctx.shadowBlur = p.radius * 3.5;
+        ctx.fillStyle = `${p.colorObj.prefix} ${dynamicAlpha})`;
+        ctx.shadowColor = `${p.colorObj.prefix} 0.7)`;
+        ctx.shadowBlur = p.radius * 3;
         ctx.fill();
         ctx.restore();
       });
