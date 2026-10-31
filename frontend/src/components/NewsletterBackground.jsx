@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 
 /**
- * NewsletterBackground: Celestial Liquid Wave & Atmospheric Quanta Mesh
- * Designed specifically for the Newsletter section:
- * - Fluid, hardware-accelerated 2D canvas with DPR scaling
- * - 3 harmonious undulating atmospheric aurora waves (Warm Coral, Deep Navy, Golden Amber)
- * - Weightless ambient quanta motes with delicate constellation filaments
- * - Subtle geometric telemetry coordinate accents
- * - Responsive cursor deflection for an organic, living atmosphere
+ * NewsletterBackground: Minimalist Kinetic Grid & Ambient Quanta Spotlight
+ * Engineered specifically for the Newsletter section:
+ * - Minimal, quiet, luxury obsidian atmosphere (no distracting rolling waves)
+ * - Interactive cursor-driven warm amber/coral spotlight with fluid spring inertia
+ * - Microscopic architectural crosshairs that subtly illuminate as the cursor passes
+ * - Sparse, weightless stardust motes with faint constellation connections
+ * - High-DPI Retina support and 60-120 FPS performance
  */
 export default function NewsletterBackground() {
   const canvasRef = useRef(null);
@@ -36,7 +36,7 @@ export default function NewsletterBackground() {
     resize();
     window.addEventListener("resize", resize);
 
-    // Mouse coordinates with smooth spring inertia
+    // Mouse coordinates with fluid spring damping
     const mouse = {
       x: -1000,
       y: -1000,
@@ -48,8 +48,8 @@ export default function NewsletterBackground() {
     const handleMouseMove = (e) => {
       const rect = canvas.getBoundingClientRect();
       if (
-        e.clientY >= rect.top - 100 &&
-        e.clientY <= rect.bottom + 100 &&
+        e.clientY >= rect.top - 80 &&
+        e.clientY <= rect.bottom + 80 &&
         e.clientX >= rect.left &&
         e.clientX <= rect.right
       ) {
@@ -70,80 +70,65 @@ export default function NewsletterBackground() {
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave);
 
-    // 1. Quanta Particles (Weightless stardust motes)
-    const particleCount = 22;
-    const particles = [];
-    const colors = [
-      "rgba(255, 122, 69, 0.75)", // Signature Warm Coral
-      "rgba(255, 185, 70, 0.70)", // Golden Amber
-      "rgba(255, 255, 255, 0.65)", // Pure Starlight White
-      "rgba(147, 197, 253, 0.55)", // Ethereal Ice Blue
+    // Minimal Ambient Quanta (Just 14 subtle, breathing luminous motes)
+    const moteCount = 14;
+    const motes = [];
+    const moteColors = [
+      "rgba(255, 122, 69, 0.65)", // Warm Coral
+      "rgba(255, 185, 70, 0.55)", // Amber Gold
+      "rgba(255, 255, 255, 0.50)", // Starlight White
     ];
 
-    for (let i = 0; i < particleCount; i++) {
-      particles.push({
+    for (let i = 0; i < moteCount; i++) {
+      motes.push({
         x: Math.random() * (width || 1200),
         y: Math.random() * (height || 600),
-        vx: (Math.random() - 0.5) * 0.45,
-        vy: (Math.random() - 0.5) * 0.35,
-        radius: Math.random() * 1.8 + 0.9,
-        color: colors[i % colors.length],
-        alpha: Math.random() * 0.5 + 0.3,
-        pulseSpeed: 0.02 + Math.random() * 0.02,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.2,
+        radius: Math.random() * 1.4 + 0.8,
+        color: moteColors[i % moteColors.length],
+        baseAlpha: Math.random() * 0.35 + 0.2,
+        pulseSpeed: 0.015 + Math.random() * 0.015,
         phase: Math.random() * Math.PI * 2,
       });
     }
 
-    // 2. Harmonic Undulating Waves Configuration
-    let time = 0;
-    const waveLayers = [
-      {
-        baseY: 0.45,
-        amplitude: 45,
-        frequency: 0.0035,
-        speed: 0.008,
-        colorStart: "rgba(255, 122, 69, 0.08)",
-        colorEnd: "rgba(234, 88, 12, 0.0)",
-        crestColor: "rgba(255, 122, 69, 0.22)",
-      },
-      {
-        baseY: 0.58,
-        amplitude: 55,
-        frequency: 0.0028,
-        speed: -0.006,
-        colorStart: "rgba(59, 130, 246, 0.07)",
-        colorEnd: "rgba(15, 23, 42, 0.0)",
-        crestColor: "rgba(96, 165, 250, 0.18)",
-      },
-      {
-        baseY: 0.52,
-        amplitude: 38,
-        frequency: 0.0042,
-        speed: 0.011,
-        colorStart: "rgba(245, 158, 11, 0.06)",
-        colorEnd: "rgba(180, 83, 9, 0.0)",
-        crestColor: "rgba(251, 191, 36, 0.20)",
-      },
-    ];
+    // Grid spacing for architectural coordinate crosses
+    const gridSpacing = 120;
+    const crossSize = 3;
 
-    // Main 60-120 FPS render loop
+    // Render loop
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
       // Smooth mouse spring inertia
-      mouse.x += (mouse.targetX - mouse.x) * 0.08;
-      mouse.y += (mouse.targetY - mouse.y) * 0.08;
+      mouse.x += (mouse.targetX - mouse.x) * 0.07;
+      mouse.y += (mouse.targetY - mouse.y) * 0.07;
 
-      time += 1;
+      // ─── 1. Minimal Architectural Crosshair Grid with Interactive Illumination ───
+      const cols = Math.ceil(width / gridSpacing);
+      const rows = Math.ceil(height / gridSpacing);
 
-      // ─── 1. Render Subtle Architectural Telemetry Coordinate Crosshairs ───
-      const gridSpacingX = 160;
-      const gridSpacingY = 120;
-      const crossSize = 3;
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.04)";
-      ctx.lineWidth = 1;
-      for (let gx = gridSpacingX / 2; gx < width; gx += gridSpacingX) {
-        for (let gy = gridSpacingY / 2; gy < height; gy += gridSpacingY) {
+      for (let c = 0; c <= cols; c++) {
+        const gx = c * gridSpacing;
+        for (let r = 0; r <= rows; r++) {
+          const gy = r * gridSpacing;
+
+          let crossAlpha = 0.035;
+
+          // Light up crosshairs near cursor
+          if (mouse.active && mouse.x > -500) {
+            const dx = gx - mouse.x;
+            const dy = gy - mouse.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 220) {
+              const proximity = 1 - dist / 220;
+              crossAlpha += proximity * 0.22;
+            }
+          }
+
+          ctx.strokeStyle = `rgba(255, 255, 255, ${crossAlpha})`;
+          ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(gx - crossSize, gy);
           ctx.lineTo(gx + crossSize, gy);
@@ -153,126 +138,80 @@ export default function NewsletterBackground() {
         }
       }
 
-      // ─── 2. Render Harmonic Undulating Liquid Aurora Waves ───
-      waveLayers.forEach((w) => {
-        const yCenter = height * w.baseY;
-        ctx.beginPath();
-        ctx.moveTo(0, height);
-
-        for (let x = 0; x <= width; x += 8) {
-          // Compound sinusoidal harmonics
-          const sine1 = Math.sin(x * w.frequency + time * w.speed);
-          const sine2 = Math.cos(x * w.frequency * 0.65 - time * w.speed * 0.7);
-          let y = yCenter + (sine1 + sine2 * 0.5) * w.amplitude;
-
-          // Responsive interactive cursor lift
-          if (mouse.active) {
-            const dx = x - mouse.x;
-            const dist = Math.abs(dx);
-            if (dist < 260) {
-              const influence = Math.cos((dist / 260) * (Math.PI / 2));
-              y += (mouse.y - yCenter) * 0.22 * influence;
-            }
-          }
-
-          if (x === 0) {
-            ctx.lineTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-        }
-
-        ctx.lineTo(width, height);
-        ctx.closePath();
-
-        // Wave Fill Gradient
-        const waveGrad = ctx.createLinearGradient(0, yCenter - w.amplitude, 0, height);
-        waveGrad.addColorStop(0, w.colorStart);
-        waveGrad.addColorStop(1, w.colorEnd);
-        ctx.fillStyle = waveGrad;
-        ctx.fill();
-
-        // Luminous crest stroke line
-        ctx.strokeStyle = w.crestColor;
-        ctx.lineWidth = 1.2;
-        ctx.stroke();
-      });
-
-      // ─── 3. Render Weightless Stardust Quanta & Constellation Filaments ───
-      // Draw filaments between close particles
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const distSq = dx * dx + dy * dy;
-          const maxDist = 125;
-          if (distSq < maxDist * maxDist) {
-            const dist = Math.sqrt(distSq);
-            const alpha = (1 - dist / maxDist) * 0.16;
-            ctx.strokeStyle = `rgba(255, 122, 69, ${alpha})`;
-            ctx.lineWidth = 0.8;
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-
-      // Update and draw particles
-      particles.forEach((p) => {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.phase += p.pulseSpeed;
-
-        // Wrap around boundaries smoothly
-        if (p.x < -20) p.x = width + 20;
-        if (p.x > width + 20) p.x = -20;
-        if (p.y < -20) p.y = height + 20;
-        if (p.y > height + 20) p.y = -20;
-
-        // Interactive mouse gentle deflection
-        if (mouse.active) {
-          const dx = p.x - mouse.x;
-          const dy = p.y - mouse.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 140 && dist > 1) {
-            const force = (1 - dist / 140) * 1.5;
-            p.x += (dx / dist) * force;
-            p.y += (dy / dist) * force;
-          }
-        }
-
-        const currentAlpha = p.alpha + Math.sin(p.phase) * 0.2;
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        ctx.shadowColor = p.color;
-        ctx.shadowBlur = 8;
-        ctx.globalAlpha = Math.max(0.1, Math.min(1, currentAlpha));
-        ctx.fill();
-        ctx.restore();
-      });
-
-      // ─── 4. Ambient Cursor Illumination Halo ───
+      // ─── 2. Interactive Soft Ambient Spotlight ───
       if (mouse.active && mouse.x > -500) {
-        const glowGrad = ctx.createRadialGradient(
+        const spotlight = ctx.createRadialGradient(
           mouse.x,
           mouse.y,
           0,
           mouse.x,
           mouse.y,
-          320
+          340
         );
-        glowGrad.addColorStop(0, "rgba(255, 122, 69, 0.08)");
-        glowGrad.addColorStop(0.5, "rgba(255, 122, 69, 0.02)");
-        glowGrad.addColorStop(1, "transparent");
-        ctx.fillStyle = glowGrad;
+        spotlight.addColorStop(0, "rgba(255, 122, 69, 0.07)");
+        spotlight.addColorStop(0.4, "rgba(234, 88, 12, 0.025)");
+        spotlight.addColorStop(1, "transparent");
+
+        ctx.fillStyle = spotlight;
         ctx.beginPath();
-        ctx.arc(mouse.x, mouse.y, 320, 0, Math.PI * 2);
+        ctx.arc(mouse.x, mouse.y, 340, 0, Math.PI * 2);
         ctx.fill();
       }
+
+      // ─── 3. Minimal Constellation Filaments Between Close Motes ───
+      for (let i = 0; i < motes.length; i++) {
+        for (let j = i + 1; j < motes.length; j++) {
+          const dx = motes[i].x - motes[j].x;
+          const dy = motes[i].y - motes[j].y;
+          const distSq = dx * dx + dy * dy;
+          const maxDist = 110;
+          if (distSq < maxDist * maxDist) {
+            const dist = Math.sqrt(distSq);
+            const alpha = (1 - dist / maxDist) * 0.12;
+            ctx.strokeStyle = `rgba(255, 122, 69, ${alpha})`;
+            ctx.lineWidth = 0.7;
+            ctx.beginPath();
+            ctx.moveTo(motes[i].x, motes[i].y);
+            ctx.lineTo(motes[j].x, motes[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // ─── 4. Weightless Stardust Quanta ───
+      motes.forEach((m) => {
+        m.x += m.vx;
+        m.y += m.vy;
+        m.phase += m.pulseSpeed;
+
+        if (m.x < -10) m.x = width + 10;
+        if (m.x > width + 10) m.x = -10;
+        if (m.y < -10) m.y = height + 10;
+        if (m.y > height + 10) m.y = -10;
+
+        // Subtle elastic deflection from cursor
+        if (mouse.active) {
+          const dx = m.x - mouse.x;
+          const dy = m.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120 && dist > 1) {
+            const force = (1 - dist / 120) * 1.1;
+            m.x += (dx / dist) * force;
+            m.y += (dy / dist) * force;
+          }
+        }
+
+        const currentAlpha = m.baseAlpha + Math.sin(m.phase) * 0.15;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.radius, 0, Math.PI * 2);
+        ctx.fillStyle = m.color;
+        ctx.shadowColor = m.color;
+        ctx.shadowBlur = 6;
+        ctx.globalAlpha = Math.max(0.08, Math.min(1, currentAlpha));
+        ctx.fill();
+        ctx.restore();
+      });
 
       animationFrameId = requestAnimationFrame(render);
     };
@@ -291,7 +230,7 @@ export default function NewsletterBackground() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none z-0"
-      style={{ opacity: 0.95 }}
+      style={{ opacity: 0.9 }}
     />
   );
 }

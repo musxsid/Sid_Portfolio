@@ -122,7 +122,7 @@ export default function Contact() {
           </h2>
 
           <p className="text-sm sm:text-base md:text-lg font-normal text-gray-300 max-w-xl mx-auto leading-relaxed">
-            Open for software engineering roles, distributed architecture consulting, and high-impact systems.
+            Open for new opportunities and high-impact projects.
           </p>
 
           {/* Quick Telemetry Coordinates Strip (Addresses the blank page feeling) */}
@@ -167,23 +167,17 @@ export default function Contact() {
             onMouseMove={handleCardMouseMove}
             className="group relative max-w-2xl sm:max-w-[620px] mx-auto rounded-3xl sm:rounded-[32px] bg-gradient-to-b from-white/[0.08] via-[#080811]/50 to-black/70 border border-white/[0.14] hover:border-white/[0.24] p-6 sm:p-9 md:p-10 backdrop-blur-3xl backdrop-saturate-[160%] shadow-[0_24px_70px_rgba(0,0,0,0.8),inset_0_1px_1.5px_rgba(255,255,255,0.22),inset_0_-1px_1px_rgba(0,0,0,0.4)] overflow-hidden transition-all duration-500"
           >
-            {/* Specular Radial Glare on Hover */}
+            {/* Subtle Specular Radial Glare on Hover */}
             <div
               className="absolute inset-0 pointer-events-none transition-opacity duration-500 ease-out z-10"
               style={{
                 opacity: isHovered ? 1 : 0,
-                background: `radial-gradient(520px circle at ${glarePos.x}% ${glarePos.y}%, rgba(255,255,255,0.16) 0%, rgba(255,122,69,0.07) 35%, transparent 75%)`,
+                background: `radial-gradient(480px circle at ${glarePos.x}% ${glarePos.y}%, rgba(255,255,255,0.07) 0%, rgba(255,122,69,0.03) 35%, transparent 70%)`,
               }}
             />
 
-            {/* Prismatic Diagonal Light Sheen Sweep on Hover */}
-            <div
-              className="absolute inset-0 -translate-x-[150%] group-hover:translate-x-[250%] transition-transform duration-1000 ease-out bg-gradient-to-r from-transparent via-white/[0.12] to-transparent pointer-events-none skew-x-12 z-10"
-            />
-
-            {/* Luminous Top Optical Flare */}
-            <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-accent-warm/75 to-transparent transition-opacity duration-300 group-hover:via-white/90 z-20" />
-            <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-white/40 blur-[1px] transition-opacity duration-300 group-hover:opacity-100 opacity-60 z-20" />
+            {/* Subtle Top Optical Flare */}
+            <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-accent-warm/50 to-transparent transition-opacity duration-300 group-hover:via-accent-warm/75 z-20" />
 
             {submitStatus === "success" ? (
               <motion.div
