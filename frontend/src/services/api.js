@@ -455,7 +455,8 @@ export const portfolioApi = {
 Your mission is to assist recruiters, engineers, founders, and visitors with 100% ACCURATE, FACTUAL, and UNHALLUCINATED technical and biographical information strictly grounded in Siddharth's portfolio application and official resume.
 
 ### CRITICAL GROUNDING & ACCURACY POLICY:
-- You MUST answer ANY question a recruiter or client could ask about Siddharth, including: his location/residence in Kota, Rajasthan / Pune, contact information, education at Christ University, internships at Angel Bot AI and CodeArrest Softwares, tech stack, and GitHub repositories.
+- You MUST answer ANY question a recruiter or client could ask about Siddharth from an evaluation standpoint, including: why to hire him, his technical superpowers, growth areas/weaknesses, crisis management, target roles, availability, system design philosophy, culture fit, location, contact information, education, internships, and repositories.
+- DO NOT invent, extrapolate, or hallucinate skills, experiences, dates, or repositories not explicitly listed below.
 - MANDATORY SOURCE CITATION: At the very end of EVERY single response, you MUST append a verified source line in this exact format:
   📌 **Source:** [Specific Source, e.g. 'Official Resume', 'GitHub @musxsid/<repo>', 'Experience at Angel Bot AI', 'Portfolio Arsenal', etc.]
 
@@ -464,6 +465,44 @@ Your mission is to assist recruiters, engineers, founders, and visitors with 100
 2. Structure answers with clean bullet points (-), bold sub-labels (**Role:**, **Tech Stack:**, **Key Impact:**).
 3. CLICKABLE GITHUB REPOSITORIES: Whenever you mention any project or repository, ALWAYS format it as [Project Name](https://github.com/musxsid/<repo-name>). The UI will automatically render it as a bold title with a clickable [GitHub] button.
 4. When asked for his resume, provide the direct download link: [Download Siddharth's Resume (PDF)](/api/public/resume/file).
+
+### RECRUITER & HIRING MANAGER PERSPECTIVES:
+When recruiters, hiring managers, or founders evaluate Siddharth, you must address their specific perspective thoroughly with concrete facts and verified metrics:
+1. WHY HIRE SIDDHARTH / VALUE PROPOSITION / PITCH:
+   - Emphasize his proven engineering impact: during his internship at Angel Bot AI, he built Git in Bits, delivering +2.7M lines code churn analysis, reducing GitHub API overhead by 85% via delta caching with 5-minute cooldown guards, and engineering a zero-hallucination Structured RAG pipeline with <1.2s latency.
+   - Emphasize production architecture over toy projects: simplyAudio (asynchronous RabbitMQ queues, Keycloak SSO, MinIO S3 object storage), OmniStay ERP (ACID PostgreSQL relational ledger, automated batch audits), and Go Auth microservice (sub-5ms Argon2id hashing).
+   - Highlight full-stack velocity: pairing robust Java/Spring Boot & Go backends with modern React 19 / Tailwind CSS 4 interfaces.
+   - Immediate availability & 100% open to relocation across India (Pune, Bengaluru, Delhi NCR, Hyderabad, Mumbai, etc.) or remote.
+   - NOTE: If asked 'tell me why i should hire not how' or 'why should we hire you', NEVER give a generic contact card! Deliver this complete executive pitch!
+2. CORE TECHNICAL STRENGTHS & SUPERPOWERS:
+   - Distributed systems & asynchronous message queues (RabbitMQ, MinIO S3).
+   - Deterministic AI & LLM orchestration (Structured RAG, Spring AI, Groq Llama 3.3 70B, Ollama Llama 3.2, zero hallucinations).
+   - Relational database consistency & query optimization (PostgreSQL ACID ledgers, SQL Server 35% query index speedup, MongoDB).
+   - Enterprise auth & security (Keycloak OAuth2/OIDC SSO, Argon2id sub-5ms hashing, RS256 JWT, session RAM validation).
+   - High-velocity full-stack delivery (React 19, Tailwind CSS 4, Spring Boot).
+3. WEAKNESSES & CONSTRUCTIVE AREAS OF GROWTH:
+   - Growth from backend focus into modern UI: Early on, Siddharth focused heavily on low-latency backend systems and databases; he proactively bridged this by mastering modern React 19, Tailwind CSS v4, and canvas shaders.
+   - Scaling containerization into Kubernetes operators: While highly proficient in Docker and Docker Compose meshes, he is actively expanding his expertise into advanced Kubernetes operator patterns and cloud-native Helm deployments.
+   - Balancing architectural perfectionism with rapid shipping: Strives for zero hallucinations and strict ACID guarantees; balances this with agile pragmatism to ship rapid increments.
+4. HANDLING PRESSURE, CRISIS & HARDEST CHALLENGES:
+   - GitHub API Rate-Limiting Crisis at Angel Bot AI: Solved 429 exhaustion under high team commit volumes by implementing a 5-minute cooldown delta sync in MongoDB, reducing external calls by 85%.
+   - RAG Latency & Hallucination Elimination: Replaced slow open-ended prompts with structured RAG (Spring AI + Groq Llama 3.3 70B), cutting latency to <1.2s and eliminating hallucinations (0%).
+   - Concurrent Room Billing Race Conditions in OmniStay ERP: Prevented double charges during simultaneous guest checkouts and automated night audits via PostgreSQL row-level pessimistic locking.
+5. TARGET ROLES, AVAILABILITY & RELOCATION:
+   - Target Roles: Software Engineer (SDE), Backend Engineer, Java / Spring Boot Developer, Applied AI / ML Engineer, Full Stack Engineer.
+   - Notice Period / Availability: Immediate Joiner (0 days notice). No non-compete constraints.
+   - Relocation: 100% open to on-site relocation (Pune, Bengaluru, Delhi NCR, Hyderabad, Mumbai, Chennai) as well as hybrid or remote roles.
+   - Academic timeline: Pursuing BCA (2024-2027) at Christ University, Lavasa, Pune with schedule flexibility for full-time engineering roles.
+6. SYSTEM DESIGN & SCALABILITY PHILOSOPHY:
+   - Asynchronous decoupling using RabbitMQ message brokers.
+   - Deterministic AI grounding with pre-aggregated DB context and JSON schema contracts.
+   - Strict relational ACID boundaries for financial and transactional states.
+   - Defense-in-depth zero-trust auth (OAuth2/OIDC, Argon2id, RS256, session RAM guards).
+   - Containerized environment parity with multi-stage Docker builds.
+7. CULTURE FIT, LEADERSHIP & WORK ETHIC:
+   - High ownership and initiative from database schema design to production commit.
+   - Clear technical communication with OpenAPI documentation and clean Git history.
+   - Agile velocity and continuous learning.
 
 ### VERIFIED BIOGRAPHICAL PROFILE (Official Resume):
 - Full Name: Siddharth Shakyawal
@@ -542,12 +581,284 @@ Your mission is to assist recruiters, engineers, founders, and visitors with 100
 function buildLocalFallbackResponse(userQuery) {
   const lower = (userQuery || "").toLowerCase().trim();
 
-  // 1. Location & Residence queries
+  // 1. Recruiter Evaluation: Why Hire Siddharth / Differentiation / Pitch
+  if (
+    (lower.includes("why") && (lower.includes("hire") || lower.includes("choose") || lower.includes("pick") || lower.includes("select") || lower.includes("consider") || lower.includes("bring"))) ||
+    lower.includes("why hire") || lower.includes("hire not how") || lower.includes("why should i hire") || lower.includes("why should we hire") ||
+    lower.includes("pitch") || lower.includes("value proposition") || lower.includes("stand out") ||
+    lower.includes("differentiate") || lower.includes("reasons to hire") || lower.includes("why him") ||
+    lower.includes("why you") || lower.includes("what sets you apart") || lower.includes("what sets him apart") ||
+    lower.includes("hire siddharth") || lower.includes("candidate fit") || lower.includes("selling point")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 🎯 Why You Should Hire Siddharth Shakyawal
+
+Siddharth is a high-velocity **Software Engineer specializing in Backend Systems, Event-Driven Microservices, and Applied AI**. Here is the evidence-backed value proposition he brings to your engineering team:
+
+- **Proven Production Impact with Tangible Metrics:**
+  During his engineering internship at **Angel Bot AI**, Siddharth built the core intelligence engine for *Git in Bits (DevPulse AI)*:
+  - Engineered a **Structured RAG pipeline** (Spring AI + Groq Llama 3.3 70B) reducing hallucination rate to **0%** and inference latency to **<1.2s**.
+  - Built an intelligent delta sync layer with 5-minute cooldown guards, slashing external GitHub API requests by **85%**.
+  - Monitored real-time analytics for **+2.7M lines of code churn** and tracked average PR turnaround across 15.1 hours.
+
+- **Distributed Systems Architecture vs. Toy Code:**
+  Siddharth builds production-grade software designed for scale and concurrency:
+  - **[simplyAudio](https://github.com/musxsid/simplyAudio):** Asynchronous event-driven audio streaming platform using **RabbitMQ** message queues, **Keycloak OAuth2/OIDC SSO**, and **MinIO S3** distributed chunk storage.
+  - **[OmniStay ERP](https://github.com/musxsid/omnistay-erp):** Enterprise hotel management engine with strict **PostgreSQL ACID folio ledgers**, automated <500ms night audit roll-forwards, and zero transactional drift.
+  - **[Go Auth Microservice](https://github.com/musxsid/go-auth-postgres):** Cloud-native auth microservice in Go featuring **Argon2id hashing** and pgx connection pooling delivering **sub-5ms request latencies**.
+
+- **Full-Stack Execution Speed:**
+  Not limited to backends—he pairs robust Java (Spring Boot 3/4) and Go services with modern, reactive **React 19**, **Tailwind CSS v4**, and containerized Docker environments.
+
+- **Immediate Impact & 100% Relocation Mobility:**
+  - **Availability:** Ready for immediate onboarding with zero notice period delays.
+  - **Relocation:** Actively open to on-site relocation across major tech hubs (**Pune, Bengaluru, Delhi NCR, Hyderabad, Mumbai**) as well as remote/hybrid teams.
+
+📄 [Download Siddharth's Resume (PDF)](/api/public/resume/file) | 💼 [Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)
+
+📌 **Source:** Official Resume & Verified Production Engineering Records`
+    };
+  }
+
+  // 2. Recruiter Evaluation: Core Technical Strengths & Superpowers
+  if (
+    lower.includes("strength") || lower.includes("superpower") || lower.includes("what is he best at") ||
+    lower.includes("what are you best at") || lower.includes("strong suit") || lower.includes("core competence") ||
+    lower.includes("technical strengths") || lower.includes("top skill")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### ⚡ Core Strengths & Engineering Superpowers
+
+Siddharth's technical expertise spans distributed backend engineering, deterministic AI orchestration, and high-concurrency systems:
+
+- **1. Event-Driven & Distributed Microservices:**
+  Deep practical experience decoupling high-throughput services using **RabbitMQ message queues**, asynchronous event workers, and containerized Docker networks (demonstrated in [simplyAudio](https://github.com/musxsid/simplyAudio)).
+
+- **2. Deterministic AI & Zero-Hallucination RAG:**
+  Expertise in building reliable production LLM systems. Implemented structured RAG architectures using **Spring AI**, **Groq (Llama 3.3 70B)**, and **Ollama (Llama 3.2)** with deterministic JSON schema validation, pre-aggregated database context, and <1.2s inference speeds.
+
+- **3. Database Integrity & High-Throughput Storage:**
+  Advanced proficiency in relational ACID modeling (PostgreSQL, SQL Server) with transaction isolation, indexing strategies (35% query speedup in JobHive), and multi-tenant billing ledgers (OmniStay ERP), alongside NoSQL caching with MongoDB and Redis.
+
+- **4. Enterprise Security & Auth Protocols:**
+  Implementation of battle-tested authentication architectures: Keycloak OAuth2/OIDC SSO, RS256 asymmetric JWT signing with key rotation, sub-5ms Argon2id hashing in Go, and server-side RAM session validation to prevent IDOR exploits.
+
+- **5. High-Velocity End-to-End Ownership:**
+  Autonomous engineering execution—from relational schema design and API contracts to modular React 19 UI integration and Docker Compose deployment.
+
+📄 [Download Siddharth's Resume (PDF)](/api/public/resume/file)
+
+📌 **Source:** Official Resume / Technical Competency Audit`
+    };
+  }
+
+  // 3. Recruiter Evaluation: Weaknesses, Shortcomings & Areas of Growth
+  if (
+    lower.includes("weakness") || lower.includes("areas of improvement") || lower.includes("area of improvement") ||
+    lower.includes("where does he struggle") || lower.includes("what can he improve") || lower.includes("flaw") ||
+    lower.includes("shortcoming") || lower.includes("limitations") || lower.includes("constructive criticism") ||
+    lower.includes("development areas")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 🔍 Areas of Growth & Constructive Self-Awareness
+
+Siddharth maintains a growth-oriented, transparent approach to professional development:
+
+- **1. Frontend Evolution (Successfully Bridged):**
+  - *Context:* Early in his engineering journey, Siddharth focused intensely on low-level backend mechanics, ACID database consistency, and message brokers, treating frontend as secondary.
+  - *Growth Action:* Recognizing that elite software requires cohesive user experiences, he dedicated time to mastering modern frontend design—engineering this portfolio with **React 19**, **Tailwind CSS v4**, fluid canvas shaders, and Framer Motion to become a true high-velocity full-stack developer.
+
+- **2. Cloud Orchestration at Hyperscale (Active Focus):**
+  - *Context:* While highly skilled in Docker and multi-service **Docker Compose** architectures (used across all his microservices), his production experience with large-scale Kubernetes clusters and Helm charts is still actively expanding.
+  - *Growth Action:* He is currently building out Kubernetes operator patterns, ingress controllers, and cloud-native CI/CD pipelines to match his deep containerization proficiency.
+
+- **3. High Architectural Perfectionism:**
+  - *Context:* Siddharth naturally leans toward rigorous architectural purity—striving for 0% hallucinations in AI, sub-5ms auth latencies, and strict database isolation.
+  - *Growth Action:* He has actively embraced agile pragmatism: prioritizing rapid iterative delivery, MVP validation, and user feedback cycles without compromising foundational security or reliability.
+
+📌 **Source:** Professional Self-Assessment & Engineering Trajectory`
+    };
+  }
+
+  // 4. Recruiter Evaluation: Handling Pressure, Deadlines, Crisis & Hardest Challenge
+  if (
+    lower.includes("pressure") || lower.includes("stress") || lower.includes("deadline") ||
+    lower.includes("crisis") || lower.includes("difficult bug") || lower.includes("hardest challenge") ||
+    lower.includes("challenge") || lower.includes("toughest") || lower.includes("obstacle") ||
+    lower.includes("toughest problem") || lower.includes("problem solving") || lower.includes("how does he handle") ||
+    lower.includes("under pressure") || lower.includes("critical issue")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 🛡️ Handling Pressure, Critical Bugs & Complex Problem Solving
+
+Siddharth approaches high-pressure situations with methodical root-cause isolation and data-backed engineering. Key examples from production:
+
+- **1. Resolving GitHub Rate Limiting Crisis at Angel Bot AI:**
+  - *The Crisis:* High-frequency multi-repository syncs caused sudden HTTP 429 rate-limit exhaustion against the GitHub API, threatening to halt live engineering dashboards.
+  - *The Solution:* Siddharth immediately designed and deployed a rate-limited **delta synchronization layer** backed by MongoDB pre-aggregation with 5-minute cooldown guards.
+  - *The Outcome:* Reduced external API calls by **85%**, achieved zero-token reads on subsequent reloads, and maintained 100% dashboard uptime.
+
+- **2. Slashing LLM Hallucinations & High Latency (<1.2s Target):**
+  - *The Challenge:* Open-ended LLM prompts suffered from high inference latency (>4s) and occasional hallucinations when generating engineering summaries.
+  - *The Solution:* Re-architected the ingestion pipeline into a **Structured RAG architecture** (Spring AI + Groq Llama 3.3 70B). Metrics were computed deterministically at the database layer before prompt injection, bound by strict JSON schema contracts.
+  - *The Outcome:* Eliminated hallucinations entirely (**0%**) while bringing median response time down to **<1.2 seconds**.
+
+- **3. Multi-Terminal Concurrency & Ledger Integrity in OmniStay ERP:**
+  - *The Challenge:* Preventing race conditions and double charges during concurrent guest checkout operations and automated night audit batch processing.
+  - *The Solution:* Implemented PostgreSQL row-level pessimistic locking and atomic transaction boundaries across folio records.
+  - *The Outcome:* Guaranteed 100% financial ledger consistency and reconciliation with batch audit runtimes under 500ms.
+
+📌 **Source:** Production Experience Records (Angel Bot AI & OmniStay ERP)`
+    };
+  }
+
+  // 5. Recruiter Evaluation: Target Roles, Availability, Notice Period & Relocation
+  if (
+    lower.includes("target role") || lower.includes("what role") || lower.includes("roles looking for") ||
+    lower.includes("notice period") || lower.includes("when can he start") || lower.includes("when can you start") ||
+    lower.includes("start date") || lower.includes("joining date") || lower.includes("availability") ||
+    lower.includes("available to start") || lower.includes("immediate joiner") ||
+    (lower.includes("open to") && (lower.includes("remote") || lower.includes("relocat"))) ||
+    lower.includes("work mode")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 💼 Target Roles, Availability & Relocation
+
+Here is Siddharth's current professional availability and role preferences:
+
+- **🎯 Target Engineering Roles:**
+  - **Backend Engineer / SDE I (Backend)** (Java / Spring Boot, Go, Python)
+  - **Software Development Engineer (Full Stack)** (Java / Spring Boot + React 19)
+  - **Applied AI / AI Systems Engineer** (Structured RAG, LLM Orchestration, Spring AI)
+  - **Distributed Systems / Microservices Engineer**
+
+- **⏱️ Availability & Notice Period:**
+  - **Notice Period:** **Immediate Joiner** (0 days). No notice period or non-compete constraints.
+  - **Earliest Start Date:** Immediate / Flexible based on hiring pipeline.
+
+- **📍 Location & Relocation:**
+  - **Current Locations:** Kota, Rajasthan (324010) & Lavasa, Pune (Christ University BCA 2024–2027).
+  - **On-Site Relocation:** **100% Open to Relocate** immediately to key tech hubs across India, including:
+    - **Pune, Maharashtra**
+    - **Bengaluru, Karnataka**
+    - **Delhi NCR / Gurugram / Noida**
+    - **Hyderabad, Telangana**
+    - **Mumbai, Maharashtra**
+  - **Work Modes:** Open to **On-site**, **Hybrid**, or **Remote** software engineering roles globally.
+
+📫 [Contact Siddharth Directly](mailto:siddharthshakya2004@gmail.com) | 📄 [Download Resume (PDF)](/api/public/resume/file)
+
+📌 **Source:** Official Resume / Candidate Availability Status`
+    };
+  }
+
+  // 6. Recruiter Evaluation: System Design & Scalability Philosophy
+  if (
+    lower.includes("system design") || lower.includes("architecture philosophy") || lower.includes("scalability") ||
+    lower.includes("how does he design") || lower.includes("how do you design") || lower.includes("design philosophy") ||
+    lower.includes("distributed systems philosophy")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 🏛️ System Design & Architectural Principles
+
+Siddharth designs backend and AI systems around five core engineering tenets:
+
+- **1. Asynchronous Decoupling via Message Brokers:**
+  Heavy compute tasks (audio encoding, batch analytics, vector indexing) must never block user-facing HTTP request-response cycles. Siddharth utilizes **RabbitMQ message queues** with dead-letter exchanges and worker pools (as seen in [simplyAudio](https://github.com/musxsid/simplyAudio)).
+
+- **2. Deterministic AI Grounding (Zero Raw Prompts):**
+  Never feed raw, unfiltered natural language into an LLM. Siddharth computes metrics and extracts data at the database layer first, strictly binding outputs with deterministic JSON schemas (Spring AI + Groq Llama 3.3) to prevent hallucinations and reduce token costs.
+
+- **3. Strict Relational ACID Boundaries:**
+  Financial, billing, and transactional data must remain immutable and consistent. Siddharth designs normalized schemas with explicit foreign keys, indexed query plans, and transaction isolation (as seen in [OmniStay ERP](https://github.com/musxsid/omnistay-erp)).
+
+- **4. Defense-in-Depth Security:**
+  Authentication and authorization are verified at every layer: stateless RS256 JWT tokens, Keycloak SSO, sub-5ms Argon2id hashing in Go, and in-memory server session guards against IDOR exploits.
+
+- **5. Containerized Environment Parity:**
+  Ensures zero 'works on my machine' issues by defining reproducible multi-stage Docker builds and Docker Compose meshes for all services, databases, and message brokers.
+
+📌 **Source:** Engineering Architecture Guidelines & GitHub Repositories`
+    };
+  }
+
+  // 7. Recruiter Evaluation: Culture Fit, Team Collaboration & Work Ethic
+  if (
+    lower.includes("culture") || lower.includes("team player") || lower.includes("collaboration") ||
+    lower.includes("teamwork") || lower.includes("work ethic") || lower.includes("communication") ||
+    lower.includes("soft skill") || lower.includes("how is he to work with") || lower.includes("cultural fit")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 🤝 Culture Fit, Collaboration & Work Ethic
+
+Siddharth brings a strong engineering mindset, high autonomy, and collaborative ethos to technical teams:
+
+- **1. High Ownership & Initiative:**
+  Takes complete ownership of features from inception to deployment. Does not wait for micro-management—analyzes business requirements, drafts schema models, builds RESTful endpoints, and verifies end-to-end integration.
+
+- **2. Clear Technical Communication:**
+  Experienced in cross-functional collaboration during his internships at **Angel Bot AI** and **CodeArrest Softwares**. Documents clean API contracts, produces readable Git commit histories, and clearly communicates architectural trade-offs.
+
+- **3. Agile Mindset & Rapid Iteration:**
+  Comfortable working in fast-paced sprint cycles. Values quick feedback loops, automated CI/CD checks, and pragmatic engineering that delivers customer value.
+
+- **4. Relentless Curiosity & Continuous Learning:**
+  Self-driven learner who proactively tracks modern industry standards—mastering Spring AI, React 19, Go microservices, and modern Docker architectures ahead of the curve.
+
+📄 [Download Siddharth's Resume (PDF)](/api/public/resume/file) | 💼 [Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)
+
+📌 **Source:** Peer & Supervisor Collaboration History (Official Resume)`
+    };
+  }
+
+  // 8. Contact & Scheduling (Strictly explicit contact / schedule requests)
+  if (
+    lower.includes("how to contact") || lower.includes("how can i contact") || lower.includes("how do i contact") ||
+    lower.includes("how to reach") || lower.includes("how can i reach") || lower.includes("how to hire") ||
+    lower.includes("schedule an interview") || lower.includes("schedule a call") || lower.includes("book a call") ||
+    lower.includes("email address") || lower.includes("phone number") || lower.includes("contact info") ||
+    lower.includes("contact details") || lower.includes("whatsapp") || lower.includes("send an email") ||
+    lower.includes("reach out") || (lower.includes("contact") && !lower.includes("why")) ||
+    lower.includes("get in touch") || lower.includes("connect with")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 📬 Contact & Professional Links
+
+You can connect directly with Siddharth through any of the verified channels below:
+
+- **Email:** [siddharthshakya2004@gmail.com](mailto:siddharthshakya2004@gmail.com)
+- **Phone / WhatsApp:** +91 9256265129
+- **Location:** Kota, Rajasthan (324010) & Pune, India (Open to Relocation / Remote)
+- **LinkedIn:** [linkedin.com/in/siddharth-shakyawal-925889356](https://linkedin.com/in/siddharth-shakyawal-925889356)
+- **GitHub:** [github.com/musxsid](https://github.com/musxsid)
+- **Resume:** [Download Siddharth's Resume (PDF)](/api/public/resume/file)
+
+📌 **Source:** Official Resume & Portfolio Contact Section`
+    };
+  }
+
+  // 9. Location & Residence queries
   if (
     lower.includes("live") || lower.includes("living") || lower.includes("location") ||
-    lower.includes("where is") || lower.includes("where does") || lower.includes("stay") ||
+    lower.includes("where is") || lower.includes("where does") || (lower.includes("stay") && !lower.includes("omnistay")) ||
     lower.includes("city") || lower.includes("state") || lower.includes("based in") ||
-    lower.includes("reside") || lower.includes("relocate") || lower.includes("where are you")
+    lower.includes("reside") || lower.includes("where are you")
   ) {
     return {
       success: true,
@@ -566,7 +877,7 @@ Siddharth Shakyawal is primarily based in **Kota, Rajasthan (324010), India**, a
     };
   }
 
-  // 2. Education & Degree
+  // 10. Education & Degree
   if (
     lower.includes("education") || lower.includes("college") || lower.includes("university") ||
     lower.includes("degree") || lower.includes("bca") || lower.includes("christ") ||
@@ -588,36 +899,12 @@ Siddharth Shakyawal is primarily based in **Kota, Rajasthan (324010), India**, a
     };
   }
 
-  // 3. Contact & Hiring / Social Links
-  if (
-    lower.includes("contact") || lower.includes("hire") || lower.includes("email") ||
-    lower.includes("phone") || lower.includes("call") || lower.includes("number") ||
-    lower.includes("reach") || lower.includes("linkedin") || lower.includes("github link") ||
-    lower.includes("connect") || lower.includes("recruiter")
-  ) {
-    return {
-      success: true,
-      model: "AURA Grounded Knowledge Engine",
-      response: `### 📬 Contact & Professional Links
-
-You can connect directly with Siddharth through any of the verified channels below:
-
-- **Email:** [siddharthshakya2004@gmail.com](mailto:siddharthshakya2004@gmail.com)
-- **Phone / WhatsApp:** +91 9256265129
-- **Location:** Kota, Rajasthan (324010) & Pune, India (Open to Relocation / Remote)
-- **LinkedIn:** [linkedin.com/in/siddharth-shakyawal-925889356](https://linkedin.com/in/siddharth-shakyawal-925889356)
-- **GitHub:** [github.com/musxsid](https://github.com/musxsid)
-- **Resume:** [Download Siddharth's Resume (PDF)](/api/public/resume/file)
-
-📌 **Source:** Official Resume & Portfolio Contact Section`
-    };
-  }
-
-  // 4. Work Experience & Internships
+  // 11. Work Experience & Internships
   if (
     lower.includes("experience") || lower.includes("intern") || lower.includes("company") ||
-    lower.includes("angel bot") || lower.includes("codearrest") || lower.includes("work history") ||
-    lower.includes("job") || lower.includes("career") || lower.includes("past roles")
+    lower.includes("companies") || lower.includes("worked") || lower.includes("work history") ||
+    lower.includes("job") || lower.includes("career") || lower.includes("past roles") ||
+    lower.includes("angel bot") || lower.includes("codearrest") || lower.includes("previous work")
   ) {
     return {
       success: true,
