@@ -12,7 +12,7 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 COPY projects ./projects
 COPY resume ./resume
-EXPOSE 8080
-ENV PORT=8080
+EXPOSE 10000 8080
+ENV PORT=10000
 ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-Xss512k", "-jar", "app.jar"]
 
