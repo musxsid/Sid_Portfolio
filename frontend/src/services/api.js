@@ -24,7 +24,16 @@ const REPO_METADATA_ENRICHMENTS = {
     language: "Java",
     techStack: ["Java 17", "Spring Boot", "PostgreSQL", "React 19", "Hibernate JPA", "REST API", "Recharts"],
     featured: true,
-    images: []
+    images: [
+      "/projects/omnistay-erp/hero section .jpg",
+      "/projects/omnistay-erp/login signup.jpg",
+      "/projects/omnistay-erp/curated accomodations.jpg",
+      "/projects/omnistay-erp/dining.jpg",
+      "/projects/omnistay-erp/display.jpg",
+      "/projects/omnistay-erp/reserve and find page .jpg",
+      "/projects/omnistay-erp/Screenshot 2026-10-31 174552.jpg",
+      "/projects/omnistay-erp/testimonials.jpg"
+    ]
   },
   "simplyaudio": {
     title: "simplyAudio",
@@ -33,7 +42,13 @@ const REPO_METADATA_ENRICHMENTS = {
     language: "Java",
     techStack: ["Spring Boot", "RabbitMQ", "Keycloak SSO", "Docker", "React 19", "MinIO S3", "Microservices"],
     featured: true,
-    images: []
+    images: [
+      "/projects/simplyaudio/dashboard.jpg",
+      "/projects/simplyaudio/home.jpg",
+      "/projects/simplyaudio/player.jpg",
+      "/projects/simplyaudio/visualizer.jpg",
+      "/projects/simplyaudio/dashboard simplyMusic.jpg"
+    ]
   },
   "supervisor-feedback-analyzer": {
     title: "Supervisor Feedback Analyzer",
@@ -57,7 +72,23 @@ const REPO_METADATA_ENRICHMENTS = {
     language: "TypeScript",
     techStack: ["Spring Boot", "Java 21", "React 19", "MongoDB", "Groq AI", "Llama 3.3 70B", "Tailwind CSS", "TanStack Query"],
     featured: true,
-    images: []
+    images: [
+      "/projects/gibs-git_in_bits-main/landing page hero.jpg",
+      "/projects/gibs-git_in_bits-main/projects tab.jpg",
+      "/projects/gibs-git_in_bits-main/developer wise report and ai briefing .jpg",
+      "/projects/gibs-git_in_bits-main/developer wise pr report .jpg",
+      "/projects/gibs-git_in_bits-main/project analysis.jpg",
+      "/projects/gibs-git_in_bits-main/Projectwise ai summary and analytics.jpg",
+      "/projects/gibs-git_in_bits-main/pull request risk and intelligence page.jpg",
+      "/projects/gibs-git_in_bits-main/pr based reports .jpg",
+      "/projects/gibs-git_in_bits-main/pull request filtering options and audit options .jpg",
+      "/projects/gibs-git_in_bits-main/ai briefing based on pr.jpg",
+      "/projects/gibs-git_in_bits-main/ai chatbot working .jpg",
+      "/projects/gibs-git_in_bits-main/dark theme  .jpg",
+      "/projects/gibs-git_in_bits-main/repo stability.jpg",
+      "/projects/gibs-git_in_bits-main/repositories page .jpg",
+      "/projects/gibs-git_in_bits-main/analysis panel .jpg"
+    ]
   },
   "sid_portfolio": {
     title: "Sid Portfolio",
@@ -66,7 +97,18 @@ const REPO_METADATA_ENRICHMENTS = {
     language: "JavaScript",
     techStack: ["React 19", "Tailwind CSS 4", "Framer Motion", "Vite", "Spring Boot", "JavaScript"],
     featured: true,
-    images: []
+    images: [
+      "/projects/sid_portfolio/herosection.jpg",
+      "/projects/sid_portfolio/hero animation .jpg",
+      "/projects/sid_portfolio/about me .jpg",
+      "/projects/sid_portfolio/about me 2.jpg",
+      "/projects/sid_portfolio/skills page .jpg",
+      "/projects/sid_portfolio/experience.jpg",
+      "/projects/sid_portfolio/repository index.jpg",
+      "/projects/sid_portfolio/github page.jpg",
+      "/projects/sid_portfolio/ai assistant.jpg",
+      "/projects/sid_portfolio/contact page .jpg"
+    ]
   },
   "go-auth-postgres": {
     title: "Go Auth Microservice",
@@ -132,11 +174,11 @@ const REPO_METADATA_ENRICHMENTS = {
     images: []
   },
   "simplyaudio-workspace": {
-    title: "SimplyAudio Workspace",
-    tagline: "Companion Orchestration Environment & Asset Pipeline",
-    description: "Developer workspace orchestration environment managing microservices lifecycle, environment variables, and Docker network topologies.",
+    title: "simplyAudio Workspace",
+    tagline: "Docker Compose Microservices Harness & Multi-Container Mesh",
+    description: "Developer workspace and orchestration environment managing microservices lifecycles, RabbitMQ message brokers, Keycloak SSO identities, and Docker multi-container network topologies.",
     language: "Shell",
-    techStack: ["Docker", "Shell", "Microservices", "Workspace Config"],
+    techStack: ["Docker Compose", "Microservices", "Shell", "DevOps", "Container Mesh"],
     featured: false,
     images: []
   }
@@ -204,6 +246,14 @@ export function enrichAndSortLiveProjects(rawRepos) {
   });
 
   mapped.sort((a, b) => {
+    const aHasImages = a.images && a.images.length > 0;
+    const bHasImages = b.images && b.images.length > 0;
+
+    // 1. Projects with authentic backend/local screenshots ALWAYS sort to the top!
+    if (aHasImages && !bHasImages) return -1;
+    if (!aHasImages && bHasImages) return 1;
+
+    // 2. Predefined priority sequence within group
     const idxA = REPO_PRIORITY_ORDER.indexOf(a.name.toLowerCase());
     const idxB = REPO_PRIORITY_ORDER.indexOf(b.name.toLowerCase());
     if (idxA !== -1 && idxB !== -1) return idxA - idxB;

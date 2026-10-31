@@ -21,7 +21,16 @@
     "forks": 0,
     "featured": true,
     "updatedAt": "2026-08-25T10:10:28Z",
-    "images": []
+    "images": [
+      "/projects/omnistay-erp/hero section .jpg",
+      "/projects/omnistay-erp/login signup.jpg",
+      "/projects/omnistay-erp/curated accomodations.jpg",
+      "/projects/omnistay-erp/dining.jpg",
+      "/projects/omnistay-erp/display.jpg",
+      "/projects/omnistay-erp/reserve and find page .jpg",
+      "/projects/omnistay-erp/Screenshot 2026-10-31 174552.jpg",
+      "/projects/omnistay-erp/testimonials.jpg"
+    ]
   },
   {
     "id": "simplyAudio",
@@ -45,7 +54,13 @@
     "forks": 0,
     "featured": true,
     "updatedAt": "2026-07-30T10:44:49Z",
-    "images": []
+    "images": [
+      "/projects/simplyaudio/dashboard.jpg",
+      "/projects/simplyaudio/home.jpg",
+      "/projects/simplyaudio/player.jpg",
+      "/projects/simplyaudio/visualizer.jpg",
+      "/projects/simplyaudio/dashboard simplyMusic.jpg"
+    ]
   },
   {
     "id": "supervisor-feedback-analyzer",
@@ -100,7 +115,23 @@
     "forks": 0,
     "featured": true,
     "updatedAt": "2026-08-13T11:50:33Z",
-    "images": []
+    "images": [
+      "/projects/gibs-git_in_bits-main/landing page hero.jpg",
+      "/projects/gibs-git_in_bits-main/projects tab.jpg",
+      "/projects/gibs-git_in_bits-main/developer wise report and ai briefing .jpg",
+      "/projects/gibs-git_in_bits-main/developer wise pr report .jpg",
+      "/projects/gibs-git_in_bits-main/project analysis.jpg",
+      "/projects/gibs-git_in_bits-main/Projectwise ai summary and analytics.jpg",
+      "/projects/gibs-git_in_bits-main/pull request risk and intelligence page.jpg",
+      "/projects/gibs-git_in_bits-main/pr based reports .jpg",
+      "/projects/gibs-git_in_bits-main/pull request filtering options and audit options .jpg",
+      "/projects/gibs-git_in_bits-main/ai briefing based on pr.jpg",
+      "/projects/gibs-git_in_bits-main/ai chatbot working .jpg",
+      "/projects/gibs-git_in_bits-main/dark theme  .jpg",
+      "/projects/gibs-git_in_bits-main/repo stability.jpg",
+      "/projects/gibs-git_in_bits-main/repositories page .jpg",
+      "/projects/gibs-git_in_bits-main/analysis panel .jpg"
+    ]
   },
   {
     "id": "Sid_Portfolio",
@@ -123,7 +154,18 @@
     "forks": 0,
     "featured": true,
     "updatedAt": "2026-10-30T19:35:41Z",
-    "images": []
+    "images": [
+      "/projects/sid_portfolio/herosection.jpg",
+      "/projects/sid_portfolio/hero animation .jpg",
+      "/projects/sid_portfolio/about me .jpg",
+      "/projects/sid_portfolio/about me 2.jpg",
+      "/projects/sid_portfolio/skills page .jpg",
+      "/projects/sid_portfolio/experience.jpg",
+      "/projects/sid_portfolio/repository index.jpg",
+      "/projects/sid_portfolio/github page.jpg",
+      "/projects/sid_portfolio/ai assistant.jpg",
+      "/projects/sid_portfolio/contact page .jpg"
+    ]
   },
   {
     "id": "go-auth-postgres",
@@ -283,17 +325,18 @@
   {
     "id": "simplyAudio-Workspace",
     "name": "simplyAudio-Workspace",
-    "title": "SimplyAudio Workspace",
-    "tagline": "Companion Orchestration Environment & Asset Pipeline",
-    "description": "Developer workspace orchestration environment managing microservices lifecycle, environment variables, and Docker network topologies.",
+    "title": "simplyAudio Workspace",
+    "tagline": "Docker Compose Microservices Harness & Multi-Container Mesh",
+    "description": "Developer workspace and orchestration environment managing microservices lifecycles, RabbitMQ message brokers, Keycloak SSO identities, and Docker multi-container network topologies.",
     "githubUrl": "https://github.com/musxsid/simplyAudio-Workspace",
     "liveUrl": null,
     "language": "Shell",
     "techStack": [
-      "Docker",
-      "Shell",
+      "Docker Compose",
       "Microservices",
-      "Workspace Config"
+      "Shell",
+      "DevOps",
+      "Container Mesh"
     ],
     "stars": 0,
     "forks": 0,

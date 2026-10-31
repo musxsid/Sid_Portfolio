@@ -102,6 +102,9 @@ public class GitHubServiceImpl implements GitHubService {
         // Dynamically discover all images on backend disk on every fetch
         refreshDynamicImages(list);
 
+        // Repositories with images in backend disk folders ALWAYS sort to the top!
+        sortProjectsWithImagesFirst(list);
+
         return list;
     }
 
@@ -210,7 +213,7 @@ public class GitHubServiceImpl implements GitHubService {
                     freshProjects.add(dto);
                 }
 
-                sortProjects(freshProjects);
+                sortProjectsWithImagesFirst(freshProjects);
                 cachedProjects = freshProjects;
                 projectsCacheExpiry = now + CACHE_DURATION_MS;
 
@@ -263,12 +266,19 @@ public class GitHubServiceImpl implements GitHubService {
             activeFolderSlugs.add(slug.replaceAll("[^a-z0-9-]", ""));
             if (slug.contains("supervisor-feedback")) {
                 activeFolderSlugs.add("supervisor-feedback");
+                activeFolderSlugs.add("supervisor-feedback-analyzer");
             }
             if (slug.contains("portfolio")) {
                 activeFolderSlugs.add("portfolio");
+                activeFolderSlugs.add("sid_portfolio");
             }
             if (slug.contains("simplymusic")) {
                 activeFolderSlugs.add("simplymusic");
+            }
+            if (slug.contains("simplyaudio-workspace") || slug.contains("workspace")) {
+                activeFolderSlugs.add("simplyaudio-workspace");
+            } else if (slug.contains("simplyaudio")) {
+                activeFolderSlugs.add("simplyaudio");
             }
         }
 
@@ -496,8 +506,10 @@ public class GitHubServiceImpl implements GitHubService {
                         || (folderSlug.length() >= 5 && targetSlug.contains(folderSlug));
 
                 if (!match) {
-                    if (targetSlug.contains("simplyaudio") && folderSlug.contains("simplyaudio")) {
-                        match = true;
+                    if (targetSlug.contains("workspace") || folderSlug.contains("workspace")) {
+                        match = (targetSlug.contains("workspace") && folderSlug.contains("workspace"));
+                    } else if (targetSlug.contains("simplyaudio") && folderSlug.contains("simplyaudio")) {
+                        match = !targetSlug.contains("workspace") && !folderSlug.contains("workspace");
                     } else if (targetSlug.contains("supervisorfeedback") && folderSlug.contains("supervisorfeedback")) {
                         match = true;
                     } else if ((targetSlug.contains("portfolio") || targetSlug.contains("sidportfolio"))
@@ -578,6 +590,11 @@ public class GitHubServiceImpl implements GitHubService {
             desc = "Full-stack hotel management and booking system built with Java 17, Spring Boot 4, PostgreSQL, and React 19. Links staff operations to a public guest portal. Uses a relational folio ledger for room charges, dynamic room matrix tracking, a POS module, an automated night audit, and an AI assistant for guest reviews.";
             techStack = Arrays.asList("Java 17", "Spring Boot", "PostgreSQL", "React 19", "Hibernate JPA", "REST API",
                     "Recharts");
+        } else if (lowerName.contains("simplyaudio-workspace") || lowerName.contains("workspace")) {
+            title = "simplyAudio Workspace";
+            tagline = "Docker Compose Microservices Harness & Multi-Container Mesh";
+            desc = "Developer workspace and orchestration environment managing microservices lifecycles, RabbitMQ message brokers, Keycloak SSO identities, and Docker multi-container network topologies.";
+            techStack = Arrays.asList("Docker Compose", "Microservices", "Shell", "DevOps", "Container Mesh");
         } else if (lowerName.contains("simplyaudio")) {
             title = "simplyAudio";
             tagline = "Event-Driven Audio Microservices with RabbitMQ & Spring Boot";
@@ -636,11 +653,6 @@ public class GitHubServiceImpl implements GitHubService {
             tagline = "High-Performance Algorithmic Implementations & Complexity Analysis";
             desc = "Curated repository of optimized data structures, algorithmic paradigms (dynamic programming, graph traversals, tree manipulations), and asymptotic runtime benchmarks.";
             techStack = Arrays.asList("Java", "Algorithms", "Data Structures", "Dynamic Programming", "Graph Theory");
-        } else if (lowerName.contains("simplyaudio-workspace")) {
-            title = "SimplyAudio Workspace";
-            tagline = "Companion Orchestration Environment & Asset Pipeline";
-            desc = "Developer workspace orchestration environment managing microservices lifecycle, environment variables, and Docker network topologies.";
-            techStack = Arrays.asList("Docker", "Shell", "Microservices", "Workspace Config");
         }
 
         return GitHubProjectDto.builder()
@@ -660,7 +672,10 @@ public class GitHubServiceImpl implements GitHubService {
                 .build();
     }
 
-    private void sortProjects(List<GitHubProjectDto> list) {
+    private void sortProjectsWithImagesFirst(List<GitHubProjectDto> list) {
+        if (list == null || list.size() <= 1)
+            return;
+
         List<String> priority = Arrays.asList(
                 "omnistay-erp",
                 "simplyaudio",
@@ -677,28 +692,55 @@ public class GitHubServiceImpl implements GitHubService {
                 "simplyaudio-workspace");
 
         list.sort((a, b) -> {
-            int idxA = -1;
-            int idxB = -1;
-            for (int i = 0; i < priority.size(); i++) {
-                if (a.getName().toLowerCase().contains(priority.get(i))) {
-                    idxA = i;
-                    break;
-                }
-            }
-            for (int i = 0; i < priority.size(); i++) {
-                if (b.getName().toLowerCase().contains(priority.get(i))) {
-                    idxB = i;
-                    break;
-                }
-            }
+            boolean aHasImages = a.getImages() != null && !a.getImages().isEmpty();
+            boolean bHasImages = b.getImages() != null && !b.getImages().isEmpty();
+
+            // 1. Projects with backend disk images ALWAYS sort to the top as showcase priority!
+            if (aHasImages && !bHasImages)
+                return -1;
+            if (!aHasImages && bHasImages)
+                return 1;
+
+            // 2. Predefined priority order within each group
+            int idxA = getPriorityIndex(a.getName(), priority);
+            int idxB = getPriorityIndex(b.getName(), priority);
+
             if (idxA != -1 && idxB != -1)
                 return Integer.compare(idxA, idxB);
             if (idxA != -1)
                 return -1;
             if (idxB != -1)
                 return 1;
-            return 0;
+
+            return a.getName().compareToIgnoreCase(b.getName());
         });
+    }
+
+    private int getPriorityIndex(String repoName, List<String> priority) {
+        if (repoName == null)
+            return -1;
+        String lower = repoName.toLowerCase();
+        // Exact match takes absolute precedence
+        for (int i = 0; i < priority.size(); i++) {
+            if (lower.equals(priority.get(i))) {
+                return i;
+            }
+        }
+        // Distinguish simplyaudio-workspace from simplyaudio
+        if (lower.contains("workspace")) {
+            for (int i = 0; i < priority.size(); i++) {
+                if (priority.get(i).contains("workspace")) {
+                    return i;
+                }
+            }
+        }
+        for (int i = 0; i < priority.size(); i++) {
+            String p = priority.get(i);
+            if (!p.contains("workspace") && lower.contains(p)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private List<GitHubProjectDto> getFallbackProjects() {

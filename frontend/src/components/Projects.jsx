@@ -230,11 +230,22 @@ export default function Projects() {
   const headerY = useTransform(headerScroll, [0, 1], ["24px", "0px"]);
   const headerOpacity = useTransform(headerScroll, [0, 0.25, 1], [0.35, 0.8, 1]);
 
+  const sortWithImagesFirst = (list) => {
+    if (!Array.isArray(list)) return [];
+    return [...list].sort((a, b) => {
+      const aHas = a.images && a.images.length > 0;
+      const bHas = b.images && b.images.length > 0;
+      if (aHas && !bHas) return -1;
+      if (!aHas && bHas) return 1;
+      return 0;
+    });
+  };
+
   useEffect(() => {
     let isMounted = true;
     portfolioApi.getGitHubProjects().then((data) => {
-      if (isMounted) {
-        setProjects(data);
+      if (isMounted && Array.isArray(data)) {
+        setProjects(sortWithImagesFirst(data));
       }
     });
     return () => {
