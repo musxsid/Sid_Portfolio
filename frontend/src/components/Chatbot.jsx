@@ -871,7 +871,7 @@ export default function Chatbot() {
             </div>
 
             {/* Liquid-Glass Frosted Messages Area */}
-            <div className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-3.5 custom-scrollbar bg-transparent z-10">
+            <div data-lenis-prevent className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-3.5 custom-scrollbar bg-transparent z-10">
               {messages.map((msg, idx) => (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}

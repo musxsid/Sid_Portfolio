@@ -353,7 +353,16 @@ export default function About() {
   const handleScroll = (e, href) => {
     e.preventDefault();
     const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    if (!el) return;
+    if (window.__lenis) {
+      window.__lenis.scrollTo(el, {
+        offset: -85,
+        duration: 1.3,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
+    } else {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
