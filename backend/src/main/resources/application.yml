@@ -20,10 +20,14 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8080/realms/portfolio-realm}
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:}
 
 server:
-  port: ${PORT:8081}
+  address: 0.0.0.0
+  port: ${PORT:8080}
+
+cors:
+  frontend-url: ${CLIENT_URL:${FRONTEND_URL:}}
 
 github:
   username: ${GITHUB_USERNAME:musxsid}

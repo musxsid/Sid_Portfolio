@@ -16,7 +16,7 @@ import {
   CheckCircle2,
   Lock
 } from 'lucide-react';
-import { portfolioApi } from '../services/api';
+import { portfolioApi, API_BASE_URL } from '../services/api';
 
 // Ultra-Premium Proprietary AI Identity: Celestial Quantum Nexus & Neural Spark
 const AuraLogo = ({ className = "", size = 24 }) => (
@@ -126,6 +126,7 @@ const SUGGESTED_QUESTIONS = [
 ];
 
 function renderLinkPill(title, url, key) {
+  const resolvedUrl = (url && url.startsWith("/api")) ? `${API_BASE_URL}${url}` : url;
   const isGitHub = url.toLowerCase().includes("github.com");
   const isLinkedIn = url.toLowerCase().includes("linkedin.com");
   const isResume = url.toLowerCase().includes("resume") || url.toLowerCase().endsWith(".pdf");
@@ -138,7 +139,7 @@ function renderLinkPill(title, url, key) {
       return (
         <a
           key={key}
-          href={url}
+          href={resolvedUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 px-3 py-1 my-0.5 rounded-full bg-white/[0.08] hover:bg-accent-warm text-accent-warm hover:text-white border border-accent-warm/30 hover:border-accent-warm font-sans font-semibold text-[0.74rem] transition-all shadow-sm active:scale-95 cursor-pointer align-middle"
@@ -155,7 +156,7 @@ function renderLinkPill(title, url, key) {
       <span key={key} className="inline-flex items-center gap-1.5 align-middle flex-wrap my-0.5">
         <strong className="text-white font-bold">{title}</strong>
         <a
-          href={url}
+          href={resolvedUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/[0.08] hover:bg-accent-warm text-accent-warm hover:text-white border border-accent-warm/30 hover:border-accent-warm font-sans font-semibold text-[0.72rem] transition-all shadow-sm active:scale-95 cursor-pointer"
@@ -174,7 +175,7 @@ function renderLinkPill(title, url, key) {
     return (
       <a
         key={key}
-        href={url}
+        href={resolvedUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center gap-2 px-3.5 py-1.5 my-1 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] hover:border-accent-warm/50 text-gray-200 hover:text-white border border-white/15 font-sans font-semibold text-xs transition-all shadow-sm active:scale-95 cursor-pointer align-middle"
@@ -191,7 +192,7 @@ function renderLinkPill(title, url, key) {
     return (
       <a
         key={key}
-        href={url}
+        href={resolvedUrl}
         target="_blank"
         rel="noopener noreferrer"
         download

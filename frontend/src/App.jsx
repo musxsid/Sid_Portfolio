@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { API_BASE_URL } from "./services/api";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -14,6 +16,17 @@ import Chatbot from "./components/Chatbot";
 
 export default function App() {
   const { scrollYProgress } = useScroll();
+
+  // Fire-and-forget silent pre-warm to awaken Render / Koyeb free container on user arrival
+  useEffect(() => {
+    try {
+      fetch(`${API_BASE_URL}/health`, { method: "GET", mode: "cors" }).catch(() => {
+        // Silent catch: pre-warm trigger only
+      });
+    } catch {
+      // Ignore network errors on pre-warm
+    }
+  }, []);
 
   // Dynamic world-class color interpolation for the background across all sections
   const backgroundColor = useTransform(

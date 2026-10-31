@@ -2,7 +2,10 @@ import axios from "axios";
 import githubLiveData from "../github_live_data.json";
 import githubReposLive from "../github_repos_live.json";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8081";
+export const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:8080";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -152,8 +155,18 @@ const REPO_METADATA_ENRICHMENTS = {
     description: "Full-stack job portal built on .NET Core (MVC) and SQL Server. Implements multi-criteria vacancy filters, resume parsing, candidate application status workflows, and typed queries via Entity Framework Core.",
     language: "C#",
     techStack: [".NET Core", "C#", "SQL Server", "Entity Framework", "MVC", "SCSS"],
-    featured: false,
-    images: []
+    featured: true,
+    images: [
+      "/projects/jobhive/hero section.jpg",
+      "/projects/jobhive/featured jobs .jpg",
+      "/projects/jobhive/recruiter dashboard.jpg",
+      "/projects/jobhive/application tracker.jpg",
+      "/projects/jobhive/resume creation.jpg",
+      "/projects/jobhive/ai assistant.jpg",
+      "/projects/jobhive/working.jpg",
+      "/projects/jobhive/navbar.jpg",
+      "/projects/jobhive/Screenshot 2026-11-01 000855.jpg"
+    ]
   },
   "superutility": {
     title: "SuperUtility",
@@ -405,7 +418,8 @@ export const portfolioApi = {
     try {
       const response = await apiClient.get("/api/public/resume");
       if (response.data && response.data.url && !response.data.url.includes('example-cloud-storage.com')) {
-        return response.data.url;
+        const rawUrl = response.data.url;
+        return rawUrl.startsWith("/api") ? `${API_BASE_URL}${rawUrl}` : rawUrl;
       }
     } catch {
       // Backend not running, use local fallback

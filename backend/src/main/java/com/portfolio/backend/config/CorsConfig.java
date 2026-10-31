@@ -1,17 +1,52 @@
 package com.portfolio.backend.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
 
+    @Value("${CLIENT_URL:${FRONTEND_URL:}}")
+    private String configuredFrontendUrl;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+        List<String> originPatterns = new ArrayList<>();
+
+        // 1. Local development origins
+        originPatterns.add("http://localhost:5173");
+        originPatterns.add("http://localhost:3000");
+        originPatterns.add("http://127.0.0.1:5173");
+        originPatterns.add("http://127.0.0.1:3000");
+
+        // 2. Production frontend origin dynamically read from CLIENT_URL or FRONTEND_URL
+        if (configuredFrontendUrl != null && !configuredFrontendUrl.isBlank()) {
+            for (String origin : configuredFrontendUrl.split(",")) {
+                String cleanOrigin = origin.trim();
+                if (!cleanOrigin.isEmpty()) {
+                    originPatterns.add(cleanOrigin);
+                }
+            }
+        }
+
+        // 3. Vercel deployment preview domains & general secure fallback
+        originPatterns.add("https://*.vercel.app");
+        originPatterns.add("https://*.onrender.com");
+        originPatterns.add("https://*.koyeb.app");
+
+        // If no explicit frontend URL is configured, also permit wildcard patterns
+        if (configuredFrontendUrl == null || configuredFrontendUrl.isBlank()) {
+            originPatterns.add("*");
+        }
+
         registry.addMapping("/**")
-                .allowedOriginPatterns("*") // Allows localhost, Vercel deployments, and production domains
+                .allowedOriginPatterns(originPatterns.toArray(new String[0]))
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
