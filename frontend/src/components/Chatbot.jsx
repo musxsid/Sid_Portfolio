@@ -118,12 +118,6 @@ function LinkedInIcon({ className = "w-3.5 h-3.5" }) {
   );
 }
 
-const SUGGESTED_QUESTIONS = [
-  "What is Siddharth's background & location?",
-  "Tell me about simplyAudio's architecture",
-  "What is Siddharth's tech stack & experience?",
-  "Download official resume / contact info"
-];
 
 function renderLinkPill(title, url, key) {
   const resolvedUrl = (url && url.startsWith("/api")) ? `${API_BASE_URL}${url}` : url;
@@ -800,27 +794,6 @@ export default function Chatbot() {
               )}
               <div ref={messagesEndRef} />
             </div>
-
-            {/* Suggested Prompts Shelf */}
-            {messages.length <= 2 && (
-              <div className="px-3.5 py-2 border-t border-white/10 bg-white/[0.02] backdrop-blur-md z-10">
-                <p className="text-[0.62rem] text-gray-400 mb-1.5 flex items-center gap-1 font-sans font-bold uppercase tracking-wider">
-                  <Sparkles size={10} className="text-accent-warm" /> Suggested Queries
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {SUGGESTED_QUESTIONS.map((q, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => handleSend(q)}
-                      disabled={isTyping}
-                      className="text-[0.68rem] font-sans font-medium bg-white/[0.035] hover:bg-white/[0.08] border border-white/10 hover:border-accent-warm/50 hover:text-white text-gray-300 py-1 px-2.5 rounded-full transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-left cursor-pointer shadow-sm hover:scale-[1.02] active:scale-95"
-                    >
-                      {q}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
 
             {/* Input Bar with Frosted Glass & Ambient Glow */}
             <div className="p-3 sm:p-3.5 bg-[#050712]/95 border-t border-white/10 backdrop-blur-2xl z-10">
