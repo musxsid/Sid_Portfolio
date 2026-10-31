@@ -5,8 +5,7 @@ import {
   Trophy, 
   GitPullRequest, 
   ExternalLink,
-  Code2,
-  Activity
+  Code2
 } from "lucide-react";
 import { portfolioApi } from "../services/api";
 import GitHubBackgroundCanvas from "./GitHubBackgroundCanvas";
@@ -150,20 +149,9 @@ export default function GitHubContributions() {
           className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12 pb-8 border-b border-white/10"
         >
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="w-2 h-2 rounded-full bg-accent-warm animate-pulse shadow-[0_0_8px_#ff7a45]" />
-              <span className="text-xs font-sans font-bold tracking-widest text-accent-warm uppercase">
-                Continuous Delivery & Open Source
-              </span>
-            </div>
-
             <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white">
               Engineering <span className="text-accent-warm">Activity.</span>
             </h2>
-
-            <p className="text-gray-400 text-sm sm:text-base max-w-2xl mt-2 font-light">
-              Real-time synchronization of git commits, code reviews, and distributed architecture deployments directly from GitHub.
-            </p>
           </div>
 
           {/* Unboxed GitHub Profile Badge & Quick Link */}
@@ -180,7 +168,7 @@ export default function GitHubContributions() {
                   <span className="w-1.5 h-1.5 rounded-full bg-accent-warm shadow-[0_0_6px_#ff7a45]" />
                 </p>
                 <p className="text-xs text-gray-400 font-sans font-medium">
-                  Siddharth • Active Contributor
+                  Siddharth
                 </p>
               </div>
             </div>
@@ -309,13 +297,8 @@ export default function GitHubContributions() {
             )}
           </AnimatePresence>
 
-          {/* Calendar Footer: Learn Link + White & Orange Legend */}
-          <div className="flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-white/10 text-xs text-gray-400 gap-3 font-sans font-medium">
-            <span className="flex items-center gap-1.5 text-gray-400">
-              <Activity className="w-3.5 h-3.5 text-accent-warm" />
-              <span>Continuous git commit telemetry • Updated hourly</span>
-            </span>
-
+          {/* Calendar Footer: White & Orange Legend */}
+          <div className="flex flex-col sm:flex-row items-center justify-end pt-4 border-t border-white/10 text-xs text-gray-400 gap-3 font-sans font-medium">
             {/* WHITE & ORANGE APP THEME LEGEND */}
             <div className="flex items-center gap-2">
               <span className="text-[0.7rem] text-gray-400 uppercase tracking-wider">Less</span>
