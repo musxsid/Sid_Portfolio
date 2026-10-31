@@ -595,6 +595,40 @@ When recruiters, hiring managers, or founders evaluate Siddharth, you must addre
 function buildLocalFallbackResponse(userQuery) {
   const lower = (userQuery || "").toLowerCase().trim();
 
+  // 0. Recruiter Interview: Full Introduction (POV of Applicant in Interview)
+  if (
+    lower.includes("introduce") || lower.includes("introduction") || lower.includes("tell me about yourself") ||
+    lower.includes("tell me about siddharth") || lower === "tell me about you" || lower.includes("tell me about him") ||
+    lower.includes("walk me through your resume") || lower.includes("walk me through your background") ||
+    lower.includes("walk me through his") || lower.includes("who is siddharth") || lower.includes("who are you") ||
+    lower.includes("elevator pitch") || lower.includes("your intro") || lower.includes("his intro") ||
+    lower.includes("candidate intro") || lower.includes("about yourself") || lower.includes("self intro") ||
+    lower.includes("give me your intro") || lower.includes("give me an intro") || lower.includes("brief intro") ||
+    lower === "intro" || lower === "who is he" || lower === "about him"
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### Introduction — Siddharth Shakyawal
+
+"Hello! I’m **Siddharth Shakyawal**, a **Software Engineer** specializing in **High-Concurrency Backend Architecture** and **Applied AI/LLM Orchestration**. I engineer production-grade distributed microservices, event-driven pipelines, and deterministic, hallucination-free AI workflows."
+
+- **Professional Identity:** Software Engineer with verified production experience across Java (Spring Boot 3/4), Python (FastAPI), Go, and React 19.
+- **Academics:** Pursuing a **Bachelor of Computer Applications (BCA, 2024–2027)** at **Christ University, Lavasa, Pune**, combining computer science foundations with continuous production delivery.
+- **Production Internship Impact (Angel Bot AI):** As Software Developer Intern, I built [Git in Bits (DevPulse AI)](https://github.com/musxsid/GIBs-Git_In_Bits-main), tracking **+2.7M lines of code churn**, slashing GitHub API calls by **85%** with rate-limited delta caching, and engineering a **Structured RAG pipeline** with Spring AI and Groq Llama 3.3 achieving **<1.2s inference with zero hallucinations**.
+- **Production Internship Impact (CodeArrest Softwares):** As Full Stack Developer Intern, I developed [JobHive](https://github.com/musxsid/JobHive) using .NET Core (MVC) and SQL Server, optimizing relational queries across recruitment pipelines by **35%** with strict ACID transactional guarantees.
+- **Key Architectural Flagships:**
+  - [simplyAudio](https://github.com/musxsid/simplyAudio): Asynchronous RabbitMQ message queues decoupling audio ingestion from real-time analytics, Keycloak OAuth2/OIDC SSO, and MinIO S3 object storage.
+  - [OmniStay ERP](https://github.com/musxsid/omnistay-erp): Enterprise hotel engine featuring an ACID PostgreSQL relational folio ledger and automated night audit roll-forwards in <500ms.
+  - [Go Auth Microservice](https://github.com/musxsid/go-auth-postgres): Sub-5ms low latency HTTP auth microservice with pgx connection pools and Argon2id cryptographic hashing.
+- **Immediate Availability & Relocation:**
+  - **Notice Period:** Immediate Joiner (0 days notice, ready to contribute from Day 1).
+  - **Relocation:** 100% open to on-site relocation across India (**Pune, Bengaluru, Delhi NCR, Hyderabad, Mumbai, etc.**) as well as remote or hybrid engineering roles.
+
+[Download Siddharth's Resume (PDF)](/api/public/resume/file) [GitHub Profile (@musxsid)](https://github.com/musxsid) [Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)`
+    };
+  }
+
   // 1. Recruiter Evaluation: Why Hire Siddharth / Differentiation / Pitch
   if (
     (lower.includes("why") && (lower.includes("hire") || lower.includes("choose") || lower.includes("pick") || lower.includes("select") || lower.includes("consider") || lower.includes("bring"))) ||
@@ -733,7 +767,9 @@ Siddharth approaches high-pressure situations with methodical root-cause isolati
     lower.includes("start date") || lower.includes("joining date") || lower.includes("availability") ||
     lower.includes("available to start") || lower.includes("immediate joiner") ||
     (lower.includes("open to") && (lower.includes("remote") || lower.includes("relocat"))) ||
-    lower.includes("work mode")
+    lower.includes("work mode") || lower.includes("relocat") || lower.includes("bangalore") ||
+    lower.includes("bengaluru") || lower.includes("delhi") || lower.includes("mumbai") ||
+    lower.includes("hyderabad") || lower.includes("onsite") || lower.includes("on-site")
   ) {
     return {
       success: true,
@@ -793,6 +829,254 @@ Siddharth designs backend and AI systems around five core engineering tenets:
 
 - **5. Containerized Environment Parity:**
   Ensures zero 'works on my machine' issues by defining reproducible multi-stage Docker builds and Docker Compose meshes for all services, databases, and message brokers.`
+    };
+  }
+
+
+  // 6b. Recruiter Evaluation: Applied AI, Structured RAG & Zero Hallucinations
+  if (
+    lower.includes("rag") || lower.includes("hallucination") || lower.includes("llm") ||
+    lower.includes("vector") || lower.includes("spring ai") || lower.includes("groq") ||
+    lower.includes("llama") || lower.includes("prompt engineering") || lower.includes("embeddings") ||
+    lower.includes("ai experience") || lower.includes("genai") || lower.includes("generative ai") ||
+    lower.includes("semantic search")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### Applied AI, Structured RAG & LLM Orchestration
+
+Siddharth specializes in architecting **deterministic, zero-hallucination AI pipelines** designed for mission-critical enterprise workflows:
+
+- **Structured RAG Architecture (0% Hallucination Guarantee):**
+  - In [Git in Bits](https://github.com/musxsid/GIBs-Git_In_Bits-main), Siddharth eliminated open-ended prompt hallucinations by computing analytics deterministically in MongoDB first.
+  - LLM synthesis (via **Spring AI** and **Groq Llama 3.3 70B**) is strictly bound to deterministic JSON schema contracts, reducing hallucination rate to **0%** and inference latency to **<1.2s**.
+- **Vector Ingestion & Semantic Retrieval:**
+  - In [DocuVault](https://github.com/musxsid/DocuVault), engineered a high-throughput document ingestion pipeline utilizing dense vector embeddings and similarity search for cryptographic document intelligence.
+- **Local LLM Orchestration:**
+  - In [Supervisor Feedback Analyzer](https://github.com/musxsid/supervisor-feedback-analyzer), integrated local **Llama 3.2 via Ollama** paired with Spring AI, ensuring confidential corporate review data never leaves the on-premise perimeter.
+
+[Explore Git in Bits on GitHub](https://github.com/musxsid/GIBs-Git_In_Bits-main)`
+    };
+  }
+
+  // 6c. Recruiter Evaluation: Concurrency, Asynchronous Messaging & RabbitMQ
+  if (
+    lower.includes("rabbitmq") || lower.includes("message queue") || lower.includes("asynchronous") ||
+    lower.includes("concurrency") || lower.includes("async") || lower.includes("message broker") ||
+    lower.includes("event-driven") || lower.includes("decoupling") || lower.includes("queues") ||
+    lower.includes("worker threads") || lower.includes("backpressure")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### Concurrency, Asynchronous Messaging & Event-Driven Architecture
+
+Siddharth designs systems where compute-heavy or I/O-intensive workloads never degrade client-facing API latencies:
+
+- **RabbitMQ Message Broker Decoupling:**
+  - In [simplyAudio](https://github.com/musxsid/simplyAudio), decoupled audio ingestion from real-time analytics using **RabbitMQ queues**.
+  - Ingestion APIs acknowledge uploads in **<50ms**, while background worker pools process chunking, transcoding, and persistence to **MinIO S3**.
+- **Resilience, Acks & Dead-Letter Exchanges:**
+  - Configured manual acknowledgements, consumer prefetch counts, and dead-letter exchanges (DLX) to guarantee zero message loss during worker crashes.
+- **High-Concurrency Low Latency:**
+  - In [Go Auth Microservice](https://github.com/musxsid/go-auth-postgres), utilized Go goroutines and **pgx connection pools** to achieve sub-5ms concurrent authentication throughput under heavy loads.
+
+[Explore simplyAudio on GitHub](https://github.com/musxsid/simplyAudio)`
+    };
+  }
+
+  // 6d. Recruiter Evaluation: Database Consistency, ACID Transactions & Folio Ledgers
+  if (
+    lower.includes("acid") || lower.includes("transaction") || lower.includes("postgres") ||
+    lower.includes("sql vs nosql") || lower.includes("relational") || lower.includes("sql server") ||
+    lower.includes("race condition") || lower.includes("locking") || lower.includes("folio ledger") ||
+    lower.includes("data consistency") || lower.includes("pessimistic")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### Relational Database Consistency, ACID Ledgers & Data Integrity
+
+Siddharth prioritizes transactional correctness and strict ACID guarantees over casual data handling:
+
+- **ACID Folio Ledger Architecture:**
+  - In [OmniStay ERP](https://github.com/musxsid/omnistay-erp), architected an ACID relational folio ledger tracking thousands of room charges, deposits, and tax distributions with zero discrepancy.
+  - Employed **PostgreSQL row-level pessimistic locking** (\`SELECT FOR UPDATE\`) to prevent race conditions and double charges during concurrent guest checkouts.
+  - Built an automated night audit batch service reconciling 100% of hotel accounts in **<500ms**.
+- **Relational Query Index Optimization:**
+  - In [JobHive](https://github.com/musxsid/JobHive), analyzed SQL Server query plans across multi-role applicant filters, introducing composite indexed schemas that cut query execution times by **35%**.
+- **Pragmatic SQL vs NoSQL Selection:**
+  - Uses PostgreSQL and SQL Server for financial ledgers, audit trails, and transactional consistency.
+  - Uses MongoDB for high-churn unstructured telemetry (Git in Bits) and Redis for sub-millisecond session validation.
+
+[Explore OmniStay ERP on GitHub](https://github.com/musxsid/omnistay-erp)`
+    };
+  }
+
+  // 6e. Recruiter Evaluation: Enterprise Security, Authentication & Zero-Trust
+  if (
+    lower.includes("security") || lower.includes("keycloak") || lower.includes("oauth") ||
+    lower.includes("jwt") || lower.includes("argon2") || lower.includes("sso") ||
+    lower.includes("idor") || lower.includes("csrf") || lower.includes("session validation") ||
+    lower.includes("authorization") || lower.includes("zero trust")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### Enterprise Security, Auth Protocols & Zero-Trust Architecture
+
+Siddharth implements defense-in-depth security standards across all layers of the stack:
+
+- **Centralized SSO via Keycloak OAuth2/OIDC:**
+  - In [simplyAudio](https://github.com/musxsid/simplyAudio), integrated **Keycloak** identity provider for enterprise Single Sign-On, securing microservices with bearer JWT verification and role-based access control (RBAC).
+- **Sub-5ms Argon2id Password Hashing:**
+  - In [Go Auth Microservice](https://github.com/musxsid/go-auth-postgres), utilized **Argon2id** (memory-hard, GPU-resistant password hashing) alongside RS256 asymmetric JWT signing.
+- **Server-Side Session Guards & IDOR Prevention:**
+  - In [Git in Bits](https://github.com/musxsid/GIBs-Git_In_Bits-main), implemented server-side OAuth2 session validation in RAM, blocking 100% of unauthorized cross-tenant Insecure Direct Object Reference (IDOR) attempts.
+
+[Explore Go Auth on GitHub](https://github.com/musxsid/go-auth-postgres)`
+    };
+  }
+
+  // 6f. Recruiter Evaluation: Full-Stack Breadth & Modern Frontend (React 19)
+  if (
+    lower.includes("frontend") || lower.includes("fullstack") || lower.includes("full stack") ||
+    lower.includes("react") || lower.includes("ui") || lower.includes("tailwind") ||
+    lower.includes("can he do frontend") || lower.includes("both backend and frontend") ||
+    lower.includes("full-stack")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### Full-Stack Agility & Modern React 19 Frontend
+
+While Siddharth's primary focus is backend architecture, he is an agile **Full-Stack Engineer** who builds production-ready interfaces:
+
+- **Modern React 19 & Tailwind CSS v4:**
+  - Engineered this portfolio utilizing **React 19**, **Tailwind CSS v4**, and **Framer Motion**, delivering interactive hardware-accelerated canvas shaders, dynamic glassmorphism, and 60-120fps animations.
+- **End-to-End Feature Velocity:**
+  - In [Git in Bits](https://github.com/musxsid/GIBs-Git_In_Bits-main), created full-stack executive dashboards computing 6 live engineering KPIs, visualizing PR turnaround, and orchestrating AI briefings.
+  - In [OmniStay ERP](https://github.com/musxsid/omnistay-erp), designed responsive guest check-in interfaces, billing invoice previews, and live room matrix grids.
+- **Client-Side Optimization:**
+  - Proficient in responsive design, state management, API error boundaries, optimistic UI updates, and accessibility standards.
+
+[Explore Sid Portfolio on GitHub](https://github.com/musxsid/Sid_Portfolio)`
+    };
+  }
+
+  // 7b. Recruiter Evaluation: Testing, QA & Code Reliability
+  if (
+    lower.includes("test") || lower.includes("testing") || lower.includes("unit test") ||
+    lower.includes("integration test") || lower.includes("qa") || lower.includes("postman") ||
+    lower.includes("code quality") || lower.includes("ci/cd") || lower.includes("reliability") ||
+    lower.includes("how do you test") || lower.includes("code review")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### Testing, Quality Assurance & Engineering Reliability
+
+Siddharth treats testing and verification as first-class architectural requirements:
+
+- **Automated API Integration Testing:**
+  - Validates REST endpoints, error payloads, and authentication guards using comprehensive **Postman collections** and automated test suites.
+- **Backend Unit Testing & Mocking:**
+  - Tests Spring Boot and Java business logic using **JUnit** and **Mockito**, isolating service logic from database dependencies.
+- **Deterministic Schema Verification:**
+  - Uses JSON Schema contracts and Bean Validation (\`@Valid\`, \`@NotNull\`) to catch corrupt or malformed inputs before they reach business layers.
+- **Clean Code & Review Discipline:**
+  - Maintains strict semantic Git commit hygiene, comprehensive OpenAPI/Swagger documentation, and proactive peer code review participation.
+
+[Download Siddharth's Resume (PDF)](/api/public/resume/file)`
+    };
+  }
+
+  // 7c. Recruiter Evaluation: DevOps, Docker & Container Infrastructure
+  if (
+    lower.includes("docker") || lower.includes("devops") || lower.includes("container") ||
+    lower.includes("compose") || lower.includes("deploy") || lower.includes("kubernetes") ||
+    lower.includes("infrastructure") || lower.includes("containerization")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### DevOps, Docker & Containerized Environment Parity
+
+Siddharth builds cloud-ready architectures with full local-to-production parity:
+
+- **Multi-Service Docker Compose Meshes:**
+  - Standardizes development and deployment environments for [simplyAudio](https://github.com/musxsid/simplyAudio), [OmniStay ERP](https://github.com/musxsid/omnistay-erp), and [Go Auth](https://github.com/musxsid/go-auth-postgres) across Spring Boot, Go, PostgreSQL, Keycloak, RabbitMQ, and MinIO.
+- **Multi-Stage Container Builds:**
+  - Employs multi-stage Dockerfiles (Maven/Go builder stages to minimal distroless/Alpine runtimes) to drastically cut image size and eliminate build-time security vulnerabilities.
+- **Continuous Deployment & Cloud Integration:**
+  - Experience deploying containerized full-stack applications with automated health-check endpoints, zero-downtime restarts, and environment variable isolation.
+
+[Explore Repositories on GitHub](https://github.com/musxsid)`
+    };
+  }
+
+  // 7d. Recruiter Evaluation: Engineering Motivation & Passion
+  if (
+    lower.includes("why software") || lower.includes("why engineering") || lower.includes("passion") ||
+    lower.includes("what drives you") || lower.includes("motivation") || lower.includes("career goal") ||
+    lower.includes("aspiration") || lower.includes("why coding") || lower.includes("what excites you")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### Engineering Passion, Motivation & Career Vision
+
+What drives Siddharth as an engineer:
+
+- **Passion for High-Impact Distributed Systems:**
+  - Motivated by building resilient, low-latency architectures that solve complex real-world problems—concurrency race conditions, high-throughput message brokers, and zero-hallucination AI pipelines.
+- **Execution Over Tutorials:**
+  - Believes true engineering competence comes from building and shipping end-to-end systems (+2.7M lines code churn analysis, ACID hotel ledgers, sub-5ms auth services).
+- **Career Aspiration:**
+  - Aspires to join a high-caliber engineering team where he can take ownership of core backend infrastructure, learn from staff engineers, and scale distributed products globally.
+
+[Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)`
+    };
+  }
+
+  // 7e. Recruiter Evaluation: Salary & Compensation Expectations
+  if (
+    lower.includes("salary") || lower.includes("compensation") || lower.includes("ctc") ||
+    lower.includes("expected salary") || lower.includes("package") || lower.includes("pay") ||
+    lower.includes("budget") || lower.includes("remuneration") || lower.includes("expected ctc")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### Compensation & Salary Expectations
+
+- **Professional Stance:** Siddharth is open and flexible regarding compensation, seeking packages aligned with standard industry benchmarks for the specific role, level of responsibility, and work location.
+- **Primary Priority:** Joining a high-growth, technically rigorous team where he can take direct technical ownership, work on challenging distributed systems, and drive measurable engineering impact.
+- **Next Step:** Open to transparent compensation alignment during initial recruiter screening calls.
+
+[Schedule an Interview Call](mailto:siddharthshakya2004@gmail.com)`
+    };
+  }
+
+  // 10b. Recruiter Evaluation: Academic Schedule & Full-Time Readiness
+  if (
+    lower.includes("college") || lower.includes("christ university") || lower.includes("bca") ||
+    lower.includes("studying") || lower.includes("can he work full time") || lower.includes("student") ||
+    lower.includes("attendance") || lower.includes("graduation") || lower.includes("full-time while")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### Academic Background & Full-Time Working Readiness
+
+- **Degree:** Bachelor of Computer Applications (BCA, 2024–2027) at **Christ University, Lavasa, Pune**.
+- **Full-Time Availability:** Siddharth maintains **complete schedule flexibility and readiness for immediate full-time software engineering roles** (on-site or remote).
+- **Proven Dual-Track Delivery:**
+  - Successfully completed full-time production internships at **Angel Bot AI** and **CodeArrest Softwares** while maintaining strong academic standing.
+  - Ready to onboard immediately with zero delay.
+
+[Download Siddharth's Resume (PDF)](/api/public/resume/file)`
     };
   }
 

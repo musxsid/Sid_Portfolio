@@ -239,8 +239,32 @@ public class GroqAiServiceImpl implements GroqAiService {
         String lower = userQuery.toLowerCase().trim();
         StringBuilder reply = new StringBuilder();
 
+        // 0. Recruiter Interview: Full Introduction (POV of Applicant in Interview)
+        if (lower.contains("introduce") || lower.contains("introduction") || lower.contains("tell me about yourself") 
+                || lower.contains("tell me about siddharth") || lower.equals("tell me about you") || lower.contains("tell me about him") 
+                || lower.contains("walk me through your resume") || lower.contains("walk me through your background") 
+                || lower.contains("walk me through his") || lower.contains("who is siddharth") || lower.contains("who are you") 
+                || lower.contains("elevator pitch") || lower.contains("your intro") || lower.contains("his intro") 
+                || lower.contains("candidate intro") || lower.contains("about yourself") || lower.contains("self intro") 
+                || lower.contains("give me your intro") || lower.contains("give me an intro") || lower.contains("brief intro") 
+                || lower.equals("intro") || lower.equals("who is he") || lower.equals("about him")) {
+            reply.append("### Introduction — Siddharth Shakyawal\n\n");
+            reply.append("\"Hello! I’m **Siddharth Shakyawal**, a **Software Engineer** specializing in **High-Concurrency Backend Architecture** and **Applied AI/LLM Orchestration**. I engineer production-grade distributed microservices, event-driven pipelines, and deterministic, hallucination-free AI workflows.\"\n\n");
+            reply.append("- **Professional Identity:** Software Engineer with verified production experience across Java (Spring Boot 3/4), Python (FastAPI), Go, and React 19.\n");
+            reply.append("- **Academics:** Pursuing a **Bachelor of Computer Applications (BCA, 2024–2027)** at **Christ University, Lavasa, Pune**, combining computer science foundations with continuous production delivery.\n");
+            reply.append("- **Production Internship Impact (Angel Bot AI):** As Software Developer Intern, I built [Git in Bits (DevPulse AI)](https://github.com/musxsid/GIBs-Git_In_Bits-main), tracking **+2.7M lines of code churn**, slashing GitHub API calls by **85%** with rate-limited delta caching, and engineering a **Structured RAG pipeline** with Spring AI and Groq Llama 3.3 achieving **<1.2s inference with zero hallucinations**.\n");
+            reply.append("- **Production Internship Impact (CodeArrest Softwares):** As Full Stack Developer Intern, I developed [JobHive](https://github.com/musxsid/JobHive) using .NET Core (MVC) and SQL Server, optimizing relational queries across recruitment pipelines by **35%** with strict ACID transactional guarantees.\n");
+            reply.append("- **Key Architectural Flagships:**\n");
+            reply.append("  - [simplyAudio](https://github.com/musxsid/simplyAudio): Asynchronous RabbitMQ message queues decoupling audio ingestion from real-time analytics, Keycloak OAuth2/OIDC SSO, and MinIO S3 object storage.\n");
+            reply.append("  - [OmniStay ERP](https://github.com/musxsid/omnistay-erp): Enterprise hotel engine featuring an ACID PostgreSQL relational folio ledger and automated night audit roll-forwards in <500ms.\n");
+            reply.append("  - [Go Auth Microservice](https://github.com/musxsid/go-auth-postgres): Sub-5ms low latency HTTP auth microservice with pgx connection pools and Argon2id cryptographic hashing.\n");
+            reply.append("- **Immediate Availability & Relocation:**\n");
+            reply.append("  - **Notice Period:** Immediate Joiner (0 days notice, ready to contribute from Day 1).\n");
+            reply.append("  - **Relocation:** 100% open to on-site relocation across India (**Pune, Bengaluru, Delhi NCR, Hyderabad, Mumbai, etc.**) as well as remote or hybrid engineering roles.\n\n");
+            reply.append("[Download Siddharth's Resume (PDF)](/api/public/resume/file) [GitHub Profile (@musxsid)](https://github.com/musxsid) [Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)\n\n");
+        }
         // 1. Recruiter Evaluation: Why Hire Siddharth / Differentiation / Pitch
-        if ((lower.contains("why") && (lower.contains("hire") || lower.contains("choose") || lower.contains("pick") 
+        else if ((lower.contains("why") && (lower.contains("hire") || lower.contains("choose") || lower.contains("pick") 
                 || lower.contains("select") || lower.contains("consider") || lower.contains("bring"))) 
                 || lower.contains("why hire") || lower.contains("hire not how") || lower.contains("why should i hire") 
                 || lower.contains("why should we hire") || lower.contains("pitch") || lower.contains("value proposition") 
@@ -329,7 +353,9 @@ public class GroqAiServiceImpl implements GroqAiService {
                 || lower.contains("start date") || lower.contains("joining date") || lower.contains("availability") 
                 || lower.contains("available to start") || lower.contains("immediate joiner") 
                 || (lower.contains("open to") && (lower.contains("remote") || lower.contains("relocat"))) 
-                || lower.contains("work mode")) {
+                || lower.contains("work mode") || lower.contains("relocat") || lower.contains("bangalore") 
+                || lower.contains("bengaluru") || lower.contains("delhi") || lower.contains("mumbai") 
+                || lower.contains("hyderabad") || lower.contains("pune") || lower.contains("onsite")) {
             reply.append("### Target Roles, Availability & Relocation\n\n");
             reply.append("Here is Siddharth's current professional availability and role preferences:\n\n");
             reply.append("- **Target Engineering Roles:**\n");
@@ -367,6 +393,155 @@ public class GroqAiServiceImpl implements GroqAiService {
             reply.append("  Authentication and authorization are verified at every layer: stateless RS256 JWT tokens, Keycloak SSO, sub-5ms Argon2id hashing in Go, and in-memory server session guards against IDOR exploits.\n\n");
             reply.append("- **5. Containerized Environment Parity:**\n");
             reply.append("  Ensures zero 'works on my machine' issues by defining reproducible multi-stage Docker builds and Docker Compose meshes for all services, databases, and message brokers.\n\n");
+        }
+        // 6b. Recruiter Evaluation: Applied AI, Structured RAG & Zero Hallucinations
+        else if (lower.contains("rag") || lower.contains("hallucination") || lower.contains("llm") 
+                || lower.contains("vector") || lower.contains("spring ai") || lower.contains("groq") 
+                || lower.contains("llama") || lower.contains("prompt engineering") || lower.contains("embeddings") 
+                || lower.contains("ai experience") || lower.contains("genai") || lower.contains("generative ai") 
+                || lower.contains("semantic search")) {
+            reply.append("### Applied AI, Structured RAG & LLM Orchestration\n\n");
+            reply.append("Siddharth specializes in architecting **deterministic, zero-hallucination AI pipelines** designed for mission-critical enterprise workflows:\n\n");
+            reply.append("- **Structured RAG Architecture (0% Hallucination Guarantee):**\n");
+            reply.append("  - In [Git in Bits](https://github.com/musxsid/GIBs-Git_In_Bits-main), Siddharth eliminated open-ended prompt hallucinations by computing analytics deterministically in MongoDB first.\n");
+            reply.append("  - LLM synthesis (via **Spring AI** and **Groq Llama 3.3 70B**) is strictly bound to deterministic JSON schema contracts, reducing hallucination rate to **0%** and inference latency to **<1.2s**.\n");
+            reply.append("- **Vector Ingestion & Semantic Retrieval:**\n");
+            reply.append("  - In [DocuVault](https://github.com/musxsid/DocuVault), engineered a high-throughput document ingestion pipeline utilizing dense vector embeddings and similarity search for cryptographic document intelligence.\n");
+            reply.append("- **Local LLM Orchestration:**\n");
+            reply.append("  - In [Supervisor Feedback Analyzer](https://github.com/musxsid/supervisor-feedback-analyzer), integrated local **Llama 3.2 via Ollama** paired with Spring AI, ensuring confidential corporate review data never leaves the on-premise perimeter.\n\n");
+            reply.append("[Explore Git in Bits on GitHub](https://github.com/musxsid/GIBs-Git_In_Bits-main)\n\n");
+        }
+        // 6c. Recruiter Evaluation: Concurrency, Asynchronous Messaging & RabbitMQ
+        else if (lower.contains("rabbitmq") || lower.contains("message queue") || lower.contains("asynchronous") 
+                || lower.contains("concurrency") || lower.contains("async") || lower.contains("message broker") 
+                || lower.contains("event-driven") || lower.contains("decoupling") || lower.contains("queues") 
+                || lower.contains("worker threads") || lower.contains("backpressure")) {
+            reply.append("### Concurrency, Asynchronous Messaging & Event-Driven Architecture\n\n");
+            reply.append("Siddharth designs systems where compute-heavy or I/O-intensive workloads never degrade client-facing API latencies:\n\n");
+            reply.append("- **RabbitMQ Message Broker Decoupling:**\n");
+            reply.append("  - In [simplyAudio](https://github.com/musxsid/simplyAudio), decoupled audio ingestion from real-time analytics using **RabbitMQ queues**.\n");
+            reply.append("  - Ingestion APIs acknowledge uploads in **<50ms**, while background worker pools process chunking, transcoding, and persistence to **MinIO S3**.\n");
+            reply.append("- **Resilience, Acks & Dead-Letter Exchanges:**\n");
+            reply.append("  - Configured manual acknowledgements, consumer prefetch counts, and dead-letter exchanges (DLX) to guarantee zero message loss during worker crashes.\n");
+            reply.append("- **High-Concurrency Low Latency:**\n");
+            reply.append("  - In [Go Auth Microservice](https://github.com/musxsid/go-auth-postgres), utilized Go goroutines and **pgx connection pools** to achieve sub-5ms concurrent authentication throughput under heavy loads.\n\n");
+            reply.append("[Explore simplyAudio on GitHub](https://github.com/musxsid/simplyAudio)\n\n");
+        }
+        // 6d. Recruiter Evaluation: Database Consistency, ACID Transactions & Folio Ledgers
+        else if (lower.contains("acid") || lower.contains("transaction") || lower.contains("postgres") 
+                || lower.contains("sql vs nosql") || lower.contains("relational") || lower.contains("sql server") 
+                || lower.contains("race condition") || lower.contains("locking") || lower.contains("folio ledger") 
+                || lower.contains("data consistency") || lower.contains("pessimistic")) {
+            reply.append("### Relational Database Consistency, ACID Ledgers & Data Integrity\n\n");
+            reply.append("Siddharth prioritizes transactional correctness and strict ACID guarantees over casual data handling:\n\n");
+            reply.append("- **ACID Folio Ledger Architecture:**\n");
+            reply.append("  - In [OmniStay ERP](https://github.com/musxsid/omnistay-erp), architected an ACID relational folio ledger tracking thousands of room charges, deposits, and tax distributions with zero discrepancy.\n");
+            reply.append("  - Employed **PostgreSQL row-level pessimistic locking** (SELECT FOR UPDATE) to prevent race conditions and double charges during concurrent guest checkouts.\n");
+            reply.append("  - Built an automated night audit batch service reconciling 100% of hotel accounts in **<500ms**.\n");
+            reply.append("- **Relational Query Index Optimization:**\n");
+            reply.append("  - In [JobHive](https://github.com/musxsid/JobHive), analyzed SQL Server query plans across multi-role applicant filters, introducing composite indexed schemas that cut query execution times by **35%**.\n");
+            reply.append("- **Pragmatic SQL vs NoSQL Selection:**\n");
+            reply.append("  - Uses PostgreSQL and SQL Server for financial ledgers, audit trails, and transactional consistency.\n");
+            reply.append("  - Uses MongoDB for high-churn unstructured telemetry (Git in Bits) and Redis for sub-millisecond session validation.\n\n");
+            reply.append("[Explore OmniStay ERP on GitHub](https://github.com/musxsid/omnistay-erp)\n\n");
+        }
+        // 6e. Recruiter Evaluation: Enterprise Security, Authentication & Zero-Trust
+        else if (lower.contains("security") || lower.contains("keycloak") || lower.contains("oauth") 
+                || lower.contains("jwt") || lower.contains("argon2") || lower.contains("sso") 
+                || lower.contains("idor") || lower.contains("csrf") || lower.contains("session validation") 
+                || lower.contains("authorization") || lower.contains("zero trust")) {
+            reply.append("### Enterprise Security, Auth Protocols & Zero-Trust Architecture\n\n");
+            reply.append("Siddharth implements defense-in-depth security standards across all layers of the stack:\n\n");
+            reply.append("- **Centralized SSO via Keycloak OAuth2/OIDC:**\n");
+            reply.append("  - In [simplyAudio](https://github.com/musxsid/simplyAudio), integrated **Keycloak** identity provider for enterprise Single Sign-On, securing microservices with bearer JWT verification and role-based access control (RBAC).\n");
+            reply.append("- **Sub-5ms Argon2id Password Hashing:**\n");
+            reply.append("  - In [Go Auth Microservice](https://github.com/musxsid/go-auth-postgres), utilized **Argon2id** (memory-hard, GPU-resistant password hashing) alongside RS256 asymmetric JWT signing.\n");
+            reply.append("- **Server-Side Session Guards & IDOR Prevention:**\n");
+            reply.append("  - In [Git in Bits](https://github.com/musxsid/GIBs-Git_In_Bits-main), implemented server-side OAuth2 session validation in RAM, blocking 100% of unauthorized cross-tenant Insecure Direct Object Reference (IDOR) attempts.\n\n");
+            reply.append("[Explore Go Auth on GitHub](https://github.com/musxsid/go-auth-postgres)\n\n");
+        }
+        // 6f. Recruiter Evaluation: Full-Stack Breadth & Modern Frontend (React 19)
+        else if (lower.contains("frontend") || lower.contains("fullstack") || lower.contains("full stack") 
+                || lower.contains("react") || lower.contains("ui") || lower.contains("tailwind") 
+                || lower.contains("can he do frontend") || lower.contains("both backend and frontend") 
+                || lower.contains("full-stack")) {
+            reply.append("### Full-Stack Agility & Modern React 19 Frontend\n\n");
+            reply.append("While Siddharth's primary focus is backend architecture, he is an agile **Full-Stack Engineer** who builds production-ready interfaces:\n\n");
+            reply.append("- **Modern React 19 & Tailwind CSS v4:**\n");
+            reply.append("  - Engineered this portfolio utilizing **React 19**, **Tailwind CSS v4**, and **Framer Motion**, delivering interactive hardware-accelerated canvas shaders, dynamic glassmorphism, and 60-120fps animations.\n");
+            reply.append("- **End-to-End Feature Velocity:**\n");
+            reply.append("  - In [Git in Bits](https://github.com/musxsid/GIBs-Git_In_Bits-main), created full-stack executive dashboards computing 6 live engineering KPIs, visualizing PR turnaround, and orchestrating AI briefings.\n");
+            reply.append("  - In [OmniStay ERP](https://github.com/musxsid/omnistay-erp), designed responsive guest check-in interfaces, billing invoice previews, and live room matrix grids.\n");
+            reply.append("- **Client-Side Optimization:**\n");
+            reply.append("  - Proficient in responsive design, state management, API error boundaries, optimistic UI updates, and accessibility standards.\n\n");
+            reply.append("[Explore Sid Portfolio on GitHub](https://github.com/musxsid/Sid_Portfolio)\n\n");
+        }
+        // 7b. Recruiter Evaluation: Testing, QA & Code Reliability
+        else if (lower.contains("test") || lower.contains("testing") || lower.contains("unit test") 
+                || lower.contains("integration test") || lower.contains("qa") || lower.contains("postman") 
+                || lower.contains("code quality") || lower.contains("ci/cd") || lower.contains("reliability") 
+                || lower.contains("how do you test") || lower.contains("code review")) {
+            reply.append("### Testing, Quality Assurance & Engineering Reliability\n\n");
+            reply.append("Siddharth treats testing and verification as first-class architectural requirements:\n\n");
+            reply.append("- **Automated API Integration Testing:**\n");
+            reply.append("  - Validates REST endpoints, error payloads, and authentication guards using comprehensive **Postman collections** and automated test suites.\n");
+            reply.append("- **Backend Unit Testing & Mocking:**\n");
+            reply.append("  - Tests Spring Boot and Java business logic using **JUnit** and **Mockito**, isolating service logic from database dependencies.\n");
+            reply.append("- **Deterministic Schema Verification:**\n");
+            reply.append("  - Uses JSON Schema contracts and Bean Validation (@Valid, @NotNull) to catch corrupt or malformed inputs before they reach business layers.\n");
+            reply.append("- **Clean Code & Review Discipline:**\n");
+            reply.append("  - Maintains strict semantic Git commit hygiene, comprehensive OpenAPI/Swagger documentation, and proactive peer code review participation.\n\n");
+            reply.append("[Download Siddharth's Resume (PDF)](/api/public/resume/file)\n\n");
+        }
+        // 7c. Recruiter Evaluation: DevOps, Docker & Container Infrastructure
+        else if (lower.contains("docker") || lower.contains("devops") || lower.contains("container") 
+                || lower.contains("compose") || lower.contains("deploy") || lower.contains("kubernetes") 
+                || lower.contains("infrastructure") || lower.contains("containerization")) {
+            reply.append("### DevOps, Docker & Containerized Environment Parity\n\n");
+            reply.append("Siddharth builds cloud-ready architectures with full local-to-production parity:\n\n");
+            reply.append("- **Multi-Service Docker Compose Meshes:**\n");
+            reply.append("  - Standardizes development and deployment environments for [simplyAudio](https://github.com/musxsid/simplyAudio), [OmniStay ERP](https://github.com/musxsid/omnistay-erp), and [Go Auth](https://github.com/musxsid/go-auth-postgres) across Spring Boot, Go, PostgreSQL, Keycloak, RabbitMQ, and MinIO.\n");
+            reply.append("- **Multi-Stage Container Builds:**\n");
+            reply.append("  - Employs multi-stage Dockerfiles (Maven/Go builder stages to minimal distroless/Alpine runtimes) to drastically cut image size and eliminate build-time security vulnerabilities.\n");
+            reply.append("- **Continuous Deployment & Cloud Integration:**\n");
+            reply.append("  - Experience deploying containerized full-stack applications with automated health-check endpoints, zero-downtime restarts, and environment variable isolation.\n\n");
+            reply.append("[Explore Repositories on GitHub](https://github.com/musxsid)\n\n");
+        }
+        // 7d. Recruiter Evaluation: Engineering Motivation & Passion
+        else if (lower.contains("why software") || lower.contains("why engineering") || lower.contains("passion") 
+                || lower.contains("what drives you") || lower.contains("motivation") || lower.contains("career goal") 
+                || lower.contains("aspiration") || lower.contains("why coding") || lower.contains("what excites you")) {
+            reply.append("### Engineering Passion, Motivation & Career Vision\n\n");
+            reply.append("What drives Siddharth as an engineer:\n\n");
+            reply.append("- **Passion for High-Impact Distributed Systems:**\n");
+            reply.append("  - Motivated by building resilient, low-latency architectures that solve complex real-world problems—concurrency race conditions, high-throughput message brokers, and zero-hallucination AI pipelines.\n");
+            reply.append("- **Execution Over Tutorials:**\n");
+            reply.append("  - Believes true engineering competence comes from building and shipping end-to-end systems (+2.7M lines code churn analysis, ACID hotel ledgers, sub-5ms auth services).\n");
+            reply.append("- **Career Aspiration:**\n");
+            reply.append("  - Aspires to join a high-caliber engineering team where he can take ownership of core backend infrastructure, learn from staff engineers, and scale distributed products globally.\n\n");
+            reply.append("[Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)\n\n");
+        }
+        // 7e. Recruiter Evaluation: Salary & Compensation Expectations
+        else if (lower.contains("salary") || lower.contains("compensation") || lower.contains("ctc") 
+                || lower.contains("expected salary") || lower.contains("package") || lower.contains("pay") 
+                || lower.contains("budget") || lower.contains("remuneration") || lower.contains("expected ctc")) {
+            reply.append("### Compensation & Salary Expectations\n\n");
+            reply.append("- **Professional Stance:** Siddharth is open and flexible regarding compensation, seeking packages aligned with standard industry benchmarks for the specific role, level of responsibility, and work location.\n");
+            reply.append("- **Primary Priority:** Joining a high-growth, technically rigorous team where he can take direct technical ownership, work on challenging distributed systems, and drive measurable engineering impact.\n");
+            reply.append("- **Next Step:** Open to transparent compensation alignment during initial recruiter screening calls.\n\n");
+            reply.append("[Schedule an Interview Call](mailto:siddharthshakya2004@gmail.com)\n\n");
+        }
+        // 10b. Recruiter Evaluation: Academic Schedule & Full-Time Readiness
+        else if (lower.contains("college") || lower.contains("christ university") || lower.contains("bca") 
+                || lower.contains("studying") || lower.contains("can he work full time") || lower.contains("student") 
+                || lower.contains("attendance") || lower.contains("graduation") || lower.contains("full-time while")) {
+            reply.append("### Academic Background & Full-Time Working Readiness\n\n");
+            reply.append("- **Degree:** Bachelor of Computer Applications (BCA, 2024–2027) at **Christ University, Lavasa, Pune**.\n");
+            reply.append("- **Full-Time Availability:** Siddharth maintains **complete schedule flexibility and readiness for immediate full-time software engineering roles** (on-site or remote).\n");
+            reply.append("- **Proven Dual-Track Delivery:**\n");
+            reply.append("  - Successfully completed full-time production internships at **Angel Bot AI** and **CodeArrest Softwares** while maintaining strong academic standing.\n");
+            reply.append("  - Ready to onboard immediately with zero delay.\n\n");
+            reply.append("[Download Siddharth's Resume (PDF)](/api/public/resume/file)\n\n");
         }
         // 7. Recruiter Evaluation: Culture Fit, Team Collaboration & Work Ethic
         else if (lower.contains("culture") || lower.contains("team player") || lower.contains("collaboration") 
