@@ -575,47 +575,47 @@ const INITIAL_MESSAGES = [
   }
 ];
 
-// Dynamic section background alignment with liquid-glass translucency
+// Dynamic section background alignment with liquid-glass translucency matching Newsletter and Contact
 const SECTION_THEMES = {
   hero: {
-    bgGlass: "bg-[#050508]/70",
-    headerBg: "bg-white/[0.03]",
-    inputBg: "bg-[#040407]/60",
+    bgGlass: "bg-gradient-to-b from-white/[0.06] via-[#050508]/50 to-black/70",
+    headerBg: "bg-white/[0.02]",
+    inputBg: "bg-[#040407]/45",
   },
   about: {
-    bgGlass: "bg-[#080811]/70",
-    headerBg: "bg-white/[0.03]",
-    inputBg: "bg-[#06060e]/60",
+    bgGlass: "bg-gradient-to-b from-white/[0.06] via-[#080811]/50 to-black/70",
+    headerBg: "bg-white/[0.02]",
+    inputBg: "bg-[#06060e]/45",
   },
   experience: {
-    bgGlass: "bg-[#0f0f15]/70",
-    headerBg: "bg-white/[0.03]",
-    inputBg: "bg-[#0a0a12]/60",
+    bgGlass: "bg-gradient-to-b from-white/[0.06] via-[#0f0f15]/50 to-black/70",
+    headerBg: "bg-white/[0.02]",
+    inputBg: "bg-[#0a0a12]/45",
   },
   projects: {
-    bgGlass: "bg-[#080b13]/70",
-    headerBg: "bg-white/[0.03]",
-    inputBg: "bg-[#060810]/60",
+    bgGlass: "bg-gradient-to-b from-white/[0.06] via-[#080b13]/50 to-black/70",
+    headerBg: "bg-white/[0.02]",
+    inputBg: "bg-[#060810]/45",
   },
   github: {
-    bgGlass: "bg-[#080b13]/70",
-    headerBg: "bg-white/[0.03]",
-    inputBg: "bg-[#060810]/60",
+    bgGlass: "bg-gradient-to-b from-white/[0.06] via-[#080b13]/50 to-black/70",
+    headerBg: "bg-white/[0.02]",
+    inputBg: "bg-[#060810]/45",
   },
   skills: {
-    bgGlass: "bg-[#080b13]/70",
-    headerBg: "bg-white/[0.03]",
-    inputBg: "bg-[#060810]/60",
+    bgGlass: "bg-gradient-to-b from-white/[0.06] via-[#080b13]/50 to-black/70",
+    headerBg: "bg-white/[0.02]",
+    inputBg: "bg-[#060810]/45",
   },
   newsletter: {
-    bgGlass: "bg-[#090d16]/70",
-    headerBg: "bg-white/[0.03]",
-    inputBg: "bg-[#070a13]/60",
+    bgGlass: "bg-gradient-to-b from-white/[0.06] via-[#090d16]/45 to-black/70",
+    headerBg: "bg-white/[0.02]",
+    inputBg: "bg-[#070a13]/45",
   },
   contact: {
-    bgGlass: "bg-[#050508]/70",
-    headerBg: "bg-white/[0.03]",
-    inputBg: "bg-[#040407]/60",
+    bgGlass: "bg-gradient-to-b from-white/[0.06] via-[#050508]/50 to-black/70",
+    headerBg: "bg-white/[0.02]",
+    inputBg: "bg-[#040407]/45",
   }
 };
 
@@ -763,11 +763,14 @@ export default function Chatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 35, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 350, damping: 30 }}
-            className={`fixed bottom-4 sm:bottom-6 right-3 sm:right-6 ${theme.bgGlass} backdrop-blur-3xl backdrop-saturate-[140%] border border-white/[0.12] rounded-[28px] sm:rounded-[32px] rounded-br-[12px] sm:rounded-br-[16px] shadow-[0_24px_70px_rgba(0,0,0,0.75),inset_0_1px_1px_rgba(255,255,255,0.1)] z-[10000] flex flex-col overflow-hidden transition-colors duration-500 ${isExpanded
+            className={`fixed bottom-4 sm:bottom-6 right-3 sm:right-6 ${theme.bgGlass} backdrop-blur-3xl backdrop-saturate-[150%] border border-white/[0.12] rounded-[28px] sm:rounded-[32px] rounded-br-[12px] sm:rounded-br-[16px] shadow-[0_20px_60px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.12)] z-[10000] flex flex-col overflow-hidden transition-all duration-500 ${isExpanded
                 ? "w-[94vw] sm:w-[580px] md:w-[620px] h-[630px] sm:h-[650px] max-h-[88vh]"
                 : "w-[92vw] sm:w-[395px] md:w-[415px] h-[520px] sm:h-[545px] max-h-[82vh]"
               }`}
           >
+            {/* Subtle Top Optical Flare Line */}
+            <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-accent-warm/50 to-transparent pointer-events-none z-20" />
+
             {/* Sleek Executive AURA Header */}
             <div className={`flex items-center justify-between px-4 py-3 sm:px-4.5 sm:py-3.5 border-b border-white/[0.08] ${theme.headerBg} backdrop-blur-md relative z-10 transition-colors duration-500`}>
               <div className="flex items-center gap-2.5">
