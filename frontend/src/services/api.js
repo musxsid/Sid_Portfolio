@@ -354,13 +354,13 @@ export const portfolioApi = {
   getResume: async () => {
     try {
       const response = await apiClient.get("/api/public/resume");
-      if (response.data && response.data.url) {
+      if (response.data && response.data.url && !response.data.url.includes('example-cloud-storage.com')) {
         return response.data.url;
       }
     } catch {
       // Backend not running, use local fallback
     }
-    return "/resume/Siddharth Resume.pdf";
+    return "/resume/Siddharth_Shakyawal_Resume.pdf";
   },
 
   // Submit Newsletter
@@ -500,4 +500,7 @@ Your mission is to assist recruiters, engineers, founders, and visitors with 100
     };
   },
 };
+
+
+
 

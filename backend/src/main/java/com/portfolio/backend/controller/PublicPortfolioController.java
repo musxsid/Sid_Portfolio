@@ -4,7 +4,10 @@ import com.portfolio.backend.dto.*;
 import com.portfolio.backend.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +45,20 @@ public class PublicPortfolioController {
     @GetMapping("/resume")
     public ResponseEntity<ResumeDto> getResume() {
         return ResponseEntity.ok(resumeService.getResume());
+    }
+
+    @GetMapping({"/resume/file", "/resume/download"})
+    public ResponseEntity<Resource> downloadResume() {
+        Resource resource = resumeService.getResumeFileResource();
+        if (resource == null || !resource.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+        String filename = resumeService.getResumeFileName();
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
+                .header(HttpHeaders.CACHE_CONTROL, "public, max-age=3600")
+                .body(resource);
     }
 
     @PostMapping("/leads")

@@ -228,6 +228,24 @@ public class GitHubServiceImpl implements GitHubService {
         }
     }
 
+    private List<File> resolveProjectBaseDirs() {
+        List<File> dirs = new ArrayList<>();
+        if (new File("src/main/resources").exists()) {
+            // Launched from 'backend' directory
+            dirs.add(new File("projects"));
+            dirs.add(new File("src/main/resources/static/projects"));
+            dirs.add(new File("../frontend/public/projects"));
+        } else if (new File("backend").exists()) {
+            // Launched from repository root
+            dirs.add(new File("backend/projects"));
+            dirs.add(new File("backend/src/main/resources/static/projects"));
+            dirs.add(new File("frontend/public/projects"));
+        } else {
+            dirs.add(new File("projects"));
+        }
+        return dirs;
+    }
+
     /**
      * Automatically monitors, creates, and tracks separate folders for each GitHub repository on disk.
      * When a new repository is added to GitHub, its dedicated images folder is created automatically.
@@ -236,12 +254,7 @@ public class GitHubServiceImpl implements GitHubService {
     private void syncManagedProjectFolders(List<GitHubProjectDto> activeProjects) {
         if (activeProjects == null || activeProjects.isEmpty()) return;
 
-        List<File> baseDirs = Arrays.asList(
-                new File("src/main/resources/static/projects"),
-                new File("projects"),
-                new File("backend/src/main/resources/static/projects"),
-                new File("backend/projects")
-        );
+        List<File> baseDirs = resolveProjectBaseDirs();
 
         Set<String> activeFolderSlugs = new HashSet<>();
         for (GitHubProjectDto p : activeProjects) {
@@ -462,14 +475,7 @@ public class GitHubServiceImpl implements GitHubService {
             return Collections.emptyList();
         String targetSlug = repoName.toLowerCase().replaceAll("[^a-z0-9]", "");
 
-        List<File> baseDirs = Arrays.asList(
-                new File("src/main/resources/static/projects"),
-                new File("projects"),
-                new File("backend/src/main/resources/static/projects"),
-                new File("backend/projects"),
-                new File("D:/Programming/Sid_Portfolio/backend/src/main/resources/static/projects"),
-                new File("D:/Programming/Sid_Portfolio/backend/projects"),
-                new File("D:/Programming/Sid_Portfolio/frontend/public/projects"));
+        List<File> baseDirs = resolveProjectBaseDirs();
 
         Set<String> imagePaths = new LinkedHashSet<>();
 

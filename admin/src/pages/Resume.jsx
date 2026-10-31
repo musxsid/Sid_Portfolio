@@ -49,7 +49,7 @@ export default function Resume() {
     try {
       const resumeDto = {
         filename: selectedFile.name,
-        url: 'https://example-cloud-storage.com/' + selectedFile.name,
+        url: '/api/public/resume/file',
         lastUpdated: new Date().toISOString().split('T')[0]
       };
       const updatedResume = await resumeService.uploadResume(resumeDto);
@@ -198,3 +198,5 @@ export default function Resume() {
     </div>
   );
 }
+
+

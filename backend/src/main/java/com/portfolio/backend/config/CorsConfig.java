@@ -35,7 +35,12 @@ public class CorsConfig implements WebMvcConfigurer {
                 .addResourceLocations(
                         "classpath:/static/resume/",
                         "file:./resume/",
+                        "file:./src/main/resources/static/resume/",
+                        "file:../backend/resume/",
+                        "file:../backend/src/main/resources/static/resume/",
                         "file:../frontend/public/resume/",
+                        "file:D:/Programming/Sid_Portfolio/backend/resume/",
+                        "file:D:/Programming/Sid_Portfolio/backend/src/main/resources/static/resume/",
                         "file:D:/Programming/Sid_Portfolio/frontend/public/resume/"
                 );
     }

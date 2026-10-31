@@ -17,13 +17,13 @@ export default function Navbar() {
   const [isVisible, setIsVisible] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [resumeUrl, setResumeUrl] = useState("/resume/Siddharth Resume.pdf");
+  const [resumeUrl, setResumeUrl] = useState("/resume/Siddharth_Shakyawal_Resume.pdf");
   const lastScrollY = useRef(0);
 
   useEffect(() => {
     let isMounted = true;
     portfolioApi.getResume().then((url) => {
-      if (isMounted && url) {
+      if (isMounted && url && !url.includes("example-cloud-storage.com")) {
         setResumeUrl(url);
       }
     });
@@ -238,3 +238,4 @@ export default function Navbar() {
     </>
   );
 }
+

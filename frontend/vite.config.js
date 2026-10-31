@@ -11,22 +11,26 @@ function resumeStaticPlugin() {
     configureServer(server) {
       server.middlewares.use('/resume', (req, res, next) => {
         const reqPath = decodeURIComponent(req.url.replace(/^\//, ''));
-        const resumeDir = path.resolve(__dirname, 'resume');
-        const publicResumeDir = path.resolve(__dirname, 'public/resume');
+        const resumeDirs = [
+          path.resolve(__dirname, '../backend/resume'),
+          path.resolve(__dirname, '../backend/src/main/resources/static/resume'),
+          path.resolve(__dirname, 'resume'),
+          path.resolve(__dirname, 'public/resume')
+        ];
 
         let targetFile = null;
 
         if (reqPath) {
-          const directFile1 = path.join(resumeDir, reqPath);
-          const directFile2 = path.join(publicResumeDir, reqPath);
-          if (fs.existsSync(directFile1) && fs.statSync(directFile1).isFile()) {
-            targetFile = directFile1;
-          } else if (fs.existsSync(directFile2) && fs.statSync(directFile2).isFile()) {
-            targetFile = directFile2;
+          for (const dir of resumeDirs) {
+            const candidate = path.join(dir, reqPath);
+            if (fs.existsSync(candidate) && fs.statSync(candidate).isFile()) {
+              targetFile = candidate;
+              break;
+            }
           }
         }
 
-        // If no direct match or requested root /resume, serve latest PDF in either folder
+        // If no direct match or requested root /resume, serve latest PDF in any folder
         if (!targetFile) {
           const findLatestPdf = (dir) => {
             if (!fs.existsSync(dir)) return null;
@@ -37,7 +41,10 @@ function resumeStaticPlugin() {
             return files.length > 0 ? files[0].fullPath : null;
           };
 
-          targetFile = findLatestPdf(resumeDir) || findLatestPdf(publicResumeDir);
+          for (const dir of resumeDirs) {
+            targetFile = findLatestPdf(dir);
+            if (targetFile) break;
+          }
         }
 
         if (targetFile && fs.existsSync(targetFile)) {

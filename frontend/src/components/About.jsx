@@ -285,7 +285,7 @@ export default function About() {
 
   const [activeService, setActiveService] = useState(0);
   const [isMarqueeHovered, setIsMarqueeHovered] = useState(false);
-  const [resumeUrl, setResumeUrl] = useState("/resume/Siddharth Resume.pdf");
+  const [resumeUrl, setResumeUrl] = useState("/resume/Siddharth_Shakyawal_Resume.pdf");
   const [gitStats, setGitStats] = useState({
     contributions: 151,
     repos: 13,
@@ -294,7 +294,7 @@ export default function About() {
   useEffect(() => {
     let isMounted = true;
     portfolioApi.getResume().then((url) => {
-      if (isMounted && url) {
+      if (isMounted && url && !url.includes("example-cloud-storage.com")) {
         setResumeUrl(url);
       }
     });
@@ -704,3 +704,4 @@ export default function About() {
     </section>
   );
 }
+

@@ -505,7 +505,7 @@ export default function Chatbot() {
         ...prev,
         {
           type: 'bot',
-          text: "I encountered an issue connecting to the AI model. You can explore Siddharth's projects directly on [GitHub](https://github.com/musxsid) or [Download his Resume](/resume/Siddharth_Shakyawal_Resume_october2026.pdf)!"
+          text: "I encountered an issue connecting to the AI model. You can explore Siddharth's projects directly on [GitHub](https://github.com/musxsid) or [Download his Resume](/resume/Siddharth_Shakyawal_Resume.pdf)!"
         }
       ]);
     } finally {
@@ -595,110 +595,111 @@ export default function Chatbot() {
               </div>
             </div>
 
-            {/* Spacious Messages Area */ }
-  <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 custom-scrollbar bg-gradient-to-b from-transparent to-black/35">
-    {messages.map((msg, idx) => (
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.22, ease: "easeOut" }}
-        key={idx}
-        className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
-      >
-        <div className={`flex items-end gap-2.5 max-w-[92%] sm:max-w-[88%] ${msg.type === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-          <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 mb-1 ${msg.type === 'user' ? 'bg-accent-warm text-white shadow-[0_0_10px_rgba(255,122,69,0.4)]' : 'bg-accent-warm/15 text-accent-warm border border-accent-warm/30 shadow-[0_0_10px_rgba(255,122,69,0.2)]'
-            }`}>
-            {msg.type === 'user' ? <User size={13} /> : <AuraLogo size={15} />}
-          </div>
+            {/* Spacious Messages Area */}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 custom-scrollbar bg-gradient-to-b from-transparent to-black/35">
+              {messages.map((msg, idx) => (
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.22, ease: "easeOut" }}
+                  key={idx}
+                  className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div className={`flex items-end gap-2.5 max-w-[92%] sm:max-w-[88%] ${msg.type === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                    <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 mb-1 ${msg.type === 'user' ? 'bg-accent-warm text-white shadow-[0_0_10px_rgba(255,122,69,0.4)]' : 'bg-accent-warm/15 text-accent-warm border border-accent-warm/30 shadow-[0_0_10px_rgba(255,122,69,0.2)]'
+                      }`}>
+                      {msg.type === 'user' ? <User size={13} /> : <AuraLogo size={15} />}
+                    </div>
 
-          <div className={`p-4 rounded-2xl text-xs sm:text-[0.85rem] ${msg.type === 'user'
-            ? 'bg-accent-warm text-white font-medium rounded-br-sm shadow-[0_4px_20px_rgba(255,122,69,0.35)]'
-            : 'bg-white/[0.05] text-gray-200 rounded-bl-sm border border-white/10 shadow-xl backdrop-blur-xl'
-            }`}>
-            {msg.type === 'user' ? (
-              <span>{msg.text}</span>
-            ) : (
-              <FormattedChatMessage text={msg.text} />
-            )}
-          </div>
-        </div>
-      </motion.div>
-    ))}
+                    <div className={`p-4 rounded-2xl text-xs sm:text-[0.85rem] ${msg.type === 'user'
+                      ? 'bg-accent-warm text-white font-medium rounded-br-sm shadow-[0_4px_20px_rgba(255,122,69,0.35)]'
+                      : 'bg-white/[0.05] text-gray-200 rounded-bl-sm border border-white/10 shadow-xl backdrop-blur-xl'
+                      }`}>
+                      {msg.type === 'user' ? (
+                        <span>{msg.text}</span>
+                      ) : (
+                        <FormattedChatMessage text={msg.text} />
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
 
-    {isTyping && (
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex justify-start"
-      >
-        <div className="flex items-end gap-2.5 max-w-[85%]">
-          <div className="w-7 h-7 rounded-full bg-accent-warm/15 flex items-center justify-center shrink-0 mb-1 border border-accent-warm/30">
-            <AuraLogo size={15} />
-          </div>
-          <div className="p-3.5 rounded-2xl bg-white/[0.05] rounded-bl-sm border border-white/10 flex items-center gap-2 shadow-lg backdrop-blur-xl">
-            <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce" />
-            <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-            <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
-            <span className="text-[0.72rem] text-gray-400 font-sans font-medium ml-1">AURA is synthesizing answer...</span>
-          </div>
-        </div>
-      </motion.div>
-    )}
-    <div ref={messagesEndRef} />
-  </div>
+              {isTyping && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex justify-start"
+                >
+                  <div className="flex items-end gap-2.5 max-w-[85%]">
+                    <div className="w-7 h-7 rounded-full bg-accent-warm/15 flex items-center justify-center shrink-0 mb-1 border border-accent-warm/30">
+                      <AuraLogo size={15} />
+                    </div>
+                    <div className="p-3.5 rounded-2xl bg-white/[0.05] rounded-bl-sm border border-white/10 flex items-center gap-2 shadow-lg backdrop-blur-xl">
+                      <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce" />
+                      <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                      <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
+                      <span className="text-[0.72rem] text-gray-400 font-sans font-medium ml-1">AURA is synthesizing answer...</span>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
 
-  {/* Suggested Prompts Shelf */ }
-  {
-    messages.length <= 2 && (
-      <div className="px-5 py-3 border-t border-white/5 bg-white/[0.02]">
-        <p className="text-[0.68rem] text-gray-400 mb-2 flex items-center gap-1.5 font-sans font-semibold uppercase tracking-wider">
-          <Sparkles size={11} className="text-accent-warm" /> Suggested Queries
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {SUGGESTED_QUESTIONS.map((q, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleSend(q)}
-              disabled={isTyping}
-              className="text-[0.74rem] bg-white/[0.04] hover:bg-white/[0.09] border border-white/10 hover:border-accent-warm/50 hover:text-white text-gray-300 py-1.5 px-3 rounded-full transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-left cursor-pointer shadow-sm active:scale-95"
-            >
-              {q}
-            </button>
-          ))}
-        </div>
-      </div>
-    )
-  }
+            {/* Suggested Prompts Shelf */}
+            {
+              messages.length <= 2 && (
+                <div className="px-5 py-3 border-t border-white/5 bg-white/[0.02]">
+                  <p className="text-[0.68rem] text-gray-400 mb-2 flex items-center gap-1.5 font-sans font-semibold uppercase tracking-wider">
+                    <Sparkles size={11} className="text-accent-warm" /> Suggested Queries
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {SUGGESTED_QUESTIONS.map((q, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => handleSend(q)}
+                        disabled={isTyping}
+                        className="text-[0.74rem] bg-white/[0.04] hover:bg-white/[0.09] border border-white/10 hover:border-accent-warm/50 hover:text-white text-gray-300 py-1.5 px-3 rounded-full transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-left cursor-pointer shadow-sm active:scale-95"
+                      >
+                        {q}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )
+            }
 
-  {/* Input Bar */ }
-  <div className="p-3.5 bg-black/60 border-t border-white/10 flex items-center gap-2.5">
-    <input
-      ref={inputRef}
-      type="text"
-      value={input}
-      onChange={(e) => setInput(e.target.value)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' && !isTyping) {
-          handleSend(input);
-        }
-      }}
-      placeholder="Ask AURA about simplyAudio, backend stack, resume..."
-      disabled={isTyping}
-      className="flex-1 bg-white/[0.05] border border-white/10 focus:border-accent-warm/60 focus:bg-white/[0.08] rounded-full px-5 py-2.5 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none transition-all duration-200 disabled:opacity-50"
-    />
-    <button
-      onClick={() => handleSend(input)}
-      disabled={isTyping || !input.trim()}
-      className="p-3 rounded-full bg-accent-warm text-white hover:brightness-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shadow-[0_0_15px_rgba(255,122,69,0.35)] shrink-0"
-      aria-label="Send message"
-    >
-      <Send size={15} />
-    </button>
-  </div>
+            {/* Input Bar */}
+            <div className="p-3.5 bg-black/60 border-t border-white/10 flex items-center gap-2.5">
+              <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !isTyping) {
+                    handleSend(input);
+                  }
+                }}
+                placeholder="Ask AURA about simplyAudio, backend stack, resume..."
+                disabled={isTyping}
+                className="flex-1 bg-white/[0.05] border border-white/10 focus:border-accent-warm/60 focus:bg-white/[0.08] rounded-full px-5 py-2.5 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none transition-all duration-200 disabled:opacity-50"
+              />
+              <button
+                onClick={() => handleSend(input)}
+                disabled={isTyping || !input.trim()}
+                className="p-3 rounded-full bg-accent-warm text-white hover:brightness-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shadow-[0_0_15px_rgba(255,122,69,0.35)] shrink-0"
+                aria-label="Send message"
+              >
+                <Send size={15} />
+              </button>
+            </div>
           </motion.div >
         )
-}
+        }
       </AnimatePresence >
     </div >
   );
 }
+
