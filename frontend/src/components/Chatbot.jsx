@@ -575,47 +575,47 @@ const INITIAL_MESSAGES = [
   }
 ];
 
-// Dynamic section background alignment matching App.jsx dark obsidian color interpolation
+// Dynamic section background alignment with liquid-glass translucency
 const SECTION_THEMES = {
   hero: {
-    bgGlass: "bg-[#050508]/82",
-    headerBg: "bg-white/[0.02]",
-    inputBg: "bg-[#040407]/85",
+    bgGlass: "bg-[#050508]/70",
+    headerBg: "bg-white/[0.03]",
+    inputBg: "bg-[#040407]/60",
   },
   about: {
-    bgGlass: "bg-[#080811]/82",
-    headerBg: "bg-white/[0.02]",
-    inputBg: "bg-[#06060e]/85",
+    bgGlass: "bg-[#080811]/70",
+    headerBg: "bg-white/[0.03]",
+    inputBg: "bg-[#06060e]/60",
   },
   experience: {
-    bgGlass: "bg-[#0f0f15]/82",
-    headerBg: "bg-white/[0.02]",
-    inputBg: "bg-[#0a0a12]/85",
+    bgGlass: "bg-[#0f0f15]/70",
+    headerBg: "bg-white/[0.03]",
+    inputBg: "bg-[#0a0a12]/60",
   },
   projects: {
-    bgGlass: "bg-[#080b13]/82",
-    headerBg: "bg-white/[0.02]",
-    inputBg: "bg-[#060810]/85",
+    bgGlass: "bg-[#080b13]/70",
+    headerBg: "bg-white/[0.03]",
+    inputBg: "bg-[#060810]/60",
   },
   github: {
-    bgGlass: "bg-[#080b13]/82",
-    headerBg: "bg-white/[0.02]",
-    inputBg: "bg-[#060810]/85",
+    bgGlass: "bg-[#080b13]/70",
+    headerBg: "bg-white/[0.03]",
+    inputBg: "bg-[#060810]/60",
   },
   skills: {
-    bgGlass: "bg-[#080b13]/82",
-    headerBg: "bg-white/[0.02]",
-    inputBg: "bg-[#060810]/85",
+    bgGlass: "bg-[#080b13]/70",
+    headerBg: "bg-white/[0.03]",
+    inputBg: "bg-[#060810]/60",
   },
   newsletter: {
-    bgGlass: "bg-[#090d16]/82",
-    headerBg: "bg-white/[0.02]",
-    inputBg: "bg-[#070a13]/85",
+    bgGlass: "bg-[#090d16]/70",
+    headerBg: "bg-white/[0.03]",
+    inputBg: "bg-[#070a13]/60",
   },
   contact: {
-    bgGlass: "bg-[#050508]/82",
-    headerBg: "bg-white/[0.02]",
-    inputBg: "bg-[#040407]/85",
+    bgGlass: "bg-[#050508]/70",
+    headerBg: "bg-white/[0.03]",
+    inputBg: "bg-[#040407]/60",
   }
 };
 
@@ -732,27 +732,30 @@ export default function Chatbot() {
 
   return (
     <div className="chatbot-container">
-      {/* Floating Action Button: Matte Frosted Glass Orb */}
+      {/* Floating Action Button: Geometric Circular AI Orb */}
       <motion.button
-        className={`fixed bottom-6 right-6 w-14 h-14 sm:w-[56px] sm:h-[56px] rounded-full z-[10000] flex items-center justify-center text-white backdrop-blur-2xl bg-[#090b14]/90 border border-white/12 shadow-[0_10px_35px_rgba(0,0,0,0.65),0_0_15px_rgba(255,122,69,0.12)] transition-all duration-300 cursor-pointer ${
-          isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'
-        }`}
-        whileHover={{ scale: 1.08, rotate: 4, y: -2 }}
-        whileTap={{ scale: 0.94 }}
+        className={`fixed bottom-6 right-6 w-14 h-14 sm:w-[58px] sm:h-[58px] rounded-full z-[10000] flex items-center justify-center text-white backdrop-blur-2xl border border-white/25 ring-1 ring-accent-warm/40 transition-all duration-300 cursor-pointer shadow-[0_0_35px_rgba(234,88,12,0.6),0_12px_28px_rgba(0,0,0,0.65)] ${isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'
+          }`}
+        style={{
+          background: 'linear-gradient(135deg, rgba(255, 122, 69, 0.96) 0%, rgba(234, 88, 12, 0.96) 55%, rgba(194, 65, 12, 0.96) 100%)'
+        }}
+        whileHover={{ scale: 1.1, rotate: 6, y: -2 }}
+        whileTap={{ scale: 0.92 }}
         onClick={() => setIsOpen(true)}
         aria-label="Open AURA AI Assistant"
       >
-        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-white/[0.03] to-white/10 pointer-events-none" />
+        {/* Subtle Inner Optical Rim Flare */}
+        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-white/10 to-white/35 pointer-events-none" />
 
         <div className="relative flex items-center justify-center">
-          <AuraLogo size={25} className="text-accent-warm drop-shadow-[0_0_8px_rgba(255,122,69,0.35)]" />
+          <AuraLogo size={28} className="text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.85)]" />
           {/* Luminous Online Status Ping */}
-          <span className="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-[#090b14] shadow-[0_0_8px_#10b981]" />
+          <span className="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-[#06080f] shadow-[0_0_10px_#10b981]" />
           <span className="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-emerald-400 animate-ping opacity-75" />
         </div>
       </motion.button>
 
-      {/* Sculpted Architectural AURA Chatbot Modal Window: Matte Frosted Glass */}
+      {/* Sculpted Architectural AURA Chatbot Modal Window: Liquid-Glass Frosted */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -760,32 +763,31 @@ export default function Chatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 35, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 350, damping: 30 }}
-            className={`fixed bottom-4 sm:bottom-6 right-3 sm:right-6 ${theme.bgGlass} backdrop-blur-2xl border border-white/10 rounded-[28px] sm:rounded-[32px] rounded-br-[12px] sm:rounded-br-[16px] shadow-[0_20px_60px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.05)] z-[10000] flex flex-col overflow-hidden transition-colors duration-500 ${
-              isExpanded
+            className={`fixed bottom-4 sm:bottom-6 right-3 sm:right-6 ${theme.bgGlass} backdrop-blur-3xl backdrop-saturate-[140%] border border-white/[0.12] rounded-[28px] sm:rounded-[32px] rounded-br-[12px] sm:rounded-br-[16px] shadow-[0_24px_70px_rgba(0,0,0,0.75),inset_0_1px_1px_rgba(255,255,255,0.1)] z-[10000] flex flex-col overflow-hidden transition-colors duration-500 ${isExpanded
                 ? "w-[94vw] sm:w-[580px] md:w-[620px] h-[630px] sm:h-[650px] max-h-[88vh]"
                 : "w-[92vw] sm:w-[395px] md:w-[415px] h-[520px] sm:h-[545px] max-h-[82vh]"
-            }`}
+              }`}
           >
             {/* Sleek Executive AURA Header */}
-            <div className={`flex items-center justify-between px-4 py-3 sm:px-4.5 sm:py-3.5 border-b border-white/[0.07] ${theme.headerBg} backdrop-blur-md relative z-10 transition-colors duration-500`}>
+            <div className={`flex items-center justify-between px-4 py-3 sm:px-4.5 sm:py-3.5 border-b border-white/[0.08] ${theme.headerBg} backdrop-blur-md relative z-10 transition-colors duration-500`}>
               <div className="flex items-center gap-2.5">
                 <div className="relative flex items-center justify-center">
-                  <div className="w-8 h-8 rounded-xl bg-accent-warm/15 border border-accent-warm/25 flex items-center justify-center text-accent-warm shadow-sm">
-                    <AuraLogo size={20} />
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-accent-warm/25 via-accent-warm/10 to-transparent border border-accent-warm/40 flex items-center justify-center text-accent-warm shadow-[0_0_18px_rgba(255,122,69,0.35)]">
+                    <AuraLogo size={22} />
                   </div>
-                  <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-[#070912] shadow-[0_0_6px_#10b981]" />
+                  <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-[#06080f] shadow-[0_0_8px_#10b981]" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <h3 className="text-sm sm:text-base font-bold text-white tracking-tight font-display">
+                    <h3 className="text-sm sm:text-base font-black text-white tracking-tight font-display">
                       AURA
                     </h3>
-                    <span className="px-1.5 py-0.5 rounded-full text-[0.55rem] font-bold font-mono tracking-wider uppercase bg-accent-warm/15 text-accent-warm border border-accent-warm/25">
+                    <span className="px-1.5 py-0.5 rounded-full text-[0.58rem] font-bold font-mono tracking-wider uppercase bg-accent-warm/15 text-accent-warm border border-accent-warm/30 shadow-[0_0_8px_rgba(255,122,69,0.2)]">
                       AI
                     </span>
                   </div>
-                  <p className="text-[0.66rem] text-gray-400 font-sans flex items-center gap-1 mt-0.5">
-                    <span>Portfolio Assistant</span>
+                  <p className="text-[0.68rem] text-gray-400 font-sans flex items-center gap-1 mt-0.5">
+                    <span>Portfolio AI</span>
                     <span className="text-gray-600">•</span>
                     <span className="text-emerald-400 font-medium">Online</span>
                   </p>
@@ -819,7 +821,7 @@ export default function Chatbot() {
               </div>
             </div>
 
-            {/* Matte Frosted Messages Area */}
+            {/* Liquid-Glass Frosted Messages Area */}
             <div className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-3.5 custom-scrollbar bg-transparent z-10">
               {messages.map((msg, idx) => (
                 <motion.div
@@ -831,20 +833,18 @@ export default function Chatbot() {
                 >
                   <div className={`flex items-end gap-2 max-w-[94%] sm:max-w-[88%] ${msg.type === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                     {/* Avatar */}
-                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mb-1 transition-all ${
-                      msg.type === 'user'
-                        ? 'bg-accent-warm text-white shadow-sm'
-                        : 'bg-white/10 text-accent-warm border border-white/15'
-                    }`}>
+                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mb-1 transition-all ${msg.type === 'user'
+                        ? 'bg-gradient-to-br from-accent-warm to-[#ea580c] text-white shadow-[0_0_10px_rgba(255,122,69,0.4)]'
+                        : 'bg-accent-warm/15 text-accent-warm border border-accent-warm/35 shadow-[0_0_12px_rgba(255,122,69,0.25)]'
+                      }`}>
                       {msg.type === 'user' ? <User size={14} /> : <AuraLogo size={16} />}
                     </div>
 
                     {/* Message Bubble Card */}
-                    <div className={`text-xs sm:text-[0.82rem] ${
-                      msg.type === 'user'
-                        ? 'bg-accent-warm text-white font-medium rounded-2xl rounded-tr-xs shadow-md px-3.5 py-2.5'
-                        : 'bg-white/[0.04] hover:bg-white/[0.055] text-gray-200 rounded-2xl rounded-tl-xs border border-white/[0.08] shadow-sm p-3.5 sm:p-4 transition-all leading-relaxed'
-                    }`}>
+                    <div className={`text-xs sm:text-[0.82rem] ${msg.type === 'user'
+                        ? 'bg-gradient-to-r from-[#ff7a45] via-[#ea580c] to-[#d9480f] text-white font-medium rounded-2xl rounded-tr-xs shadow-[0_4px_20px_rgba(255,122,69,0.35)] px-3.5 py-2.5'
+                        : 'bg-white/[0.045] hover:bg-white/[0.06] text-gray-200 rounded-2xl rounded-tl-xs border border-white/[0.08] shadow-sm backdrop-blur-md p-3.5 sm:p-4 transition-all leading-relaxed'
+                      }`}>
                       {msg.type === 'user' ? (
                         <span className="leading-relaxed">{msg.text}</span>
                       ) : (
@@ -862,14 +862,14 @@ export default function Chatbot() {
                   className="flex justify-start"
                 >
                   <div className="flex items-end gap-2 max-w-[85%]">
-                    <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center shrink-0 mb-1 border border-white/15 text-accent-warm">
+                    <div className="w-7 h-7 rounded-lg bg-accent-warm/15 flex items-center justify-center shrink-0 mb-1 border border-accent-warm/35 shadow-[0_0_12px_rgba(255,122,69,0.2)]">
                       <AuraLogo size={16} />
                     </div>
-                    <div className="p-3 rounded-2xl rounded-tl-xs bg-white/[0.04] border border-white/[0.08] flex items-center gap-2 shadow-sm">
+                    <div className="p-3 rounded-2xl rounded-tl-xs bg-white/[0.04] border border-white/[0.08] flex items-center gap-2 shadow-sm backdrop-blur-md">
                       <div className="flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce" />
-                        <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-                        <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
+                        <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce shadow-[0_0_6px_#ff7a45]" />
+                        <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce shadow-[0_0_6px_#ff7a45]" style={{ animationDelay: '0.2s' }} />
+                        <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce shadow-[0_0_6px_#ff7a45]" style={{ animationDelay: '0.4s' }} />
                       </div>
                       <span className="text-[0.7rem] text-gray-300 font-sans font-medium">AURA is synthesizing...</span>
                     </div>
@@ -879,8 +879,8 @@ export default function Chatbot() {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input Bar: Matte Frosted Glass */}
-            <div className={`p-3 sm:p-3.5 ${theme.inputBg} border-t border-white/[0.07] backdrop-blur-xl z-10 transition-colors duration-500`}>
+            {/* Input Bar: Liquid-Glass Frosted */}
+            <div className={`p-3 sm:p-3.5 ${theme.inputBg} border-t border-white/[0.08] backdrop-blur-2xl z-10 transition-colors duration-500`}>
               <div className="flex items-center gap-2 relative">
                 <div className="relative flex-1">
                   <Sparkles className="w-3.5 h-3.5 text-accent-warm/60 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
