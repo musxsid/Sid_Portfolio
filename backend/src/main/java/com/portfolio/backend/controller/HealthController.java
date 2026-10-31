@@ -15,7 +15,7 @@ import java.util.Map;
 @RestController
 public class HealthController {
 
-    @GetMapping({"/health", "/api/public/health"})
+    @GetMapping({"/health", "/healthz", "/api/public/health"})
     public ResponseEntity<Map<String, String>> healthCheck() {
         return ResponseEntity.ok(Collections.singletonMap("status", "UP"));
     }
