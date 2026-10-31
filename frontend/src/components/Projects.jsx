@@ -33,120 +33,6 @@ const LANGUAGE_STYLES = new Proxy({}, {
   get: () => UNIFIED_LANG_STYLE
 });
 
-// Hand-crafted engineering highlights for all GitHub repositories
-const PROJECT_HIGHLIGHTS = {
-  simplyaudio: [
-    { label: "Event-Driven Broker", text: "Asynchronous RabbitMQ message queues decoupling audio ingestion from real-time analytics." },
-    { label: "Unified SSO Gateway", text: "Centralized Keycloak OAuth2/OIDC single sign-on with token inspection and RBAC policies." },
-    { label: "Containerized Mesh", text: "Docker Compose multi-service architecture isolating streaming endpoints, databases, and worker nodes." }
-  ],
-  "supervisor-feedback-analyzer": [
-    { label: "Local LLM Inference", text: "Structured prompt pipelines utilizing Llama 3.2 via Ollama and Spring AI for deterministic local execution." },
-    { label: "Strict Schema Extraction", text: "Guarantees hallucination-free KPI scores, evidence mapping, and leadership competency matrices." },
-    { label: "Analytics Dashboard", text: "Interactive scoring, gap analysis radar charts, and personalized developmental trajectory paths." }
-  ],
-  simplymusic: [
-    { label: "Identity & Access", text: "Centralized OpenID Connect and OAuth2 single sign-on powered by Keycloak with RBAC policies." },
-    { label: "Media Storage", text: "High-throughput audio streaming and asset chunking partitioned across MinIO S3 object stores." },
-    { label: "Data Ingestion", text: "Decoupled catalog indexing in MongoDB with sub-10ms Redis caching for instant playlist retrieval." }
-  ],
-  sid_portfolio: [
-    { label: "Live GitHub Ingestion", text: "Scheduled background cache layer synchronizing authentic repositories and contribution calendar." },
-    { label: "Liquid Optics Shader", text: "Hardware-accelerated 2D canvas simulating fluid caustics, floating embers, and refractive waves." },
-    { label: "Build Toolchain", text: "Zero-runtime CSS with Tailwind v4, Vite 8 bundle pipeline, and strict semantic HTML5 architecture." }
-  ],
-  "omnistay-erp": [
-    { label: "Relational Folio Ledger", text: "Multi-tenant folio billing engine processing room charges, restaurant POS tabs, and payments with ACID guarantees." },
-    { label: "Inventory Matrix", text: "Dynamic room availability grids, automated night audit batch processing, and guest check-in state machines." },
-    { label: "AI Review Analysis", text: "Spring Boot AI integration extracting structured guest sentiments and operational metrics." }
-  ],
-  "gibs-git_in_bits-main": [
-    { label: "Git Telemetry Sync", text: "Event ingestion pipeline pooling commits, pull requests, and CI/CD runs into MongoDB document stores." },
-    { label: "AI Briefing Engine", text: "Real-time velocity metrics and sprint summaries generated via Groq-accelerated Llama 3.3 70B models." },
-    { label: "Reactive Frontend", text: "TanStack Query and React 19 dashboard rendering real-time engineering velocity and health charts." }
-  ],
-  docuvault: [
-    { label: "Vector Pipeline", text: "Chunking and vectorization pipeline transforming multi-format documents into searchable semantic embeddings." },
-    { label: "Asynchronous API", text: "High-throughput FastAPI backend with background ingestion workers and deterministic similarity search." },
-    { label: "Cryptographic Storage", text: "Encrypted asset repositories with metadata indexing and token-based download expirations." }
-  ],
-  triage: [
-    { label: "Incident Dispatch", text: "Priority scoring engine dynamically clustering incident tickets and routing tasks to specialized responders." },
-    { label: "State Evaluation", text: "Real-time state machine evaluating SLA thresholds, escalations, and automated alerts." },
-    { label: "Queue Workers", text: "Concurrency-tuned background workers processing task assignment streams without race conditions." }
-  ],
-  jobhive: [
-    { label: "Relational Domain", text: "Normalized SQL Server schema optimized for multi-parameter vacancy filtering and applications." },
-    { label: "Typed Queries", text: "Robust .NET Core MVC architecture utilizing Entity Framework Core for deterministic query generation." },
-    { label: "Recruiter Workflows", text: "Recruiter and applicant dashboards tracking real-time candidate pipelines and hiring stages." }
-  ],
-  "go-auth-postgres": [
-    { label: "Sub-5ms Latency", text: "High-concurrency Go HTTP service engineered with tuned pgx connection pools and zero heap bloat." },
-    { label: "Cryptographic Auth", text: "Password hashing via Argon2id with RS256 asymmetric JWT key signing and token blacklisting." },
-    { label: "Cloud Native", text: "Containerized Docker microservice with structured logging, health probes, and graceful termination." }
-  ],
-  "omni-ride": [
-    { label: "Geo-Spatial Dispatch", text: "Proximity matching engine indexing real-time driver coordinates for sub-second ride allocation." },
-    { label: "Fare Calculation", text: "Dynamic surge pricing matrices computed across historical demand curves and distance vectors." },
-    { label: "State Machine", text: "Transaction-safe ride lifecycle transitions from booking and pickup to drop-off and payment capture." }
-  ],
-  superutility: [
-    { label: "Concurrency Utilities", text: "High-performance Kotlin coroutine dispatchers and parallel task aggregation primitives." },
-    { label: "System Diagnostics", text: "Cross-platform hardware telemetry probes measuring memory footprint, CPU load, and I/O latency." },
-    { label: "Stream Processors", text: "Zero-copy byte stream utilities optimizing file compression and network packet handling." }
-  ],
-  "data-structures-and-algorithms": [
-    { label: "Asymptotic Benchmarking", text: "Empirical runtime profiling and memory optimization across complex tree and graph data structures." },
-    { label: "Advanced Algorithms", text: "Clean implementations of network flow, dynamic programming, topological sorts, and disjoint sets." },
-    { label: "Test Rigor", text: "Unit test coverage verifying edge cases, recursion depth limits, and algorithmic correctness." }
-  ],
-  "news-aggregator": [
-    { label: "Multi-Provider Ingestion", text: "Parallel asynchronous fetching across global RSS channels and third-party news REST endpoints." },
-    { label: "De-duplication", text: "Content fingerprinting algorithm filtering out duplicate wire reports and press releases." },
-    { label: "In-Memory Cache", text: "Tiered client-side caching guaranteeing instant feed delivery and offline resilience." }
-  ],
-  "next-movieapp": [
-    { label: "Server-Side Rendering", text: "Next.js streaming architecture providing sub-second Time-to-First-Byte for media catalogs." },
-    { label: "Dynamic Filtering", text: "Multi-parameter search and genre matrix filters backed by TMDB API pagination." },
-    { label: "Responsive UI", text: "Tailwind CSS fluid media carousels and modal trailers engineered for desktop and touch screens." }
-  ],
-  "cia-restaurant-website": [
-    { label: "Hospitality UX", text: "Interactive menu categorization with dietary tag filters and chef specials showcases." },
-    { label: "Table Reservation", text: "Validation-hardened booking workflows capturing seating preferences and time slot availability." },
-    { label: "Micro-Interactions", text: "Lightweight CSS animations delivering a luxury culinary dining brand experience." }
-  ]
-};
-
-// Dynamic fallback highlights for any repository (current or future live additions)
-function getProjectHighlights(project) {
-  if (!project) return [];
-  const pId = (project.id || "").toLowerCase();
-  const pName = (project.name || "").toLowerCase();
-  
-  const key = Object.keys(PROJECT_HIGHLIGHTS).find(
-    k => pId.includes(k) || pName.includes(k) || k.includes(pId)
-  );
-
-  if (key && PROJECT_HIGHLIGHTS[key]) {
-    return PROJECT_HIGHLIGHTS[key];
-  }
-
-  return [
-    {
-      label: "Architecture & Systems",
-      text: project.description || "Engineered with modular, decoupled architecture and production-grade reliability."
-    },
-    {
-      label: "Primary Runtime & Stack",
-      text: `Engineered using ${project.language || "modern standards"} with ${project.techStack?.slice(0, 4).join(", ") || "cloud-native patterns"}.`
-    },
-    {
-      label: "Open Source Cadence",
-      text: "Continuous delivery and git commit telemetry synchronized live from GitHub."
-    }
-  ];
-}
-
 function ProjectStagePreview({ project, images, title }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -387,7 +273,6 @@ export default function Projects() {
     }
   };
 
-  const currentHighlights = getProjectHighlights(activeProject);
   const displayedProjects = isExpanded ? projects : projects.slice(0, 5);
 
   const langStyle = activeProject?.language
@@ -569,18 +454,10 @@ export default function Projects() {
                         {activeProject.tagline}
                       </p>
 
-                      {/* Hand-Crafted Architectural Highlights (Clean 3-item list) */}
-                      <div className="space-y-3 mb-6">
-                        {currentHighlights.map((highlight, hIdx) => (
-                          <div key={hIdx} className="flex items-start gap-2.5 text-xs sm:text-[0.82rem] leading-relaxed text-gray-300">
-                            <span className="w-1.5 h-1.5 rounded-full bg-accent-warm shrink-0 mt-1.5 shadow-[0_0_6px_#ff7a45]" />
-                            <span>
-                              <strong className="text-white font-semibold">{highlight.label}:</strong>{" "}
-                              <span className="font-light text-gray-300">{highlight.text}</span>
-                            </span>
-                          </div>
-                        ))}
-                      </div>
+                      {/* Application Overview (from GitHub Repository Description) */}
+                      <p className="text-xs sm:text-[0.85rem] text-gray-300 font-light leading-relaxed mb-6">
+                        {activeProject.description || "Production-grade system architected with modular microservices, decoupled endpoints, and resilient database persistence."}
+                      </p>
                     </div>
 
                     <div>
