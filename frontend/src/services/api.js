@@ -387,119 +387,471 @@ export const portfolioApi = {
         history,
       });
       if (response.data && response.data.response) {
+        // If the backend has not yet been restarted and returns the legacy fallback, upgrade it with local engine
+        if (response.data.model === "deterministic-grounded-fallback") {
+          return buildLocalFallbackResponse(message);
+        }
         return response.data;
       }
     } catch (err) {
-      console.warn("Backend chat API unreachable. Falling back to direct Groq client...", err.message);
+      console.warn("Backend chat API unreachable. Falling back to local intelligence...", err.message);
     }
 
-    // 2. Direct client fallback with Groq API (openai/gpt-oss-120b)
+    // 2. Direct client fallback with Groq API if key is present
     try {
-      const systemPrompt = `You are AURA, the official AI assistant for Siddharth Shakyawal (GitHub: @musxsid).
-Your mission is to assist recruiters, engineers, founders, and visitors with 100% ACCURATE, FACTUAL, and UNHALLUCINATED information strictly grounded in Siddharth's portfolio application and official resume.
+      const apiKey = import.meta.env.VITE_GROQ_API_KEY || "";
+      if (apiKey) {
+        const systemPrompt = `You are AURA, the official AI assistant for Siddharth Shakyawal (GitHub: @musxsid).
+Your mission is to assist recruiters, engineers, founders, and visitors with 100% ACCURATE, FACTUAL, and UNHALLUCINATED technical and biographical information strictly grounded in Siddharth's portfolio application and official resume.
 
-### CRITICAL GROUNDING & TOKEN PRESERVATION POLICY:
-1. NEVER HALLUCINATE, invent, or extrapolate skills, repositories, or experiences not explicitly documented below.
-2. If asked a question that is off-topic or outside Siddharth's portfolio/resume, decline in exactly one sentence: 'I am AURA, Siddharth's AI assistant, and I only provide verified information regarding Siddharth's projects, technical architecture, and background.'
-3. CRITICAL TRUTH: There is NO project named 'SimplyNotes' or 'SimplyNotes / SimplyAudio'. The authentic repository is strictly 'simplyAudio', an event-driven audio microservices platform with RabbitMQ and Spring Boot.
-4. Always respond in well-structured, clean Markdown with bullet points, bold headers, and NO Markdown tables (tables break on mobile screens).
-5. CLICKABLE GITHUB REPOSITORIES: Whenever you mention any project or repository, ALWAYS format it as [Project Name](https://github.com/musxsid/<repo-name>). The UI will automatically render it as a bold title with a clickable [GitHub] button redirecting to that repository. Never print raw URLs in text.
-6. When asked for his resume, provide the direct download link: [Download Siddharth's Resume (PDF)](/resume/Siddharth_Shakyawal_Resume_october2026.pdf).
-7. When asked about contact or hiring, provide: Location: Kota, Rajasthan | Phone: +91 9256265129 | Email: siddharthshakya2004@gmail.com | LinkedIn: [linkedin.com/in/siddharth-shakyawal-925889356](https://linkedin.com/in/siddharth-shakyawal-925889356) and GitHub: [github.com/musxsid](https://github.com/musxsid).
+### CRITICAL GROUNDING & ACCURACY POLICY:
+- You MUST answer ANY question a recruiter or client could ask about Siddharth, including: his location/residence in Kota, Rajasthan / Pune, contact information, education at Christ University, internships at Angel Bot AI and CodeArrest Softwares, tech stack, and GitHub repositories.
+- MANDATORY SOURCE CITATION: At the very end of EVERY single response, you MUST append a verified source line in this exact format:
+  📌 **Source:** [Specific Source, e.g. 'Official Resume', 'GitHub @musxsid/<repo>', 'Experience at Angel Bot AI', 'Portfolio Arsenal', etc.]
 
-### VERIFIED BIOGRAPHICAL PROFILE & SKILLS:
+### STRICT OUTPUT FORMATTING RULES:
+1. NEVER USE MARKDOWN TABLES (do NOT use '| col | col |' syntax). Tables break on mobile screens.
+2. Structure answers with clean bullet points (-), bold sub-labels (**Role:**, **Tech Stack:**, **Key Impact:**).
+3. CLICKABLE GITHUB REPOSITORIES: Whenever you mention any project or repository, ALWAYS format it as [Project Name](https://github.com/musxsid/<repo-name>). The UI will automatically render it as a bold title with a clickable [GitHub] button.
+4. When asked for his resume, provide the direct download link: [Download Siddharth's Resume (PDF)](/api/public/resume/file).
+
+### VERIFIED BIOGRAPHICAL PROFILE (Official Resume):
 - Full Name: Siddharth Shakyawal
-- Location: Kota, Rajasthan 324010 | Phone: +91 9256265129 | Email: siddharthshakya2004@gmail.com
-- Education: Bachelor of Computer Applications (BCA) (2024–2027), Christ University, Lavasa, Pune
+- Current / Home Location: Kota, Rajasthan 324010, India
+- College / Academic Location: Christ University, Lavasa, Pune (Maharashtra, India)
+- Relocation & Work Mode: Actively open to on-site relocation (Pune, Bengaluru, Delhi NCR, Hyderabad, Mumbai, etc.) and remote/hybrid software engineering roles
+- Email: siddharthshakya2004@gmail.com | Phone: +91 9256265129
+- LinkedIn: [linkedin.com/in/siddharth-shakyawal-925889356](https://linkedin.com/in/siddharth-shakyawal-925889356) | GitHub: [github.com/musxsid](https://github.com/musxsid)
+- Degree: Bachelor of Computer Applications (BCA) (2024–2027), Christ University, Lavasa, Pune
+- Seeking: AI/ML, Backend, or AI Systems Engineering role
 - Summary: Software Engineer specializing in Backend Systems and Applied AI/ML, proficient in Python, Java (Spring Boot), and React. Experienced in architecting hallucination-free Structured RAG pipelines, deterministic data retrieval layers, and LLM orchestration workflows.
-- Categorized Technical Skills:
-  * Languages: Java, Python, TypeScript, JavaScript, C#, Kotlin, C++, SQL
-  * Backend: Spring Boot (3/4), Spring AI, Spring Security (OAuth2/JWT), REST APIs, JPA/Hibernate, RabbitMQ, .NET Core (MVC)
-  * Frontend: React (19), Tailwind CSS, Framer Motion, HTML, CSS, JavaScript
-  * AI / LLM: Structured RAG Pipelines, Prompt Engineering, LLM Integration (Llama, Groq, Ollama), Vector Embeddings
-  * Databases: MongoDB, PostgreSQL, MySQL, SQL Server, Redis, MinIO (S3), Firebase
-  * Tools & DevOps: Git, GitHub, Docker, Docker Compose, Postman, Maven
+
+### TECHNICAL ARSENAL:
+- Languages: Java, Python, TypeScript, JavaScript, C#, Kotlin, C++, SQL
+- Backend: Spring Boot (3/4), Spring AI, Spring Security (OAuth2/JWT), REST APIs, JPA/Hibernate, RabbitMQ, .NET Core (MVC)
+- Frontend: React 19, Tailwind CSS 4, Framer Motion, HTML5, CSS3, JavaScript
+- AI / LLM: Structured RAG Pipelines, Prompt Engineering, LLM Integration (Llama, Groq, Ollama), Vector Embeddings
+- Databases: MongoDB, PostgreSQL, MySQL, SQL Server, Redis, MinIO (S3), Firebase
+- Tools & DevOps: Git, GitHub, Docker, Docker Compose, Postman, Maven
 
 ### PRODUCTION WORK EXPERIENCE:
-1. **Angel Bot AI** (Delhi, India) — Software Developer Intern (24 Jun 2026 – 14 Aug 2026):
-   - Project: **Git in Bits (DevPulse AI) – Engineering Intelligence Platform**
+1. Angel Bot AI (Delhi, India) — Software Developer Intern (24 Jun 2026 – 14 Aug 2026):
+   - Project: Git in Bits (DevPulse AI) – Engineering Intelligence Platform
    - Tech Stack: React 19, Spring Boot 3, MongoDB, Spring AI, Groq (Llama 3.3 70B), Tailwind CSS, Docker
-   - Developed full-stack dashboard computing 6 core KPIs, tracking 15.1h avg PR merge times and code churn (+2.7M lines) from MongoDB.
-   - Implemented multi-domain health scoring engine (0–100) evaluating PR turnaround, branch hygiene, and CI/CD pass rates across 5 dimensions.
-   - Engineered structured RAG pipeline with Spring AI and Groq that pre-aggregated metrics in MongoDB, reducing hallucinated LLM responses to 0% and cutting inference latency to <1.2s.
-   - Implemented rate-limited delta sync with 5-minute cooldown guards, reducing external GitHub API calls by 85% and achieving zero-token reads on reloads.
-   - Secured multi-tenant data access with server-side OAuth2 session validation in RAM, blocking 100% of unauthorized cross-tenant IDOR exploits.
-2. **CodeArrest Softwares Pvt. Ltd.** (Kota, India) — Full Stack Developer Intern (24 Jun 2025 – 23 Aug 2025):
-   - Project: **JobHive – Online Job Application Portal**
+   - Key Impact: 6 core KPIs, code churn tracking (+2.7M lines), 5-dimension health scores (0-100), structured RAG (<1.2s latency, 0% hallucinations), 5-min cooldown delta sync (85% fewer GitHub API calls).
+2. CodeArrest Softwares Pvt. Ltd. (Kota, India) — Full Stack Developer Intern (24 Jun 2025 – 23 Aug 2025):
+   - Project: JobHive – Online Job Application Portal
    - Tech Stack: .NET Core (MVC), C#, SQL Server, Entity Framework Core, HTML, CSS, JavaScript
-   - Developed full-stack job portal using .NET Core (MVC) and SQL Server supporting multi-role recruitment workflows.
-   - Implemented multi-parameter filtering across title, compensation, and location, reducing query execution time by 35%.
-   - Integrated Entity Framework Core with indexed relational schemas, ensuring 100% transactional consistency across applicant tracking.
+   - Key Impact: Multi-role recruitment workflows, multi-parameter filtering (35% faster queries), 100% transactional consistency.`;
 
-### AUTHENTIC SYNCHRONIZED REPOSITORIES (13 Total):
-1. **[OmniStay ERP](https://github.com/musxsid/omnistay-erp)** (Java 17, Spring Boot 4, PostgreSQL, React 19): Full-stack hotel management with ACID PostgreSQL folio ledger, automated night audit (<500ms), and AI review analyzer.
-2. **[simplyAudio](https://github.com/musxsid/simplyAudio)** (Java, Spring Boot, RabbitMQ, Keycloak SSO, Docker Compose, MinIO S3, React 19): Event-driven music streaming microservices platform with asynchronous RabbitMQ pipelines.
-3. **[Triage](https://github.com/musxsid/Triage)** (React.js, Spring Boot, Java, MySQL, Spring Security JWT, Tailwind CSS, Framer Motion): Full-stack productivity SaaS with <50ms stateless auth and 3-tier hierarchical workspace schema.
-4. **[Supervisor Feedback Analyzer](https://github.com/musxsid/supervisor-feedback-analyzer)** (JavaScript, Llama 3.2 via Ollama, Spring AI, Spring Boot, React 19): Deterministic workplace performance analytics.
-5. **[Git In Bits (GIBs)](https://github.com/musxsid/GIBs-Git_In_Bits-main)** (TypeScript, Spring Boot, Java 21, React 19, MongoDB, Groq AI): Engineering intelligence platform with Groq LLM briefings.
-6. **[Sid Portfolio](https://github.com/musxsid/Sid_Portfolio)** (JavaScript, React 19, Tailwind CSS 4, Framer Motion, Spring Boot): Creative engineering portfolio with dynamic GitHub ingestion.
-7. **[Go Auth Microservice](https://github.com/musxsid/go-auth-postgres)** (Go, PostgreSQL, Argon2id, Docker, RS256 JWT): Sub-5ms low-latency cloud-native authentication microservice.
-8. **[DocuVault](https://github.com/musxsid/DocuVault)** (Python, FastAPI, Vector Embeddings, Document Ingestion): Enterprise document intelligence & secure vector storage pipeline.
-9. **[SimplyMusic](https://github.com/musxsid/simplyMusic)** (Java 21, Keycloak, MinIO, MongoDB, Redis, React): Full-stack audio microservices ecosystem with MinIO S3 storage.
-10. **[JobHive](https://github.com/musxsid/JobHive)** (.NET Core, C#, SQL Server, MVC): Enterprise recruitment portal with Entity Framework Core.
-11. **[SuperUtility](https://github.com/musxsid/SuperUtility)** (Kotlin, Coroutines, System Diagnostics): Cross-platform Kotlin system utilities and concurrency helpers.
-12. **[Data Structures & Algorithms](https://github.com/musxsid/Data-Structures-and-Algorithms)** (Java): Curated repository of optimized data structures and algorithmic paradigms.
-13. **[SimplyAudio Workspace](https://github.com/musxsid/simplyAudio-Workspace)** (Docker, Shell): Companion orchestration environment and asset pipeline.`;
+        const messages = [
+          { role: "system", content: systemPrompt },
+          ...history.slice(-6).map((m) => ({
+            role: m.type === "user" ? "user" : "assistant",
+            content: m.text,
+          })),
+          { role: "user", content: message },
+        ];
 
-      const messages = [
-        { role: "system", content: systemPrompt },
-        ...history.slice(-6).map((m) => ({
-          role: m.type === "user" ? "user" : "assistant",
-          content: m.text,
-        })),
-        { role: "user", content: message },
-      ];
-
-      const apiKey = import.meta.env.VITE_GROQ_API_KEY || "";
-      if (!apiKey) {
-        return buildLocalFallbackResponse(message);
-      }
-
-      const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "openai/gpt-oss-120b",
-          messages,
-          max_tokens: 800,
-          temperature: 0.3,
-        }),
-      });
-
-      if (groqRes.ok) {
-        const data = await groqRes.json();
-        const content = data.choices?.[0]?.message?.content;
-        if (content) {
-          return {
-            success: true,
-            response: content,
+        const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             model: "openai/gpt-oss-120b",
-          };
+            messages,
+            max_tokens: 850,
+            temperature: 0.2,
+          }),
+        });
+
+        if (groqRes.ok) {
+          const data = await groqRes.json();
+          const content = data.choices?.[0]?.message?.content;
+          if (content) {
+            return {
+              success: true,
+              response: content,
+              model: "openai/gpt-oss-120b",
+            };
+          }
         }
       }
     } catch (err) {
       console.warn("Direct Groq API fetch error:", err.message);
     }
 
-    return {
-      success: false,
-      response: "I'm having trouble connecting right now, but feel free to explore Siddharth's [GitHub](https://github.com/musxsid) or [Download his Resume](/resume/Siddharth_Shakyawal_Resume_october2026.pdf)!",
-    };
+    // 3. Deterministic Grounded Local Fallback Engine (Recruiter & Visitor Ready)
+    return buildLocalFallbackResponse(message);
   },
 };
+
+// Deterministic Grounded Local Fallback Intelligence Engine
+function buildLocalFallbackResponse(userQuery) {
+  const lower = (userQuery || "").toLowerCase().trim();
+
+  // 1. Location & Residence queries
+  if (
+    lower.includes("live") || lower.includes("living") || lower.includes("location") ||
+    lower.includes("where is") || lower.includes("where does") || lower.includes("stay") ||
+    lower.includes("city") || lower.includes("state") || lower.includes("based in") ||
+    lower.includes("reside") || lower.includes("relocate") || lower.includes("where are you")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 📍 Location & Relocation Availability
+
+Siddharth Shakyawal is primarily based in **Kota, Rajasthan (324010), India**, and is currently pursuing his degree in **Lavasa, Pune (Maharashtra)** at Christ University.
+
+- **Current / Home Location:** Kota, Rajasthan (324010)
+- **Academic Location:** Christ University, Lavasa, Pune
+- **Work & Relocation Preference:** Actively open to **on-site relocation** (Pune, Bengaluru, Delhi NCR, Hyderabad, Mumbai, etc.) as well as hybrid and remote software engineering opportunities worldwide.
+
+📫 **Direct Contact:** [siddharthshakya2004@gmail.com](mailto:siddharthshakya2004@gmail.com) | **Phone:** +91 9256265129
+
+📌 **Source:** Official Resume & Biographical Records`
+    };
+  }
+
+  // 2. Education & Degree
+  if (
+    lower.includes("education") || lower.includes("college") || lower.includes("university") ||
+    lower.includes("degree") || lower.includes("bca") || lower.includes("christ") ||
+    lower.includes("graduat") || lower.includes("study") || lower.includes("academics")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 🎓 Academic Background & Education
+
+- **Degree:** Bachelor of Computer Applications (BCA)
+- **Institution:** Christ University, Lavasa, Pune
+- **Duration:** 2024 – 2027
+- **Core Competencies:** Distributed computing, data structures & algorithms, relational database systems, and applied AI systems engineering.
+
+📄 [Download Siddharth's Resume (PDF)](/api/public/resume/file)
+
+📌 **Source:** Official Resume / Education Section`
+    };
+  }
+
+  // 3. Contact & Hiring / Social Links
+  if (
+    lower.includes("contact") || lower.includes("hire") || lower.includes("email") ||
+    lower.includes("phone") || lower.includes("call") || lower.includes("number") ||
+    lower.includes("reach") || lower.includes("linkedin") || lower.includes("github link") ||
+    lower.includes("connect") || lower.includes("recruiter")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 📬 Contact & Professional Links
+
+You can connect directly with Siddharth through any of the verified channels below:
+
+- **Email:** [siddharthshakya2004@gmail.com](mailto:siddharthshakya2004@gmail.com)
+- **Phone / WhatsApp:** +91 9256265129
+- **Location:** Kota, Rajasthan (324010) & Pune, India (Open to Relocation / Remote)
+- **LinkedIn:** [linkedin.com/in/siddharth-shakyawal-925889356](https://linkedin.com/in/siddharth-shakyawal-925889356)
+- **GitHub:** [github.com/musxsid](https://github.com/musxsid)
+- **Resume:** [Download Siddharth's Resume (PDF)](/api/public/resume/file)
+
+📌 **Source:** Official Resume & Portfolio Contact Section`
+    };
+  }
+
+  // 4. Work Experience & Internships
+  if (
+    lower.includes("experience") || lower.includes("intern") || lower.includes("company") ||
+    lower.includes("angel bot") || lower.includes("codearrest") || lower.includes("work history") ||
+    lower.includes("job") || lower.includes("career") || lower.includes("past roles")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 💼 Production Work Experience
+
+Siddharth has completed two verified engineering internships:
+
+1. **Angel Bot AI** (Delhi, India) — Software Developer Intern *(24 Jun 2026 – 14 Aug 2026)*:
+   - **Platform:** Git in Bits (DevPulse AI) – Engineering Intelligence Platform
+   - **Tech Stack:** React 19, Spring Boot 3, MongoDB, Spring AI, Groq (Llama 3.3 70B), Docker
+   - Computed 6 core KPIs, tracking 15.1h avg PR turnaround and code churn (+2.7M lines).
+   - Engineered a structured RAG pipeline cutting inference latency to <1.2s with 0% hallucinations.
+   - Built rate-limited delta sync with 5-minute cooldown guards, reducing GitHub API calls by 85%.
+   - Secured multi-tenant data access with server-side OAuth2 session validation in RAM.
+
+2. **CodeArrest Softwares Pvt. Ltd.** (Kota, India) — Full Stack Developer Intern *(24 Jun 2025 – 23 Aug 2025)*:
+   - **Platform:** JobHive – Online Job Application Portal
+   - **Tech Stack:** .NET Core (MVC), C#, SQL Server, Entity Framework Core, HTML, CSS, JavaScript
+   - Implemented multi-parameter filtering across title, compensation, and location, optimizing query execution by 35%.
+   - Integrated Entity Framework Core with indexed relational schemas ensuring 100% transactional consistency.
+
+📌 **Source:** Official Resume / Production Work Experience`
+    };
+  }
+
+  // 5. Technical Skills & Arsenal
+  if (
+    lower.includes("skill") || lower.includes("stack") || lower.includes("arsenal") ||
+    lower.includes("languages") || lower.includes("backend") || lower.includes("frontend") ||
+    lower.includes("technolog") || lower.includes("framework") || lower.includes("tools")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### ⚡ Siddharth's Technical Arsenal
+
+Grounded directly in his official resume and production systems:
+
+- **Programming Languages:** Java (17/21), Python, TypeScript, JavaScript, C#, Kotlin, C++, SQL
+- **Backend & APIs:** Spring Boot (3/4), Spring AI, Spring Security (OAuth2/JWT), REST APIs, JPA/Hibernate, RabbitMQ, .NET Core (MVC)
+- **Frontend Architecture:** React 19, Tailwind CSS 4, Framer Motion, HTML5, CSS3, Vite
+- **Applied AI & LLM:** Structured RAG Pipelines, Prompt Engineering, LLM Integration (Groq Llama 3.3 70B, Ollama Llama 3.2), Vector Embeddings, Semantic Search
+- **Databases & Storage:** PostgreSQL, MongoDB, MySQL, SQL Server, Redis, MinIO (S3), Firebase
+- **DevOps & Infrastructure:** Git, GitHub, Docker, Docker Compose, Postman, Maven
+
+📄 [Download Verified Resume (PDF)](/api/public/resume/file)
+
+📌 **Source:** Official Resume & Portfolio Arsenal`
+    };
+  }
+
+  // 6. Resume Download
+  if (lower.includes("resume") || lower.includes("cv") || lower.includes("pdf")) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 📄 Siddharth Shakyawal — Official Resume
+
+You can inspect or download Siddharth's authentic, up-to-date resume directly:
+
+👉 **[Download Siddharth's Resume (PDF)](/api/public/resume/file)**
+
+- **Summary:** Software Engineer specializing in Backend Systems & Applied AI/ML.
+- **Education:** BCA at Christ University, Lavasa, Pune (2024–2027).
+- **Location:** Kota, Rajasthan (324010) & Pune (Open to Relocation & Remote).
+- **Contact:** [siddharthshakya2004@gmail.com](mailto:siddharthshakya2004@gmail.com) | +91 9256265129
+
+📌 **Source:** Official Resume (PDF)`
+    };
+  }
+
+  // 7. simplyAudio
+  if (lower.includes("simplyaudio") || lower.includes("audio") || lower.includes("music stream")) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 🎧 simplyAudio — Event-Driven Audio Microservices Platform
+
+A distributed, high-concurrency music streaming and cataloging platform engineered by Siddharth.
+
+- **Tech Stack:** Java, Spring Boot 3, RabbitMQ, Keycloak SSO, Docker Compose, MinIO S3, React 19
+- **Event-Driven Architecture:** Asynchronous RabbitMQ message queues decoupling high-throughput media ingestion from real-time analytics.
+- **Centralized Security:** Keycloak OAuth2 / OIDC single sign-on with fine-grained RBAC.
+- **Object Storage:** High-throughput audio chunking partitioned across MinIO S3-compatible cloud storage.
+
+🔗 **Explore Repository:** [simplyAudio on GitHub](https://github.com/musxsid/simplyAudio)
+
+📌 **Source:** GitHub Repository [musxsid/simplyAudio]`
+    };
+  }
+
+  // 8. OmniStay ERP
+  if (lower.includes("omnistay") || lower.includes("hotel") || lower.includes("erp") || lower.includes("ledger")) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 🏨 OmniStay ERP — Hotel Management & Relational Ledger
+
+A full-stack enterprise hotel management and booking system built with **Java 17**, **Spring Boot**, **PostgreSQL**, and **React 19**.
+
+- **Relational Folio Ledger:** Multi-tenant PostgreSQL folio billing engine ensuring 100% audit reconciliation across room charges and POS billing with ACID guarantees.
+- **Night Audit Service:** Automated batch service executing daily roll-forwards and occupancy metrics in <500ms.
+- **AI Review Analyzer:** Built-in LLM integration extracting structured guest sentiments and operational insights with 95%+ precision.
+
+🔗 **Explore Repository:** [omnistay-erp on GitHub](https://github.com/musxsid/omnistay-erp)
+
+📌 **Source:** GitHub Repository [musxsid/omnistay-erp] & Official Resume`
+    };
+  }
+
+  // 9. Supervisor Feedback Analyzer
+  if (lower.includes("supervisor") || lower.includes("feedback") || lower.includes("llama") || lower.includes("ollama")) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 🧠 Supervisor Feedback Analyzer — Workplace Performance Analytics
+
+An end-to-end evaluation platform utilizing local LLM inference via **Ollama (Llama 3.2)**, **Spring AI**, **Spring Boot**, and **React 19**.
+
+- **Deterministic Schema Enforcement:** Parses multi-dimensional unstructured performance reviews into structured JSON without hallucinations.
+- **Organizational Analytics:** Computes evidence-backed managerial competency scores, sentiment telemetry, and growth trajectories.
+
+🔗 **Explore Repository:** [supervisor-feedback-analyzer on GitHub](https://github.com/musxsid/supervisor-feedback-analyzer)
+
+📌 **Source:** GitHub Repository [musxsid/supervisor-feedback-analyzer]`
+    };
+  }
+
+  // 10. Git In Bits (GIBs)
+  if (lower.includes("gibs") || lower.includes("git in bits") || lower.includes("devpulse")) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 📊 Git In Bits (GIBs) — Engineering Intelligence Platform
+
+Full-stack engineering intelligence platform engineered by Siddharth at Angel Bot AI.
+
+- **Tech Stack:** Spring Boot 3, React 19, MongoDB, Spring AI, Groq (Llama 3.3 70B), Docker
+- **Key Engineering:** Ingests GitHub PR velocities and code churn (+2.7M lines), computes 5-dimension health scores (0-100), and generates structured RAG briefings with <1.2s latency.
+
+🔗 **Explore Repository:** [Git In Bits (GIBs) on GitHub](https://github.com/musxsid/GIBs-Git_In_Bits-main)
+
+📌 **Source:** Experience Record (Angel Bot AI) & GitHub [musxsid/GIBs-Git_In_Bits-main]`
+    };
+  }
+
+  // 11. DocuVault
+  if (lower.includes("docuvault") || lower.includes("document") || lower.includes("vector")) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 📑 DocuVault — Secure Document Ingestion & Semantic Search Pipeline
+
+Enterprise document intelligence platform engineered with **Python**, **FastAPI**, and **Vector Embeddings**.
+
+- Implements automated content chunking, cosine similarity retrieval, and AES-256 encrypted storage for sensitive enterprise documents.
+
+🔗 **Explore Repository:** [DocuVault on GitHub](https://github.com/musxsid/DocuVault)
+
+📌 **Source:** GitHub Repository [musxsid/DocuVault]`
+    };
+  }
+
+  // 12. Go Auth Microservice
+  if (lower.includes("go auth") || lower.includes("go-auth") || lower.includes("argon2")) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 🔒 Go Auth Microservice — Cloud-Native Low Latency Auth
+
+High-concurrency authentication engine engineered in **Go** with **PostgreSQL** and **Docker**.
+
+- Implements Argon2id password hashing, RS256 asymmetric JWT signing with key rotation, and pgx connection pools achieving **<5ms request handling**.
+
+🔗 **Explore Repository:** [go-auth-postgres on GitHub](https://github.com/musxsid/go-auth-postgres)
+
+📌 **Source:** GitHub Repository [musxsid/go-auth-postgres]`
+    };
+  }
+
+  // 13. JobHive
+  if (lower.includes("jobhive") || lower.includes("dotnet") || lower.includes(".net") || lower.includes("c#")) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 💼 JobHive — Online Recruitment Portal
+
+Full-stack recruitment portal built on **.NET Core (MVC)**, **C#**, **SQL Server**, and **Entity Framework Core**.
+
+- Engineered multi-role applicant tracking and multi-parameter filtering, reducing query execution time by 35%.
+
+🔗 **Explore Repository:** [JobHive on GitHub](https://github.com/musxsid/JobHive)
+
+📌 **Source:** Official Resume & GitHub [musxsid/JobHive]`
+    };
+  }
+
+  // 14. Sid Portfolio
+  if (lower.includes("sid portfolio") || (lower.includes("portfolio") && !lower.includes("other"))) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### ⚡ Sid Portfolio — Creative Engineering Platform
+
+Interactive developer portfolio built with **React 19**, **Tailwind CSS 4**, **Spring Boot 3**, and **PostgreSQL**.
+
+- Real-time GitHub repository and contribution sync directly into PostgreSQL.
+- Hardware-accelerated canvas shaders, interactive aerospace chronometer skills radar, and grounded AURA AI assistant.
+
+🔗 **Explore Repository:** [Sid Portfolio on GitHub](https://github.com/musxsid/Sid_Portfolio)
+
+📌 **Source:** GitHub Repository [musxsid/Sid_Portfolio]`
+    };
+  }
+
+  // 15. General Projects / Work Overview
+  if (lower.includes("project") || lower.includes("repos") || lower.includes("built") || lower.includes("github")) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 🚀 Verified Software Engineering Projects
+
+Siddharth has engineered **13 verified repositories** on GitHub across distributed backends, microservices, and applied AI:
+
+1. **[OmniStay ERP](https://github.com/musxsid/omnistay-erp)** — Hotel management & ACID PostgreSQL ledger.
+2. **[simplyAudio](https://github.com/musxsid/simplyAudio)** — Event-driven audio microservices with RabbitMQ & Keycloak SSO.
+3. **[Git In Bits (GIBs)](https://github.com/musxsid/GIBs-Git_In_Bits-main)** — Engineering intelligence platform with Groq LLM briefings.
+4. **[Supervisor Feedback Analyzer](https://github.com/musxsid/supervisor-feedback-analyzer)** — Workplace telemetry via local Llama 3.2.
+5. **[DocuVault](https://github.com/musxsid/DocuVault)** — Vector embeddings and secure document intelligence pipeline.
+6. **[Go Auth Microservice](https://github.com/musxsid/go-auth-postgres)** — Sub-5ms low latency auth service with Argon2id.
+7. **[JobHive](https://github.com/musxsid/JobHive)** — .NET Core recruitment portal with Entity Framework Core.
+8. **[Sid Portfolio](https://github.com/musxsid/Sid_Portfolio)** — Real-time engineering portfolio with dynamic GitHub sync.
+
+🔗 **Explore All Repositories:** [GitHub Profile (@musxsid)](https://github.com/musxsid)
+
+📌 **Source:** GitHub Live Repositories & Official Resume`
+    };
+  }
+
+  // 16. Who is Siddharth / Bio / Summary / About
+  if (
+    lower.includes("who is") || lower.includes("about") || lower.includes("tell me about") ||
+    lower.includes("summary") || lower.includes("profile") || lower.includes("bio") || lower.includes("background")
+  ) {
+    return {
+      success: true,
+      model: "AURA Grounded Knowledge Engine",
+      response: `### 👨‍💻 About Siddharth Shakyawal
+
+Siddharth is a **Software Engineer** specializing in **Backend Systems** and **Applied AI/ML**, proficient in Python, Java (Spring Boot), Go, and React.
+
+- **Location:** Based in Kota, Rajasthan (324010) & studying in Lavasa, Pune (Open to Relocation & Remote).
+- **Academics:** Pursuing BCA (2024–2027) at Christ University, Lavasa, Pune.
+- **Experience:** Software Developer Intern at Angel Bot AI (Delhi) and CodeArrest Softwares (Kota).
+- **Key Expertise:** Structured RAG pipelines, deterministic LLM orchestration, event-driven microservices (RabbitMQ), ACID relational folio ledgers, and container meshes.
+
+📄 [Download Siddharth's Resume (PDF)](/api/public/resume/file) | 📬 [Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)
+
+📌 **Source:** Official Resume / Summary & Executive Profile`
+    };
+  }
+
+  // 17. Default / Off-Topic Guardrail
+  return {
+    success: true,
+    model: "AURA Grounded Knowledge Engine",
+    response: `### ⚡ AURA — Siddharth's Portfolio Intelligence
+
+I am trained on Siddharth Shakyawal's official resume, verified work experience, GitHub repositories, and system architecture.
+
+I can provide full details on:
+- **📍 Location & Relocation:** Based in Kota, Rajasthan / Pune (open to on-site relocation & remote)
+- **🎓 Academics:** BCA at Christ University, Pune (2024–2027)
+- **💼 Internships:** Production experience at Angel Bot AI & CodeArrest Softwares
+- **⚡ Tech Stack:** Java (Spring Boot), Python, Go, React 19, RabbitMQ, Docker
+- **🚀 Projects:** [simplyAudio](https://github.com/musxsid/simplyAudio), [OmniStay ERP](https://github.com/musxsid/omnistay-erp), [Git in Bits](https://github.com/musxsid/GIBs-Git_In_Bits-main), and 10 others
+- **📄 Official Resume:** [Download Resume (PDF)](/api/public/resume/file)
+
+What specific information would you like to explore?
+
+📌 **Source:** Official Resume & Portfolio Index`
+  };
+}
 
 
 

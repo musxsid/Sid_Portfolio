@@ -50,10 +50,10 @@ const AuraLogo = ({ className = "", size = 24 }) => (
 );
 
 const SUGGESTED_QUESTIONS = [
+  "Where is Siddharth located & contact info?",
   "What is simplyAudio's architecture?",
-  "What projects has Siddharth engineered?",
   "What is Sid's technical stack & experience?",
-  "How can I get Siddharth's resume or contact info?"
+  "What projects has Siddharth engineered?"
 ];
 
 function GitHubIcon({ className = "w-3.5 h-3.5" }) {
