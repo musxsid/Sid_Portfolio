@@ -9,7 +9,7 @@ function resumeStaticPlugin() {
   return {
     name: 'serve-resume-folder',
     configureServer(server) {
-      server.middlewares.use('/resume', (req, res, next) => {
+      const servePdfHandler = (req, res, next) => {
         const reqPath = decodeURIComponent(req.url.replace(/^\//, ''));
         const resumeDirs = [
           path.resolve(__dirname, '../backend/resume'),
@@ -20,7 +20,7 @@ function resumeStaticPlugin() {
 
         let targetFile = null;
 
-        if (reqPath) {
+        if (reqPath && !reqPath.includes('api/public/resume')) {
           for (const dir of resumeDirs) {
             const candidate = path.join(dir, reqPath);
             if (fs.existsSync(candidate) && fs.statSync(candidate).isFile()) {
@@ -30,7 +30,7 @@ function resumeStaticPlugin() {
           }
         }
 
-        // If no direct match or requested root /resume, serve latest PDF in any folder
+        // If no direct match or requested root /resume or /api/public/resume/file, serve latest PDF
         if (!targetFile) {
           const findLatestPdf = (dir) => {
             if (!fs.existsSync(dir)) return null;
@@ -55,7 +55,11 @@ function resumeStaticPlugin() {
         }
 
         next();
-      });
+      };
+
+      server.middlewares.use('/api/public/resume/file', servePdfHandler);
+      server.middlewares.use('/api/public/resume/download', servePdfHandler);
+      server.middlewares.use('/resume', servePdfHandler);
     },
     // Also copy files from frontend/resume to dist/resume during build
     closeBundle() {
