@@ -1,13 +1,14 @@
 import { useEffect, useRef } from "react";
 
 /**
- * NewsletterBackground: Minimalist Kinetic Grid & Ambient Quanta Spotlight
- * Engineered specifically for the Newsletter section:
- * - Minimal, quiet, luxury obsidian atmosphere (no distracting rolling waves)
- * - Interactive cursor-driven warm amber/coral spotlight with fluid spring inertia
- * - Microscopic architectural crosshairs that subtly illuminate as the cursor passes
- * - Sparse, weightless stardust motes with faint constellation connections
- * - High-DPI Retina support and 60-120 FPS performance
+ * NewsletterBackground: Interactive Celestial Stardust & Gravitational Constellation Mesh
+ * Designed specifically for the Newsletter section:
+ * - Minimal, quiet, luxury obsidian atmosphere
+ * - Weightless stardust quanta (warm coral, golden amber, starlight white)
+ * - Elastic gravitational attraction towards the cursor with silky spring inertia
+ * - Hair-thin dynamic constellation filaments between close particles
+ * - Soft volumetric ambient horizon glow that reacts organically to mouse movement
+ * - High-DPI Retina scaling and 60-120 FPS performance
  */
 export default function NewsletterBackground() {
   const canvasRef = useRef(null);
@@ -70,145 +71,147 @@ export default function NewsletterBackground() {
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave);
 
-    // Minimal Ambient Quanta (Just 14 subtle, breathing luminous motes)
-    const moteCount = 14;
-    const motes = [];
-    const moteColors = [
-      "rgba(255, 122, 69, 0.65)", // Warm Coral
-      "rgba(255, 185, 70, 0.55)", // Amber Gold
-      "rgba(255, 255, 255, 0.50)", // Starlight White
+    // ─── Celestial Stardust Quanta Configuration ───
+    const particleCount = 38;
+    const particles = [];
+    const colors = [
+      "rgba(255, 122, 69,",   // Signature Warm Coral
+      "rgba(255, 185, 70,",   // Golden Amber
+      "rgba(255, 255, 255,",  // Starlight White
+      "rgba(147, 197, 253,",  // Deep Space Azure
     ];
 
-    for (let i = 0; i < moteCount; i++) {
-      motes.push({
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
         x: Math.random() * (width || 1200),
         y: Math.random() * (height || 600),
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: (Math.random() - 0.5) * 0.2,
-        radius: Math.random() * 1.4 + 0.8,
-        color: moteColors[i % moteColors.length],
-        baseAlpha: Math.random() * 0.35 + 0.2,
-        pulseSpeed: 0.015 + Math.random() * 0.015,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.3,
+        radius: Math.random() * 1.6 + 0.8,
+        colorPrefix: colors[i % colors.length],
+        alpha: Math.random() * 0.4 + 0.25,
+        pulseSpeed: 0.015 + Math.random() * 0.02,
         phase: Math.random() * Math.PI * 2,
+        originX: Math.random() * (width || 1200),
+        originY: Math.random() * (height || 600),
       });
     }
 
-    // Grid spacing for architectural coordinate crosses
-    const gridSpacing = 120;
-    const crossSize = 3;
+    let frame = 0;
 
-    // Render loop
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
       // Smooth mouse spring inertia
       mouse.x += (mouse.targetX - mouse.x) * 0.07;
       mouse.y += (mouse.targetY - mouse.y) * 0.07;
+      frame++;
 
-      // ─── 1. Minimal Architectural Crosshair Grid with Interactive Illumination ───
-      const cols = Math.ceil(width / gridSpacing);
-      const rows = Math.ceil(height / gridSpacing);
+      const hasMouse = mouse.active && mouse.x > -500;
 
-      for (let c = 0; c <= cols; c++) {
-        const gx = c * gridSpacing;
-        for (let r = 0; r <= rows; r++) {
-          const gy = r * gridSpacing;
-
-          let crossAlpha = 0.035;
-
-          // Light up crosshairs near cursor
-          if (mouse.active && mouse.x > -500) {
-            const dx = gx - mouse.x;
-            const dy = gy - mouse.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 220) {
-              const proximity = 1 - dist / 220;
-              crossAlpha += proximity * 0.22;
-            }
-          }
-
-          ctx.strokeStyle = `rgba(255, 255, 255, ${crossAlpha})`;
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(gx - crossSize, gy);
-          ctx.lineTo(gx + crossSize, gy);
-          ctx.moveTo(gx, gy - crossSize);
-          ctx.lineTo(gx, gy + crossSize);
-          ctx.stroke();
-        }
-      }
-
-      // ─── 2. Interactive Soft Ambient Spotlight ───
-      if (mouse.active && mouse.x > -500) {
-        const spotlight = ctx.createRadialGradient(
+      // ─── 1. Ambient Volumetric Horizon Light (Follows Cursor) ───
+      if (hasMouse) {
+        const glowRadius = 360;
+        const radialGlow = ctx.createRadialGradient(
           mouse.x,
           mouse.y,
           0,
           mouse.x,
           mouse.y,
-          340
+          glowRadius
         );
-        spotlight.addColorStop(0, "rgba(255, 122, 69, 0.07)");
-        spotlight.addColorStop(0.4, "rgba(234, 88, 12, 0.025)");
-        spotlight.addColorStop(1, "transparent");
+        radialGlow.addColorStop(0, "rgba(255, 122, 69, 0.08)");
+        radialGlow.addColorStop(0.4, "rgba(234, 88, 12, 0.025)");
+        radialGlow.addColorStop(0.8, "rgba(255, 122, 69, 0.005)");
+        radialGlow.addColorStop(1, "transparent");
 
-        ctx.fillStyle = spotlight;
-        ctx.beginPath();
-        ctx.arc(mouse.x, mouse.y, 340, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.fillStyle = radialGlow;
+        ctx.fillRect(0, 0, width, height);
       }
 
-      // ─── 3. Minimal Constellation Filaments Between Close Motes ───
-      for (let i = 0; i < motes.length; i++) {
-        for (let j = i + 1; j < motes.length; j++) {
-          const dx = motes[i].x - motes[j].x;
-          const dy = motes[i].y - motes[j].y;
+      // ─── 2. Faint Concentric Orbital Horizon Rings (Background Depth) ───
+      ctx.save();
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.02)";
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 10]);
+      const centerX = width * 0.5;
+      const centerY = height * 0.5;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, Math.min(width, height) * 0.35, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, Math.min(width, height) * 0.55, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+
+      // ─── 3. Dynamic Hair-Thin Constellation Filaments ───
+      const connectionDist = 115;
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
           const distSq = dx * dx + dy * dy;
-          const maxDist = 110;
-          if (distSq < maxDist * maxDist) {
+
+          if (distSq < connectionDist * connectionDist) {
             const dist = Math.sqrt(distSq);
-            const alpha = (1 - dist / maxDist) * 0.12;
+            let alpha = (1 - dist / connectionDist) * 0.16;
+
+            // Highlight connections near cursor
+            if (hasMouse) {
+              const midX = (particles[i].x + particles[j].x) * 0.5;
+              const midY = (particles[i].y + particles[j].y) * 0.5;
+              const cursorDist = Math.hypot(midX - mouse.x, midY - mouse.y);
+              if (cursorDist < 160) {
+                alpha += (1 - cursorDist / 160) * 0.22;
+              }
+            }
+
             ctx.strokeStyle = `rgba(255, 122, 69, ${alpha})`;
-            ctx.lineWidth = 0.7;
+            ctx.lineWidth = 0.75;
             ctx.beginPath();
-            ctx.moveTo(motes[i].x, motes[i].y);
-            ctx.lineTo(motes[j].x, motes[j].y);
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
             ctx.stroke();
           }
         }
       }
 
-      // ─── 4. Weightless Stardust Quanta ───
-      motes.forEach((m) => {
-        m.x += m.vx;
-        m.y += m.vy;
-        m.phase += m.pulseSpeed;
+      // ─── 4. Update and Render Stardust Quanta Motes ───
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.phase += p.pulseSpeed;
 
-        if (m.x < -10) m.x = width + 10;
-        if (m.x > width + 10) m.x = -10;
-        if (m.y < -10) m.y = height + 10;
-        if (m.y > height + 10) m.y = -10;
+        // Wrap around canvas boundaries smoothly
+        if (p.x < -20) p.x = width + 20;
+        if (p.x > width + 20) p.x = -20;
+        if (p.y < -20) p.y = height + 20;
+        if (p.y > height + 20) p.y = -20;
 
-        // Subtle elastic deflection from cursor
-        if (mouse.active) {
-          const dx = m.x - mouse.x;
-          const dy = m.y - mouse.y;
+        // Interactive Gravitational Spring & Elastic Deflection
+        if (hasMouse) {
+          const dx = mouse.x - p.x;
+          const dy = mouse.y - p.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120 && dist > 1) {
-            const force = (1 - dist / 120) * 1.1;
-            m.x += (dx / dist) * force;
-            m.y += (dy / dist) * force;
+          const pullRadius = 180;
+
+          if (dist < pullRadius && dist > 2) {
+            // Gentle gravitational drift toward cursor with elastic spring
+            const force = (1 - dist / pullRadius) * 0.65;
+            p.x += (dx / dist) * force;
+            p.y += (dy / dist) * force;
           }
         }
 
-        const currentAlpha = m.baseAlpha + Math.sin(m.phase) * 0.15;
+        const dynamicAlpha = Math.max(0.12, Math.min(1, p.alpha + Math.sin(p.phase) * 0.18));
+        const color = `${p.colorPrefix} ${dynamicAlpha})`;
+
         ctx.save();
         ctx.beginPath();
-        ctx.arc(m.x, m.y, m.radius, 0, Math.PI * 2);
-        ctx.fillStyle = m.color;
-        ctx.shadowColor = m.color;
-        ctx.shadowBlur = 6;
-        ctx.globalAlpha = Math.max(0.08, Math.min(1, currentAlpha));
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.shadowColor = `${p.colorPrefix} 0.8)`;
+        ctx.shadowBlur = p.radius * 3.5;
         ctx.fill();
         ctx.restore();
       });
@@ -230,7 +233,7 @@ export default function NewsletterBackground() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none z-0"
-      style={{ opacity: 0.9 }}
+      style={{ opacity: 0.95 }}
     />
   );
 }

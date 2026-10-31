@@ -6,22 +6,11 @@ import NewsletterBackground from "./NewsletterBackground";
 
 export default function Newsletter() {
   const sectionRef = useRef(null);
-  const cardRef = useRef(null);
   const isInView = useInView(sectionRef, { once: false, margin: "-60px 0px" });
 
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle"); // 'idle' | 'loading' | 'success' | 'error'
   const [errorMessage, setErrorMessage] = useState("");
-  const [glarePos, setGlarePos] = useState({ x: 50, y: 50 });
-  const [isHovered, setIsHovered] = useState(false);
-
-  const handleCardMouseMove = (e) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setGlarePos({ x, y });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,39 +43,26 @@ export default function Newsletter() {
     <section
       ref={sectionRef}
       id="newsletter"
-      className="relative py-24 sm:py-28 z-20 overflow-hidden bg-gradient-to-b from-[#0a0a0a] via-[#090d16] to-black"
+      className="relative py-28 sm:py-32 z-20 overflow-hidden bg-gradient-to-b from-[#0a0a0a] via-[#090d16] to-black"
     >
-      {/* Premium Minimal & Interactive Background Animation */}
+      {/* Interactive Celestial Stardust & Constellation Mesh Canvas */}
       <NewsletterBackground />
 
       {/* Ambient Subtle Depth Lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[65vw] h-[320px] bg-accent-warm/[0.06] blur-[170px] rounded-full pointer-events-none z-0" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[340px] bg-accent-warm/[0.06] blur-[180px] rounded-full pointer-events-none z-0" />
 
       {/* Widened Section Container */}
       <div className="section-container max-w-5xl xl:max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
 
-        {/* Liquid-Glass Frosted Card with Refined Subtle Specular Sheen */}
+        {/* Liquid-Glass Frosted Card (Clean & Glare-Free) */}
         <motion.div
-          ref={cardRef}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          onMouseMove={handleCardMouseMove}
           initial={{ opacity: 0, y: 35 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="group relative rounded-3xl sm:rounded-[36px] bg-gradient-to-b from-white/[0.06] via-[#090d16]/45 to-black/60 border border-white/[0.12] hover:border-white/[0.20] p-8 sm:p-12 md:p-16 backdrop-blur-3xl backdrop-saturate-[150%] shadow-[0_20px_60px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.12)] text-center overflow-hidden transition-all duration-500"
+          className="relative rounded-3xl sm:rounded-[36px] bg-gradient-to-b from-white/[0.06] via-[#090d16]/45 to-black/60 border border-white/[0.12] hover:border-white/[0.18] p-8 sm:p-12 md:p-16 backdrop-blur-3xl backdrop-saturate-[150%] shadow-[0_20px_60px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.12)] text-center overflow-hidden transition-all duration-300"
         >
-          {/* Subtle Muted Mouse Glare (Softened & Non-Glossy) */}
-          <div
-            className="absolute inset-0 pointer-events-none transition-opacity duration-500 ease-out z-10"
-            style={{
-              opacity: isHovered ? 1 : 0,
-              background: `radial-gradient(480px circle at ${glarePos.x}% ${glarePos.y}%, rgba(255,255,255,0.07) 0%, rgba(255,122,69,0.03) 35%, transparent 70%)`,
-            }}
-          />
-
           {/* Subtle Top Gradient Line */}
-          <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-accent-warm/50 to-transparent transition-opacity duration-300 group-hover:via-accent-warm/75 z-20" />
+          <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-accent-warm/50 to-transparent pointer-events-none z-20" />
 
           {/* Original Heading */}
           <h2 className="relative z-20 font-display text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
