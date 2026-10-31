@@ -133,8 +133,8 @@ export default function ContactBackground() {
           i % 3 === 0
             ? "rgba(255, 122, 69, 0.6)"
             : i % 3 === 1
-            ? "rgba(255, 255, 255, 0.55)"
-            : "rgba(96, 165, 250, 0.5)",
+              ? "rgba(255, 255, 255, 0.55)"
+              : "rgba(96, 165, 250, 0.5)",
         phase: Math.random() * Math.PI * 2,
       });
     }
@@ -323,3 +323,4 @@ export default function ContactBackground() {
     />
   );
 }
+
