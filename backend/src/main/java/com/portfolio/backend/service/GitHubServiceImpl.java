@@ -533,6 +533,12 @@ public class GitHubServiceImpl implements GitHubService {
                         fileList.sort((a, b) -> {
                             String nameA = a.getName().toLowerCase();
                             String nameB = b.getName().toLowerCase();
+                            boolean aIsDark = nameA.contains("dark theme");
+                            boolean bIsDark = nameB.contains("dark theme");
+                            if (aIsDark && !bIsDark)
+                                return -1;
+                            if (!aIsDark && bIsDark)
+                                return 1;
                             boolean aIsLanding = nameA.contains("landing") || nameA.contains("home")
                                     || nameA.contains("login");
                             boolean bIsLanding = nameB.contains("landing") || nameB.contains("home")

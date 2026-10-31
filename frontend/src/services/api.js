@@ -76,6 +76,7 @@ const REPO_METADATA_ENRICHMENTS = {
     techStack: ["Spring Boot", "Java 21", "React 19", "MongoDB", "Groq AI", "Llama 3.3 70B", "Tailwind CSS", "TanStack Query"],
     featured: true,
     images: [
+      "/projects/gibs-git_in_bits-main/dark theme  .jpg",
       "/projects/gibs-git_in_bits-main/landing page hero.jpg",
       "/projects/gibs-git_in_bits-main/projects tab.jpg",
       "/projects/gibs-git_in_bits-main/developer wise report and ai briefing .jpg",
@@ -87,7 +88,6 @@ const REPO_METADATA_ENRICHMENTS = {
       "/projects/gibs-git_in_bits-main/pull request filtering options and audit options .jpg",
       "/projects/gibs-git_in_bits-main/ai briefing based on pr.jpg",
       "/projects/gibs-git_in_bits-main/ai chatbot working .jpg",
-      "/projects/gibs-git_in_bits-main/dark theme  .jpg",
       "/projects/gibs-git_in_bits-main/repo stability.jpg",
       "/projects/gibs-git_in_bits-main/repositories page .jpg",
       "/projects/gibs-git_in_bits-main/analysis panel .jpg"
