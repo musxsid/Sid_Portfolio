@@ -65,7 +65,7 @@ export default function Newsletter() {
 
           {/* Subtitle */}
           <p className="text-gray-300 text-sm sm:text-base max-w-xl mx-auto mb-8 leading-relaxed">
-            Get occasional engineering write-ups on building scalable Java Spring Boot microservices, high-performance APIs, and reactive React animation tricks. Zero spam.
+            Get occasional engineering write-ups. Zero spam.
           </p>
 
           {/* Form */}

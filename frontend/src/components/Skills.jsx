@@ -417,28 +417,16 @@ function UnboxedSkillDossier({ category }) {
       }}
       className="relative w-full max-w-3xl select-none"
     >
-      {/* 1. Header Bar: System Station Tag & Real-Time Sync Indicator */}
+      {/* 1. Header Bar: System Station Tag */}
       <motion.div 
         initial={{ opacity: 0, y: -8, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ type: "spring", stiffness: 500, damping: 22, delay: 0.02 }}
-        className="flex items-center justify-between pb-2.5 border-b border-white/10 mb-3"
+        className="flex items-center pb-2.5 border-b border-white/10 mb-3"
       >
-        <div className="flex items-center gap-3">
-          <span className="font-mono text-xs font-bold tracking-widest text-accent-warm bg-accent-warm/15 border border-accent-warm/30 px-2.5 py-0.5 rounded-md shadow-[0_0_12px_rgba(255,122,69,0.25)]">
-            {category.indexLabel}
-          </span>
-          <span className="font-mono text-[0.72rem] uppercase tracking-widest text-gray-400 font-semibold">
-            {category.domain}
-          </span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-accent-warm animate-pulse shadow-[0_0_8px_#ff7a45]" />
-          <span className="font-mono text-[0.68rem] tracking-wider uppercase text-gray-400 font-medium">
-            {category.statusBadge}
-          </span>
-        </div>
+        <span className="font-mono text-xs font-bold tracking-widest text-accent-warm bg-accent-warm/15 border border-accent-warm/30 px-2.5 py-0.5 rounded-md shadow-[0_0_12px_rgba(255,122,69,0.25)]">
+          {category.indexLabel}
+        </span>
       </motion.div>
 
       {/* 2. Main Title & Resume-Grounded Architectural Overview */}
@@ -544,12 +532,11 @@ function UnboxedSkillDossier({ category }) {
 
         {/* RIGHT COLUMN: Production Evidence & Codebase Implementations (7 cols) */}
         <div className="lg:col-span-7 space-y-2.5">
-          <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center mb-1">
             <span className="font-sans text-[0.68rem] font-bold tracking-wider uppercase text-gray-400 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-accent-warm" />
               <span>Production Evidence in Repositories</span>
             </span>
-            <span className="text-[0.65rem] font-mono text-gray-500">Live Codebases</span>
           </div>
 
           <div className="space-y-2">

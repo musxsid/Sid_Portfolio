@@ -44,8 +44,8 @@ export default function Hero() {
           style={{ x: textX, scale: textScale }}
           className="absolute flex flex-col items-center justify-center text-center origin-center z-10 w-full max-w-5xl px-6"
         >
-          <p className="text-[0.85rem] md:text-[1rem] font-bold tracking-[0.4em] uppercase text-gray-400 mb-6 drop-shadow-md">
-            Full-Stack Developer
+          <p className="text-[0.85rem] md:text-[1rem] font-bold tracking-[0.3em] uppercase text-gray-400 mb-6 drop-shadow-md">
+            Software Development Engineer
           </p>
 
           <AnimatedHeading 

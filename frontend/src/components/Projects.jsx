@@ -556,21 +556,9 @@ export default function Projects() {
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
-              <div className="flex items-center gap-3 flex-wrap">
-                <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-                  Repository Index
-                </h3>
-                <span className="text-xs font-sans font-semibold tracking-wide px-3 py-1 rounded-full bg-accent-warm/15 text-accent-warm border border-accent-warm/30">
-                  {isExpanded
-                    ? `Showing All ${projects.length} Repositories`
-                    : `Showing Top 5 Major Systems • ${projects.length} Total`}
-                </span>
-              </div>
-              <p className="text-gray-400 text-xs sm:text-sm mt-1.5 font-light max-w-xl">
-                {isExpanded
-                  ? "Linear architectural catalog of all synchronized repositories. Click any row to load on stage."
-                  : "Highlighting top 5 primary systems and large-scale architectures recently engineered. Expand to explore all repositories."}
-              </p>
+              <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                Repository Index
+              </h3>
             </div>
 
             <div className="flex items-center gap-3">
@@ -714,16 +702,7 @@ export default function Projects() {
 
           {/* Bottom Expand / Collapse Toggle Bar */}
           {projects.length > 5 && (
-            <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-sans font-medium text-gray-400">
-              <span className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-accent-warm animate-pulse" />
-                <span>
-                  {isExpanded
-                    ? `Displaying all ${projects.length} synchronized repositories from GitHub`
-                    : `Displaying 5 major architectures (${projects.length - 5} additional repositories collapsed)`}
-                </span>
-              </span>
-
+            <div className="pt-8 flex flex-col sm:flex-row items-center justify-end gap-4 text-xs font-sans font-medium text-gray-400">
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
                 className="group inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/15 hover:border-accent-warm/50 backdrop-blur-xl transition-all duration-300 font-sans font-semibold text-xs tracking-wide cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.35)] hover:shadow-[0_0_20px_rgba(255,122,69,0.3)] hover:scale-105 active:scale-95"

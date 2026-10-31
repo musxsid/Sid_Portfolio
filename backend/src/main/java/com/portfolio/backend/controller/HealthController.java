@@ -20,3 +20,4 @@ public class HealthController {
         return ResponseEntity.ok(Collections.singletonMap("status", "UP"));
     }
 }
+

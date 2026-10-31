@@ -337,9 +337,6 @@ export default function GitHubContributions() {
                 Technical Highlights
               </span>
             </h3>
-            <p className="text-gray-400 text-xs sm:text-sm mt-1 font-light">
-              Verified metrics summarizing software craftsmanship, architectural range, and production reliability.
-            </p>
           </div>
 
           {/* 4 Unboxed Metric Pillars with Interactive Scroll and Hover Motion */}

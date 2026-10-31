@@ -837,7 +837,7 @@ export default function Chatbot() {
                         handleSend(input);
                       }
                     }}
-                    placeholder="Ask about tech stack, simplyAudio, resume..."
+                    placeholder="Ask about tech stack, projects, resume..."
                     disabled={isTyping}
                     className="w-full bg-white/[0.04] border border-white/12 focus:border-accent-warm/70 focus:bg-white/[0.07] focus:ring-1 focus:ring-accent-warm/50 rounded-full pl-9 pr-3.5 py-2.5 text-xs sm:text-[0.82rem] text-white placeholder-gray-500 focus:outline-none transition-all duration-200 disabled:opacity-50 shadow-inner font-sans"
                   />
@@ -850,13 +850,6 @@ export default function Chatbot() {
                 >
                   <Send size={14} />
                 </button>
-              </div>
-              <div className="flex items-center justify-between text-[0.62rem] text-gray-500 px-1.5 pt-1.5 font-sans font-light">
-                <span className="flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent-warm/80" />
-                  <span>Resume & GitHub Grounded</span>
-                </span>
-                <span className="hidden sm:inline text-gray-600">Enter ↵</span>
               </div>
             </div>
           </motion.div>
