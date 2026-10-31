@@ -384,7 +384,7 @@ public class GroqAiServiceImpl implements GroqAiService {
             reply.append("- **Academics:** Pursuing BCA (2024–2027) at Christ University, Lavasa, Pune.\n");
             reply.append("- **Experience:** Software Developer Intern at Angel Bot AI (Delhi) and CodeArrest Softwares (Kota).\n");
             reply.append("- **Key Expertise:** Structured RAG pipelines, deterministic LLM orchestration, event-driven microservices (RabbitMQ), ACID relational folio ledgers, and container meshes.\n\n");
-            reply.append("📄 [Download Siddharth's Resume (PDF)](/api/public/resume/file) | 📬 [Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)\n\n");
+            reply.append("📄 [Download Siddharth's Resume (PDF)](/api/public/resume/file) [Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)\n\n");
             reply.append("📌 **Source:** Official Resume / Summary & Executive Profile");
         }
         // 17. Off-Topic / General Guardrail

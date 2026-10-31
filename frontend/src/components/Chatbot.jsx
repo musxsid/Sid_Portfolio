@@ -8,7 +8,13 @@ import {
   ExternalLink,
   RotateCcw,
   Maximize2,
-  Minimize2
+  Minimize2,
+  ShieldCheck,
+  BookmarkCheck,
+  FileText,
+  Mail,
+  CheckCircle2,
+  Lock
 } from 'lucide-react';
 import { portfolioApi } from '../services/api';
 
@@ -49,13 +55,6 @@ const AuraLogo = ({ className = "", size = 24 }) => (
   </svg>
 );
 
-const SUGGESTED_QUESTIONS = [
-  "Where is Siddharth located & contact info?",
-  "What is simplyAudio's architecture?",
-  "What is Sid's technical stack & experience?",
-  "What projects has Siddharth engineered?"
-];
-
 function GitHubIcon({ className = "w-3.5 h-3.5" }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -64,13 +63,28 @@ function GitHubIcon({ className = "w-3.5 h-3.5" }) {
   );
 }
 
+function LinkedInIcon({ className = "w-3.5 h-3.5" }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+    </svg>
+  );
+}
+
+const SUGGESTED_QUESTIONS = [
+  "What is Siddharth's background & location?",
+  "Tell me about simplyAudio's architecture",
+  "What is Siddharth's tech stack & experience?",
+  "Download official resume / contact info"
+];
+
 function renderLinkPill(title, url, key) {
   const isGitHub = url.toLowerCase().includes("github.com");
   const isLinkedIn = url.toLowerCase().includes("linkedin.com");
   const isResume = url.toLowerCase().includes("resume") || url.toLowerCase().endsWith(".pdf");
+  const isEmail = url.toLowerCase().startsWith("mailto:") || (url.includes("@") && !url.includes("/"));
 
   if (isGitHub) {
-    // If title is generic (e.g. "GitHub", "GitHub Repo", "Link", or empty):
     const isGenericTitle = !title || /^(github|repo|github repo|repository|link|source|explore)$/i.test(title.trim());
 
     if (isGenericTitle) {
@@ -80,19 +94,18 @@ function renderLinkPill(title, url, key) {
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 px-2.5 py-0.5 mx-1 rounded-full bg-white/[0.08] hover:bg-accent-warm text-accent-warm hover:text-white border border-accent-warm/30 hover:border-accent-warm font-sans font-semibold text-[0.72rem] transition-all shadow-sm active:scale-95 cursor-pointer align-baseline"
+          className="inline-flex items-center gap-1.5 px-3 py-1 my-0.5 rounded-full bg-white/[0.08] hover:bg-accent-warm text-accent-warm hover:text-white border border-accent-warm/30 hover:border-accent-warm font-sans font-semibold text-[0.74rem] transition-all shadow-sm active:scale-95 cursor-pointer align-middle"
           title="Open repository on GitHub"
         >
-          <GitHubIcon className="w-3 h-3" />
+          <GitHubIcon className="w-3.5 h-3.5 shrink-0" />
           <span>GitHub</span>
-          <ExternalLink className="w-2.5 h-2.5 opacity-80" />
+          <ExternalLink className="w-2.5 h-2.5 opacity-80 shrink-0" />
         </a>
       );
     }
 
-    // Title is project name like "Git In Bits (GIBs)" or "Sid Portfolio":
     return (
-      <span key={key} className="inline-flex items-center gap-1.5 align-baseline flex-wrap">
+      <span key={key} className="inline-flex items-center gap-1.5 align-middle flex-wrap my-0.5">
         <strong className="text-white font-bold">{title}</strong>
         <a
           href={url}
@@ -101,30 +114,33 @@ function renderLinkPill(title, url, key) {
           className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/[0.08] hover:bg-accent-warm text-accent-warm hover:text-white border border-accent-warm/30 hover:border-accent-warm font-sans font-semibold text-[0.72rem] transition-all shadow-sm active:scale-95 cursor-pointer"
           title={`Open ${title} on GitHub`}
         >
-          <GitHubIcon className="w-3 h-3" />
+          <GitHubIcon className="w-3 h-3 shrink-0" />
           <span>GitHub</span>
-          <ExternalLink className="w-2.5 h-2.5 opacity-80" />
+          <ExternalLink className="w-2.5 h-2.5 opacity-80 shrink-0" />
         </a>
       </span>
     );
   }
 
   if (isLinkedIn) {
+    const cleanTitle = (title || "Connect on LinkedIn").replace(/^[📬\s]+/, "");
     return (
       <a
         key={key}
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1 px-2.5 py-0.5 mx-1 rounded-full bg-blue-500/15 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/30 font-sans font-semibold text-[0.72rem] transition-all shadow-sm active:scale-95 cursor-pointer align-baseline"
+        className="inline-flex items-center gap-2 px-3.5 py-1.5 my-1 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] hover:border-accent-warm/50 text-gray-200 hover:text-white border border-white/15 font-sans font-semibold text-xs transition-all shadow-sm active:scale-95 cursor-pointer align-middle"
       >
-        <span>{title || "LinkedIn"}</span>
-        <ExternalLink className="w-2.5 h-2.5 opacity-80" />
+        <LinkedInIcon className="w-3.5 h-3.5 text-[#0a66c2] group-hover:text-white shrink-0" />
+        <span>{cleanTitle}</span>
+        <ExternalLink className="w-3 h-3 opacity-80 shrink-0" />
       </a>
     );
   }
 
   if (isResume) {
+    const cleanTitle = (title || "Download Siddharth's Resume (PDF)").replace(/^[📄\s]+/, "");
     return (
       <a
         key={key}
@@ -132,22 +148,36 @@ function renderLinkPill(title, url, key) {
         target="_blank"
         rel="noopener noreferrer"
         download
-        className="inline-flex items-center gap-1.5 px-3 py-0.5 mx-1 rounded-full bg-accent-warm/15 hover:bg-accent-warm text-accent-warm hover:text-white border border-accent-warm/40 font-sans font-bold text-[0.75rem] transition-all shadow-sm active:scale-95 cursor-pointer align-baseline"
+        className="inline-flex items-center gap-2 px-3.5 py-1.5 my-1 rounded-xl bg-gradient-to-r from-accent-warm/25 to-orange-500/15 hover:from-accent-warm hover:to-orange-500 text-accent-warm hover:text-white border border-accent-warm/40 hover:border-transparent font-sans font-bold text-xs transition-all shadow-[0_0_12px_rgba(255,122,69,0.18)] hover:shadow-[0_0_20px_rgba(255,122,69,0.45)] active:scale-95 cursor-pointer align-middle"
       >
-        <span>{title || "Download Resume (PDF)"}</span>
-        <ExternalLink className="w-2.5 h-2.5 opacity-80" />
+        <FileText className="w-3.5 h-3.5 shrink-0 text-accent-warm group-hover:text-white" />
+        <span>{cleanTitle}</span>
+        <ExternalLink className="w-3 h-3 opacity-80 shrink-0" />
       </a>
     );
   }
 
-  // Generic Markdown Link
+  if (isEmail) {
+    const email = url.replace("mailto:", "");
+    return (
+      <a
+        key={key}
+        href={`mailto:${email}`}
+        className="inline-flex items-center gap-1.5 px-3 py-1 my-0.5 rounded-full bg-white/[0.06] hover:bg-accent-warm text-gray-200 hover:text-white border border-white/15 hover:border-accent-warm font-sans font-semibold text-xs transition-all shadow-sm active:scale-95 cursor-pointer align-middle"
+      >
+        <Mail className="w-3 h-3 shrink-0 text-accent-warm" />
+        <span>{title || email}</span>
+      </a>
+    );
+  }
+
   return (
     <a
       key={key}
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-accent-warm font-semibold hover:underline inline-flex items-center gap-0.5 underline-offset-2 transition-colors mx-0.5"
+      className="text-accent-warm font-semibold hover:underline inline-flex items-center gap-0.5 underline-offset-2 transition-colors mx-0.5 align-middle"
     >
       <span>{title || url}</span>
       <ExternalLink className="w-3 h-3 inline ml-0.5 opacity-80" />
@@ -157,16 +187,14 @@ function renderLinkPill(title, url, key) {
 
 function parseInlineFormatting(str) {
   if (!str) return null;
-  // Clean raw HTML break tags into spaces or standard breaks
-  const cleaned = str.replace(/<br\s*\/?>/gi, " ");
-  const parts = [];
+  // Clean raw HTML break tags, remove pipes between or before links, and strip leading emoji pins
+  const cleaned = str
+    .replace(/<br\s*\/?>/gi, " ")
+    .replace(/(?<=\))\s*\|\s*(?=\[|\*\*\[)/g, " ")
+    .replace(/\|\s*(?=\[|\*\*\[)/g, " ")
+    .replace(/(?<=\))\s*\|/g, " ");
 
-  // Match:
-  // 1. **[title](url)** -> Bold Markdown Link
-  // 2. [title](url)     -> Standard Markdown Link
-  // 3. **bold**         -> Bold text
-  // 4. `code`           -> Inline code
-  // 5. Bare URLs        -> https?://...
+  const parts = [];
   const regex = /(\*\*\[([^\]]+)\]\(([^)]+)\)\*\*|\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*|`([^`]+)`|(https?:\/\/[^\s)\]]+))/g;
 
   let lastIndex = 0;
@@ -180,30 +208,25 @@ function parseInlineFormatting(str) {
     const key = `inline-${match.index}`;
 
     if (match[1].startsWith("**[") && match[2] && match[3]) {
-      // Bold Markdown Link: **[Title](url)**
       parts.push(renderLinkPill(match[2], match[3], key));
     } else if (match[1].startsWith("[") && match[4] && match[5]) {
-      // Standard Markdown Link: [Title](url)
       parts.push(renderLinkPill(match[4], match[5], key));
     } else if (match[1].startsWith("**") && match[6]) {
-      // Bold text
       parts.push(
-        <strong key={key} className="text-white font-bold">
+        <strong key={key} className="text-white font-bold tracking-tight">
           {match[6]}
         </strong>
       );
     } else if (match[1].startsWith("`") && match[7]) {
-      // Inline code
       parts.push(
         <code
           key={key}
-          className="px-1.5 py-0.5 rounded bg-white/10 text-amber-300 font-mono text-[0.8em]"
+          className="px-1.5 py-0.5 rounded-md bg-white/10 text-amber-300 font-mono text-[0.8em] border border-white/10"
         >
           {match[7]}
         </code>
       );
     } else if (match[8]) {
-      // Bare URL
       parts.push(renderLinkPill("", match[8], key));
     }
 
@@ -219,7 +242,6 @@ function parseInlineFormatting(str) {
 
 function parseCellItems(cellText) {
   if (!cellText) return null;
-  // Split on <br>, <br/>, <br />, or newline
   const subItems = cellText.split(/<br\s*\/?>|\r?\n/i).map(s => s.trim()).filter(Boolean);
   if (subItems.length <= 1) {
     return <span>{parseInlineFormatting(cellText)}</span>;
@@ -254,6 +276,18 @@ function FormattedChatMessage({ text }) {
     const line = rawLines[i];
     const trimmed = line.trim();
 
+    // Source provenance line detection:
+    // Matches: 📌 **Source:** ... or 📌 Source: ... or **Source:** ... or Source: ...
+    const sourceMatch = trimmed.match(/^(?:📌\s*)?(?:\*\*)?Sources?(?:\*\*)?:(?:\*\*)?\s*(.+)$/i);
+    if (sourceMatch) {
+      if (currentTable) {
+        blocks.push({ type: 'table', rows: currentTable });
+        currentTable = null;
+      }
+      blocks.push({ type: 'source', text: sourceMatch[1].trim() });
+      continue;
+    }
+
     // Code block detection
     if (trimmed.startsWith("```")) {
       if (!inCodeBlock) {
@@ -278,13 +312,12 @@ function FormattedChatMessage({ text }) {
       continue;
     }
 
-    // Markdown Table detection: lines containing | and starting/ending with | or containing multiple |
+    // Markdown Table detection
     const isTableLine = (trimmed.startsWith("|") && trimmed.includes("|", 1)) ||
       (trimmed.endsWith("|") && trimmed.includes("|", 0)) ||
       (/^\|?[\s\-:]+(\|[\s\-:]+)+\|?$/.test(trimmed));
 
     if (isTableLine) {
-      // Check if it is a separator line like |---|---|
       if (/^\|?[\s\-:]+(\|[\s\-:]+)+\|?$/.test(trimmed)) {
         continue;
       }
@@ -381,25 +414,20 @@ function FormattedChatMessage({ text }) {
           );
         }
 
-        if (block.type === 'h2') {
+        if (block.type === 'h2' || block.type === 'h3') {
           return (
-            <h3 key={idx} className="font-display font-black text-accent-warm text-sm sm:text-base mt-3 mb-1">
-              {parseInlineFormatting(block.text)}
-            </h3>
-          );
-        }
-
-        if (block.type === 'h3') {
-          return (
-            <h4 key={idx} className="font-display font-bold text-white text-xs sm:text-sm mt-2.5 mb-1">
-              {parseInlineFormatting(block.text)}
-            </h4>
+            <div key={idx} className="flex items-center gap-2 mt-3.5 mb-2 pb-1.5 border-b border-white/10">
+              <span className="w-1.5 h-4 rounded-full bg-accent-warm shadow-[0_0_8px_#ff7a45]" />
+              <h4 className="font-display font-extrabold text-white text-sm sm:text-base tracking-tight">
+                {parseInlineFormatting(block.text)}
+              </h4>
+            </div>
           );
         }
 
         if (block.type === 'quote') {
           return (
-            <blockquote key={idx} className="pl-3 py-1 my-1.5 border-l-2 border-accent-warm bg-accent-warm/5 text-gray-300 italic text-xs rounded-r">
+            <blockquote key={idx} className="pl-3 py-1.5 my-2 border-l-2 border-accent-warm bg-accent-warm/5 text-gray-300 italic text-xs rounded-r-lg">
               {parseInlineFormatting(block.text)}
             </blockquote>
           );
@@ -421,27 +449,77 @@ function FormattedChatMessage({ text }) {
         }
 
         if (block.type === 'bullet') {
+          const keyValMatch = block.text.match(/^\*\*([^*]+)\*\*:\s*(.*)$/);
+          if (keyValMatch) {
+            const label = keyValMatch[1];
+            const val = keyValMatch[2];
+            return (
+              <div key={idx} className="flex items-start gap-2.5 my-1.5 p-2 rounded-xl bg-white/[0.02] hover:bg-white/[0.045] border border-white/5 hover:border-accent-warm/25 transition-all duration-200">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent-warm shrink-0 mt-2 shadow-[0_0_8px_#ff7a45]" />
+                <div className="flex-1 text-xs sm:text-[0.84rem] min-w-0">
+                  <span className="font-bold text-white tracking-tight mr-1.5 font-sans">{label}:</span>
+                  <span className="text-gray-300 font-light leading-relaxed">{parseInlineFormatting(val)}</span>
+                </div>
+              </div>
+            );
+          }
+
           return (
             <div key={idx} className="flex items-start gap-2.5 my-1 leading-relaxed text-gray-200">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent-warm shrink-0 mt-1.5 shadow-[0_0_6px_#ff7a45]" />
-              <div className="flex-1">{parseInlineFormatting(block.text)}</div>
+              <span className="w-1.5 h-1.5 rounded-full bg-accent-warm shrink-0 mt-2 shadow-[0_0_8px_#ff7a45]" />
+              <div className="flex-1 text-xs sm:text-[0.84rem]">{parseInlineFormatting(block.text)}</div>
             </div>
           );
         }
 
         if (block.type === 'number') {
           return (
-            <div key={idx} className="flex items-start gap-2.5 my-1 leading-relaxed text-gray-200">
-              <span className="font-sans text-accent-warm text-xs font-bold shrink-0">{block.num}.</span>
-              <div className="flex-1">{parseInlineFormatting(block.text)}</div>
+            <div key={idx} className="flex items-start gap-2.5 my-1.5 leading-relaxed text-gray-200">
+              <span className="w-5 h-5 rounded-full bg-accent-warm/15 text-accent-warm font-mono text-[0.7rem] font-bold flex items-center justify-center shrink-0 mt-0.5 border border-accent-warm/30 shadow-[0_0_8px_rgba(255,122,69,0.2)]">
+                {block.num}
+              </span>
+              <div className="flex-1 text-xs sm:text-[0.84rem]">{parseInlineFormatting(block.text)}</div>
+            </div>
+          );
+        }
+
+        if (block.type === 'source') {
+          return (
+            <div key={idx} className="mt-4 pt-3.5 border-t border-white/10">
+              {/* Header Badge */}
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <span className="flex items-center gap-1.5 text-[0.68rem] font-sans font-extrabold tracking-wider text-accent-warm uppercase">
+                  <ShieldCheck className="w-3.5 h-3.5 text-accent-warm shrink-0 drop-shadow-[0_0_8px_rgba(255,122,69,0.7)]" />
+                  <span>Verified Provenance & Citation</span>
+                </span>
+                <span className="text-[0.62rem] text-emerald-400 font-sans font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 flex items-center gap-1 shrink-0 shadow-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Authentic Record
+                </span>
+              </div>
+
+              {/* Structured Source Card */}
+              <div className="p-3 rounded-xl bg-gradient-to-r from-accent-warm/[0.08] via-white/[0.02] to-transparent border border-accent-warm/25 shadow-inner backdrop-blur-md flex items-start gap-3">
+                <div className="w-7 h-7 rounded-lg bg-accent-warm/15 border border-accent-warm/30 flex items-center justify-center shrink-0 mt-0.5 text-accent-warm shadow-[0_0_10px_rgba(255,122,69,0.2)]">
+                  <BookmarkCheck className="w-4 h-4" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-[0.65rem] font-mono text-gray-400 uppercase tracking-wider block mb-0.5">
+                    Citation Origin
+                  </span>
+                  <div className="text-xs text-gray-200 font-medium leading-relaxed font-sans">
+                    {parseInlineFormatting(block.text)}
+                  </div>
+                </div>
+              </div>
             </div>
           );
         }
 
         return (
-          <p key={idx} className="leading-relaxed text-gray-200">
+          <div key={idx} className="leading-relaxed text-gray-200 my-1">
             {parseInlineFormatting(block.text)}
-          </p>
+          </div>
         );
       })}
     </div>
@@ -451,7 +529,7 @@ function FormattedChatMessage({ text }) {
 const INITIAL_MESSAGES = [
   {
     type: 'bot',
-    text: "Hello! I am **AURA**, Siddharth's AI assistant. I have verified access to Siddharth's 13 GitHub repositories (including `simplyAudio`, `OmniStay ERP`, and `DocuVault`), system architectures, verified work experience, and official resume.\n\nAsk me anything about his technical stack, engineering decisions, or career background!"
+    text: "Hello! I am **AURA**, Siddharth's AI assistant. I have verified access to Siddharth's 13 GitHub repositories (including `simplyAudio`, `OmniStay ERP`, and `DocuVault`), system architectures, verified work experience, and official resume.\n\nAsk me anything about his technical stack, engineering decisions, or career background!\n\n📌 **Source:** Official Portfolio System & GitHub Ledger"
   }
 ];
 
@@ -505,7 +583,7 @@ export default function Chatbot() {
         ...prev,
         {
           type: 'bot',
-          text: "I encountered an issue connecting to the AI model. You can explore Siddharth's projects directly on [GitHub](https://github.com/musxsid) or [Download his Resume](/resume/Siddharth_Shakyawal_Resume.pdf)!"
+          text: "I encountered an issue connecting to the AI model. You can explore Siddharth's projects directly on [GitHub](https://github.com/musxsid) or [Download his Resume](/resume/Siddharth_Shakyawal_Resume.pdf)!\n\n📌 **Source:** Fallback Local Knowledge Base"
         }
       ]);
     } finally {
@@ -550,73 +628,95 @@ export default function Chatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.92 }}
             transition={{ type: "spring", stiffness: 320, damping: 28 }}
-            className={`fixed bottom-3 sm:bottom-6 right-2 sm:right-6 bg-[#070913]/96 backdrop-blur-3xl border border-white/15 rounded-3xl shadow-[0_30px_90px_rgba(0,0,0,0.95)] z-[10000] flex flex-col overflow-hidden transition-all duration-300 ${isExpanded
+            className={`fixed bottom-3 sm:bottom-6 right-2 sm:right-6 bg-[#06080f]/98 backdrop-blur-3xl border border-white/15 ring-1 ring-accent-warm/20 rounded-3xl shadow-[0_25px_90px_rgba(0,0,0,0.92),0_0_60px_rgba(255,122,69,0.18)] z-[10000] flex flex-col overflow-hidden transition-all duration-300 ${isExpanded
               ? "w-[96vw] sm:w-[720px] md:w-[780px] h-[780px] max-h-[92vh]"
               : "w-[95vw] sm:w-[500px] md:w-[550px] h-[650px] max-h-[88vh]"
               }`}
           >
+            {/* Ambient Caustics Top Glow */}
+            <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-accent-warm/[0.08] via-accent-warm/[0.02] to-transparent pointer-events-none z-0" />
+
             {/* Executive AURA Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 bg-white/[0.03]">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 bg-white/[0.03] backdrop-blur-md relative z-10">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-accent-warm/15 border border-accent-warm/30 flex items-center justify-center text-accent-warm shadow-[0_0_15px_rgba(255,122,69,0.3)]">
-                  <AuraLogo size={20} />
+                <div className="relative flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-warm/25 via-accent-warm/10 to-transparent border border-accent-warm/40 flex items-center justify-center text-accent-warm shadow-[0_0_20px_rgba(255,122,69,0.35)]">
+                    <AuraLogo size={22} />
+                  </div>
+                  <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[#06080f] shadow-[0_0_8px_#10b981]" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white tracking-tight font-display">
-                    AURA
-                  </h3>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-base font-black text-white tracking-tight font-display">
+                      AURA
+                    </h3>
+                    <span className="px-2 py-0.5 rounded-full text-[0.62rem] font-bold font-mono tracking-widest uppercase bg-accent-warm/15 text-accent-warm border border-accent-warm/30 shadow-[0_0_8px_rgba(255,122,69,0.2)]">
+                      AI AGENT
+                    </span>
+                  </div>
+                  <p className="text-[0.7rem] text-gray-400 font-sans flex items-center gap-1.5 mt-0.5">
+                    <span>Grounded Portfolio Intelligence</span>
+                    <span className="text-gray-600">•</span>
+                    <span className="text-emerald-400 font-medium flex items-center gap-1">
+                      Online
+                    </span>
+                  </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
-                  className="hidden sm:flex p-2 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors cursor-pointer"
+                  className="hidden sm:flex w-8 h-8 rounded-full items-center justify-center bg-white/[0.04] hover:bg-white/[0.1] border border-white/10 text-gray-300 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
                   title={isExpanded ? "Standard view" : "Expand view"}
                   aria-label="Toggle size"
                 >
-                  {isExpanded ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+                  {isExpanded ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
                 </button>
                 <button
                   onClick={handleReset}
-                  className="p-2 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors cursor-pointer"
+                  className="w-8 h-8 rounded-full flex items-center justify-center bg-white/[0.04] hover:bg-white/[0.1] border border-white/10 text-gray-300 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
                   title="Reset conversation"
                   aria-label="Reset conversation"
                 >
-                  <RotateCcw size={15} />
+                  <RotateCcw size={14} />
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-2 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors cursor-pointer"
+                  className="w-8 h-8 rounded-full flex items-center justify-center bg-white/[0.04] hover:bg-red-500/20 hover:border-red-500/40 border border-white/10 text-gray-300 hover:text-red-300 transition-all cursor-pointer shadow-sm active:scale-95"
                   aria-label="Close chat"
                 >
-                  <X size={18} />
+                  <X size={15} />
                 </button>
               </div>
             </div>
 
             {/* Spacious Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 custom-scrollbar bg-gradient-to-b from-transparent to-black/35">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 custom-scrollbar bg-gradient-to-b from-transparent to-black/40 z-10">
               {messages.map((msg, idx) => (
                 <motion.div
-                  initial={{ opacity: 0, y: 12 }}
+                  initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.22, ease: "easeOut" }}
+                  transition={{ duration: 0.24, ease: "easeOut" }}
                   key={idx}
                   className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <div className={`flex items-end gap-2.5 max-w-[92%] sm:max-w-[88%] ${msg.type === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                    <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 mb-1 ${msg.type === 'user' ? 'bg-accent-warm text-white shadow-[0_0_10px_rgba(255,122,69,0.4)]' : 'bg-accent-warm/15 text-accent-warm border border-accent-warm/30 shadow-[0_0_10px_rgba(255,122,69,0.2)]'
+                  <div className={`flex items-end gap-2.5 max-w-[94%] sm:max-w-[88%] ${msg.type === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                    {/* Avatar */}
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mb-1 transition-all ${msg.type === 'user'
+                      ? 'bg-gradient-to-br from-accent-warm to-[#ea580c] text-white shadow-[0_0_12px_rgba(255,122,69,0.4)]'
+                      : 'bg-accent-warm/15 text-accent-warm border border-accent-warm/35 shadow-[0_0_15px_rgba(255,122,69,0.25)]'
                       }`}>
-                      {msg.type === 'user' ? <User size={13} /> : <AuraLogo size={15} />}
+                      {msg.type === 'user' ? <User size={15} /> : <AuraLogo size={18} />}
                     </div>
 
-                    <div className={`p-4 rounded-2xl text-xs sm:text-[0.85rem] ${msg.type === 'user'
-                      ? 'bg-accent-warm text-white font-medium rounded-br-sm shadow-[0_4px_20px_rgba(255,122,69,0.35)]'
-                      : 'bg-white/[0.05] text-gray-200 rounded-bl-sm border border-white/10 shadow-xl backdrop-blur-xl'
+                    {/* Message Bubble Card */}
+                    <div className={`text-xs sm:text-[0.85rem] ${msg.type === 'user'
+                      ? 'bg-gradient-to-r from-[#ff7a45] via-[#ea580c] to-[#d9480f] text-white font-medium rounded-2xl rounded-tr-sm shadow-[0_6px_25px_rgba(255,122,69,0.4)] px-4 py-3'
+                      : 'bg-white/[0.035] hover:bg-white/[0.045] text-gray-200 rounded-2xl rounded-tl-sm border border-white/12 hover:border-white/20 shadow-2xl backdrop-blur-2xl p-4 sm:p-5 transition-all'
                       }`}>
                       {msg.type === 'user' ? (
-                        <span>{msg.text}</span>
+                        <span className="leading-relaxed">{msg.text}</span>
                       ) : (
                         <FormattedChatMessage text={msg.text} />
                       )}
@@ -632,14 +732,16 @@ export default function Chatbot() {
                   className="flex justify-start"
                 >
                   <div className="flex items-end gap-2.5 max-w-[85%]">
-                    <div className="w-7 h-7 rounded-full bg-accent-warm/15 flex items-center justify-center shrink-0 mb-1 border border-accent-warm/30">
-                      <AuraLogo size={15} />
+                    <div className="w-8 h-8 rounded-xl bg-accent-warm/15 flex items-center justify-center shrink-0 mb-1 border border-accent-warm/35 shadow-[0_0_15px_rgba(255,122,69,0.2)]">
+                      <AuraLogo size={18} />
                     </div>
-                    <div className="p-3.5 rounded-2xl bg-white/[0.05] rounded-bl-sm border border-white/10 flex items-center gap-2 shadow-lg backdrop-blur-xl">
-                      <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce" />
-                      <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-                      <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
-                      <span className="text-[0.72rem] text-gray-400 font-sans font-medium ml-1">AURA is synthesizing answer...</span>
+                    <div className="p-3.5 rounded-2xl rounded-tl-sm bg-white/[0.04] border border-white/12 flex items-center gap-2.5 shadow-xl backdrop-blur-xl">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce shadow-[0_0_6px_#ff7a45]" />
+                        <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce shadow-[0_0_6px_#ff7a45]" style={{ animationDelay: '0.2s' }} />
+                        <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce shadow-[0_0_6px_#ff7a45]" style={{ animationDelay: '0.4s' }} />
+                      </div>
+                      <span className="text-[0.72rem] text-gray-300 font-sans font-medium">AURA is synthesizing verified answer...</span>
                     </div>
                   </div>
                 </motion.div>
@@ -648,58 +750,66 @@ export default function Chatbot() {
             </div>
 
             {/* Suggested Prompts Shelf */}
-            {
-              messages.length <= 2 && (
-                <div className="px-5 py-3 border-t border-white/5 bg-white/[0.02]">
-                  <p className="text-[0.68rem] text-gray-400 mb-2 flex items-center gap-1.5 font-sans font-semibold uppercase tracking-wider">
-                    <Sparkles size={11} className="text-accent-warm" /> Suggested Queries
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {SUGGESTED_QUESTIONS.map((q, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => handleSend(q)}
-                        disabled={isTyping}
-                        className="text-[0.74rem] bg-white/[0.04] hover:bg-white/[0.09] border border-white/10 hover:border-accent-warm/50 hover:text-white text-gray-300 py-1.5 px-3 rounded-full transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-left cursor-pointer shadow-sm active:scale-95"
-                      >
-                        {q}
-                      </button>
-                    ))}
-                  </div>
+            {messages.length <= 2 && (
+              <div className="px-5 py-3 border-t border-white/10 bg-white/[0.02] backdrop-blur-md z-10">
+                <p className="text-[0.68rem] text-gray-400 mb-2 flex items-center gap-1.5 font-sans font-bold uppercase tracking-wider">
+                  <Sparkles size={11} className="text-accent-warm" /> Suggested Queries
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {SUGGESTED_QUESTIONS.map((q, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleSend(q)}
+                      disabled={isTyping}
+                      className="text-[0.74rem] font-sans font-medium bg-white/[0.035] hover:bg-white/[0.08] border border-white/10 hover:border-accent-warm/50 hover:text-white text-gray-300 py-1.5 px-3 rounded-full transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-left cursor-pointer shadow-sm hover:scale-[1.02] active:scale-95"
+                    >
+                      {q}
+                    </button>
+                  ))}
                 </div>
-              )
-            }
+              </div>
+            )}
 
-            {/* Input Bar */}
-            <div className="p-3.5 bg-black/60 border-t border-white/10 flex items-center gap-2.5">
-              <input
-                ref={inputRef}
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !isTyping) {
-                    handleSend(input);
-                  }
-                }}
-                placeholder="Ask AURA about simplyAudio, backend stack, resume..."
-                disabled={isTyping}
-                className="flex-1 bg-white/[0.05] border border-white/10 focus:border-accent-warm/60 focus:bg-white/[0.08] rounded-full px-5 py-2.5 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none transition-all duration-200 disabled:opacity-50"
-              />
-              <button
-                onClick={() => handleSend(input)}
-                disabled={isTyping || !input.trim()}
-                className="p-3 rounded-full bg-accent-warm text-white hover:brightness-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shadow-[0_0_15px_rgba(255,122,69,0.35)] shrink-0"
-                aria-label="Send message"
-              >
-                <Send size={15} />
-              </button>
+            {/* Input Bar with Frosted Glass & Ambient Glow */}
+            <div className="p-3.5 sm:p-4 bg-[#050712]/95 border-t border-white/10 backdrop-blur-2xl z-10">
+              <div className="flex items-center gap-2 relative">
+                <div className="relative flex-1">
+                  <Sparkles className="w-4 h-4 text-accent-warm/70 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !isTyping) {
+                        handleSend(input);
+                      }
+                    }}
+                    placeholder="Ask about tech stack, simplyAudio, resume, location..."
+                    disabled={isTyping}
+                    className="w-full bg-white/[0.04] border border-white/12 focus:border-accent-warm/70 focus:bg-white/[0.07] focus:ring-1 focus:ring-accent-warm/50 rounded-full pl-10 pr-4 py-3 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none transition-all duration-200 disabled:opacity-50 shadow-inner font-sans"
+                  />
+                </div>
+                <button
+                  onClick={() => handleSend(input)}
+                  disabled={isTyping || !input.trim()}
+                  className="p-3 rounded-full bg-gradient-to-r from-accent-warm to-[#ea580c] hover:from-[#ff8a5c] hover:to-[#f97316] text-white hover:shadow-[0_0_20px_rgba(255,122,69,0.5)] active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer shrink-0"
+                  aria-label="Send message"
+                >
+                  <Send size={15} />
+                </button>
+              </div>
+              <div className="flex items-center justify-between text-[0.65rem] text-gray-500 px-2 pt-2 font-sans font-light">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-warm/80" />
+                  <span>Grounded in Authentic Resume & GitHub</span>
+                </span>
+                <span className="hidden sm:inline text-gray-600">Press Enter ↵ to send</span>
+              </div>
             </div>
-          </motion.div >
-        )
-        }
-      </AnimatePresence >
-    </div >
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
-

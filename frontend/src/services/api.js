@@ -875,7 +875,7 @@ Siddharth is a **Software Engineer** specializing in **Backend Systems** and **A
 - **Experience:** Software Developer Intern at Angel Bot AI (Delhi) and CodeArrest Softwares (Kota).
 - **Key Expertise:** Structured RAG pipelines, deterministic LLM orchestration, event-driven microservices (RabbitMQ), ACID relational folio ledgers, and container meshes.
 
-📄 [Download Siddharth's Resume (PDF)](/api/public/resume/file) | 📬 [Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)
+📄 [Download Siddharth's Resume (PDF)](/api/public/resume/file) [Connect on LinkedIn](https://linkedin.com/in/siddharth-shakyawal-925889356)
 
 📌 **Source:** Official Resume / Summary & Executive Profile`
     };
