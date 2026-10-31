@@ -1,5 +1,6 @@
 package com.portfolio.backend.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +11,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri:}")
+    private String issuerUri;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -26,8 +30,12 @@ public class SecurityConfig {
                 .requestMatchers("/api/admin/**").authenticated()
                 // Any other request
                 .anyRequest().authenticated()
-            )
-            .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {})); // Configure JWT validation
+            );
+
+        // Only enforce OAuth2 Resource Server if an issuer URI is explicitly provided (e.g. Keycloak)
+        if (issuerUri != null && !issuerUri.isBlank() && !issuerUri.contains("localhost")) {
+            http.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {}));
+        }
 
         return http.build();
     }
