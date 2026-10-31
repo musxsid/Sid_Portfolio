@@ -575,119 +575,47 @@ const INITIAL_MESSAGES = [
   }
 ];
 
-// Adaptive dynamic section styling: frosted glassy dialog reflecting each section's energy
+// Dynamic section background alignment matching App.jsx dark obsidian color interpolation
 const SECTION_THEMES = {
   hero: {
-    name: "Hero",
-    bgGlass: "bg-[#09070b]/60",
-    topGradient: "from-transparent via-[#ff7a45]/90 to-transparent",
-    ambientLight: "from-[#ff7a45]/20 via-amber-500/8 to-transparent",
-    radialGlow: "bg-[#ff7a45]/25",
-    borderRing: "border-white/18 ring-1 ring-[#ff7a45]/30",
-    glowShadow: "shadow-[0_24px_80px_rgba(0,0,0,0.85),0_0_50px_rgba(255,122,69,0.22)]",
-    headerBg: "bg-white/[0.04]",
-    accentText: "text-[#ff7a45]",
-    accentBorder: "border-[#ff7a45]/40",
-    orbGradient: "linear-gradient(135deg, rgba(255, 122, 69, 0.95) 0%, rgba(234, 88, 12, 0.95) 55%, rgba(194, 65, 12, 0.95) 100%)",
-    orbShadow: "shadow-[0_0_35px_rgba(255,122,69,0.65),0_12px_28px_rgba(0,0,0,0.6)]"
+    bgGlass: "bg-[#050508]/82",
+    headerBg: "bg-white/[0.02]",
+    inputBg: "bg-[#040407]/85",
   },
   about: {
-    name: "About",
-    bgGlass: "bg-[#030914]/60",
-    topGradient: "from-transparent via-cyan-400/90 to-transparent",
-    ambientLight: "from-cyan-500/20 via-blue-600/8 to-transparent",
-    radialGlow: "bg-cyan-500/25",
-    borderRing: "border-white/18 ring-1 ring-cyan-500/30",
-    glowShadow: "shadow-[0_24px_80px_rgba(0,0,0,0.85),0_0_50px_rgba(6,182,212,0.22)]",
-    headerBg: "bg-cyan-950/20",
-    accentText: "text-cyan-400",
-    accentBorder: "border-cyan-500/40",
-    orbGradient: "linear-gradient(135deg, rgba(6, 182, 212, 0.95) 0%, rgba(14, 116, 144, 0.95) 55%, rgba(15, 23, 42, 0.95) 100%)",
-    orbShadow: "shadow-[0_0_35px_rgba(6,182,212,0.65),0_12px_28px_rgba(0,0,0,0.6)]"
+    bgGlass: "bg-[#080811]/82",
+    headerBg: "bg-white/[0.02]",
+    inputBg: "bg-[#06060e]/85",
   },
   experience: {
-    name: "Experience",
-    bgGlass: "bg-[#060618]/60",
-    topGradient: "from-transparent via-indigo-400/90 to-transparent",
-    ambientLight: "from-indigo-500/20 via-blue-600/8 to-transparent",
-    radialGlow: "bg-indigo-500/25",
-    borderRing: "border-white/18 ring-1 ring-indigo-500/30",
-    glowShadow: "shadow-[0_24px_80px_rgba(0,0,0,0.85),0_0_50px_rgba(99,102,241,0.22)]",
-    headerBg: "bg-indigo-950/20",
-    accentText: "text-indigo-400",
-    accentBorder: "border-indigo-500/40",
-    orbGradient: "linear-gradient(135deg, rgba(99, 102, 241, 0.95) 0%, rgba(79, 70, 229, 0.95) 55%, rgba(49, 46, 129, 0.95) 100%)",
-    orbShadow: "shadow-[0_0_35px_rgba(99,102,241,0.65),0_12px_28px_rgba(0,0,0,0.6)]"
+    bgGlass: "bg-[#0f0f15]/82",
+    headerBg: "bg-white/[0.02]",
+    inputBg: "bg-[#0a0a12]/85",
   },
   projects: {
-    name: "Projects",
-    bgGlass: "bg-[#0c0503]/60",
-    topGradient: "from-transparent via-[#ff7a45]/95 to-transparent",
-    ambientLight: "from-[#ff7a45]/22 via-orange-600/10 to-transparent",
-    radialGlow: "bg-[#ff7a45]/28",
-    borderRing: "border-white/18 ring-1 ring-[#ff7a45]/35",
-    glowShadow: "shadow-[0_24px_80px_rgba(0,0,0,0.85),0_0_55px_rgba(255,122,69,0.25)]",
-    headerBg: "bg-[#ff7a45]/[0.05]",
-    accentText: "text-accent-warm",
-    accentBorder: "border-accent-warm/40",
-    orbGradient: "linear-gradient(135deg, rgba(255, 122, 69, 0.95) 0%, rgba(234, 88, 12, 0.95) 55%, rgba(194, 65, 12, 0.95) 100%)",
-    orbShadow: "shadow-[0_0_35px_rgba(255,122,69,0.65),0_12px_28px_rgba(0,0,0,0.6)]"
+    bgGlass: "bg-[#080b13]/82",
+    headerBg: "bg-white/[0.02]",
+    inputBg: "bg-[#060810]/85",
   },
   github: {
-    name: "GitHub",
-    bgGlass: "bg-[#020e08]/60",
-    topGradient: "from-transparent via-emerald-400/90 to-transparent",
-    ambientLight: "from-emerald-500/20 via-teal-600/8 to-transparent",
-    radialGlow: "bg-emerald-500/25",
-    borderRing: "border-white/18 ring-1 ring-emerald-500/30",
-    glowShadow: "shadow-[0_24px_80px_rgba(0,0,0,0.85),0_0_50px_rgba(16,185,129,0.22)]",
-    headerBg: "bg-emerald-950/20",
-    accentText: "text-emerald-400",
-    accentBorder: "border-emerald-500/40",
-    orbGradient: "linear-gradient(135deg, rgba(16, 185, 129, 0.95) 0%, rgba(5, 150, 105, 0.95) 55%, rgba(6, 78, 59, 0.95) 100%)",
-    orbShadow: "shadow-[0_0_35px_rgba(16,185,129,0.65),0_12px_28px_rgba(0,0,0,0.6)]"
+    bgGlass: "bg-[#080b13]/82",
+    headerBg: "bg-white/[0.02]",
+    inputBg: "bg-[#060810]/85",
   },
   skills: {
-    name: "Skills",
-    bgGlass: "bg-[#0c0316]/60",
-    topGradient: "from-transparent via-purple-400/90 to-transparent",
-    ambientLight: "from-purple-500/20 via-violet-600/8 to-transparent",
-    radialGlow: "bg-purple-500/25",
-    borderRing: "border-white/18 ring-1 ring-purple-500/30",
-    glowShadow: "shadow-[0_24px_80px_rgba(0,0,0,0.85),0_0_50px_rgba(168,85,247,0.22)]",
-    headerBg: "bg-purple-950/20",
-    accentText: "text-purple-400",
-    accentBorder: "border-purple-500/40",
-    orbGradient: "linear-gradient(135deg, rgba(168, 85, 247, 0.95) 0%, rgba(147, 51, 234, 0.95) 55%, rgba(88, 28, 135, 0.95) 100%)",
-    orbShadow: "shadow-[0_0_35px_rgba(168,85,247,0.65),0_12px_28px_rgba(0,0,0,0.6)]"
+    bgGlass: "bg-[#080b13]/82",
+    headerBg: "bg-white/[0.02]",
+    inputBg: "bg-[#060810]/85",
   },
   newsletter: {
-    name: "Newsletter",
-    bgGlass: "bg-[#0c0702]/60",
-    topGradient: "from-transparent via-amber-400/90 to-transparent",
-    ambientLight: "from-amber-500/20 via-orange-500/8 to-transparent",
-    radialGlow: "bg-amber-500/25",
-    borderRing: "border-white/18 ring-1 ring-amber-400/30",
-    glowShadow: "shadow-[0_24px_80px_rgba(0,0,0,0.85),0_0_50px_rgba(245,158,11,0.22)]",
-    headerBg: "bg-amber-950/20",
-    accentText: "text-amber-400",
-    accentBorder: "border-amber-400/40",
-    orbGradient: "linear-gradient(135deg, rgba(245, 158, 11, 0.95) 0%, rgba(217, 119, 6, 0.95) 55%, rgba(146, 64, 14, 0.95) 100%)",
-    orbShadow: "shadow-[0_0_35px_rgba(245,158,11,0.65),0_12px_28px_rgba(0,0,0,0.6)]"
+    bgGlass: "bg-[#090d16]/82",
+    headerBg: "bg-white/[0.02]",
+    inputBg: "bg-[#070a13]/85",
   },
   contact: {
-    name: "Contact",
-    bgGlass: "bg-[#0e0307]/60",
-    topGradient: "from-transparent via-rose-400/90 to-transparent",
-    ambientLight: "from-rose-500/20 via-[#ff7a45]/8 to-transparent",
-    radialGlow: "bg-rose-500/25",
-    borderRing: "border-white/18 ring-1 ring-rose-400/30",
-    glowShadow: "shadow-[0_24px_80px_rgba(0,0,0,0.85),0_0_50px_rgba(244,63,94,0.22)]",
-    headerBg: "bg-rose-950/20",
-    accentText: "text-rose-400",
-    accentBorder: "border-rose-400/40",
-    orbGradient: "linear-gradient(135deg, rgba(244, 63, 94, 0.95) 0%, rgba(225, 29, 72, 0.95) 55%, rgba(159, 18, 57, 0.95) 100%)",
-    orbShadow: "shadow-[0_0_35px_rgba(244,63,94,0.65),0_12px_28px_rgba(0,0,0,0.6)]"
+    bgGlass: "bg-[#050508]/82",
+    headerBg: "bg-white/[0.02]",
+    inputBg: "bg-[#040407]/85",
   }
 };
 
@@ -804,72 +732,60 @@ export default function Chatbot() {
 
   return (
     <div className="chatbot-container">
-      {/* Floating Action Button: Geometric Circular AI Orb */}
+      {/* Floating Action Button: Matte Frosted Glass Orb */}
       <motion.button
-        className={`fixed bottom-6 right-6 w-14 h-14 sm:w-[58px] sm:h-[58px] rounded-full z-[10000] flex items-center justify-center text-white backdrop-blur-2xl border border-white/25 ring-1 ring-white/20 transition-all duration-500 cursor-pointer ${theme.orbShadow} ${
+        className={`fixed bottom-6 right-6 w-14 h-14 sm:w-[56px] sm:h-[56px] rounded-full z-[10000] flex items-center justify-center text-white backdrop-blur-2xl bg-[#090b14]/90 border border-white/12 shadow-[0_10px_35px_rgba(0,0,0,0.65),0_0_15px_rgba(255,122,69,0.12)] transition-all duration-300 cursor-pointer ${
           isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'
         }`}
-        style={{
-          background: theme.orbGradient
-        }}
-        whileHover={{ scale: 1.1, rotate: 6, y: -2 }}
-        whileTap={{ scale: 0.92 }}
+        whileHover={{ scale: 1.08, rotate: 4, y: -2 }}
+        whileTap={{ scale: 0.94 }}
         onClick={() => setIsOpen(true)}
         aria-label="Open AURA AI Assistant"
       >
-        {/* Subtle Inner Optical Rim Flare */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-white/10 to-white/40 pointer-events-none" />
+        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-white/[0.03] to-white/10 pointer-events-none" />
 
         <div className="relative flex items-center justify-center">
-          <AuraLogo size={28} className="text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.85)]" />
+          <AuraLogo size={25} className="text-accent-warm drop-shadow-[0_0_8px_rgba(255,122,69,0.35)]" />
           {/* Luminous Online Status Ping */}
-          <span className="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-black/80 shadow-[0_0_10px_#10b981]" />
+          <span className="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-[#090b14] shadow-[0_0_8px_#10b981]" />
           <span className="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-emerald-400 animate-ping opacity-75" />
         </div>
       </motion.button>
 
-      {/* Sculpted Architectural AURA Chatbot Modal Window with Dynamic Section Frosted Glass */}
+      {/* Sculpted Architectural AURA Chatbot Modal Window: Matte Frosted Glass */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 40, scale: 0.94, transformOrigin: "bottom right" }}
+            initial={{ opacity: 0, y: 35, scale: 0.95, transformOrigin: "bottom right" }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 40, scale: 0.94 }}
-            transition={{ type: "spring", stiffness: 340, damping: 28 }}
-            className={`fixed bottom-4 sm:bottom-6 right-3 sm:right-6 ${theme.bgGlass} backdrop-blur-3xl backdrop-saturate-[180%] ${theme.borderRing} rounded-[28px] sm:rounded-[32px] rounded-br-[12px] sm:rounded-br-[16px] ${theme.glowShadow} z-[10000] flex flex-col overflow-hidden transition-all duration-700 ease-out ${
+            exit={{ opacity: 0, y: 35, scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 350, damping: 30 }}
+            className={`fixed bottom-4 sm:bottom-6 right-3 sm:right-6 ${theme.bgGlass} backdrop-blur-2xl border border-white/10 rounded-[28px] sm:rounded-[32px] rounded-br-[12px] sm:rounded-br-[16px] shadow-[0_20px_60px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.05)] z-[10000] flex flex-col overflow-hidden transition-colors duration-500 ${
               isExpanded
                 ? "w-[94vw] sm:w-[580px] md:w-[620px] h-[630px] sm:h-[650px] max-h-[88vh]"
                 : "w-[92vw] sm:w-[395px] md:w-[415px] h-[520px] sm:h-[545px] max-h-[82vh]"
             }`}
           >
-            {/* Ambient Caustics Top Glow & Precision Horizon Line */}
-            <div className={`absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r ${theme.topGradient} pointer-events-none z-20 transition-all duration-700 ease-out`} />
-            <div className={`absolute inset-0 bg-gradient-to-b ${theme.ambientLight} pointer-events-none z-0 transition-all duration-700 ease-out`} />
-            <div className={`absolute -top-16 -right-16 w-52 h-52 rounded-full blur-3xl pointer-events-none z-0 transition-all duration-700 ease-out ${theme.radialGlow}`} />
-
-            {/* Sleek Executive AURA Header with Dynamic Section Tint */}
-            <div className={`flex items-center justify-between px-4 py-3 sm:px-4.5 sm:py-3.5 border-b border-white/10 ${theme.headerBg} backdrop-blur-xl relative z-10 transition-colors duration-700`}>
+            {/* Sleek Executive AURA Header */}
+            <div className={`flex items-center justify-between px-4 py-3 sm:px-4.5 sm:py-3.5 border-b border-white/[0.07] ${theme.headerBg} backdrop-blur-md relative z-10 transition-colors duration-500`}>
               <div className="flex items-center gap-2.5">
                 <div className="relative flex items-center justify-center">
-                  <div className={`w-9 h-9 rounded-xl bg-gradient-to-br from-white/10 via-white/5 to-transparent border ${theme.accentBorder} flex items-center justify-center ${theme.accentText} shadow-[0_0_18px_rgba(255,255,255,0.15)] transition-all duration-500`}>
-                    <AuraLogo size={22} />
+                  <div className="w-8 h-8 rounded-xl bg-accent-warm/15 border border-accent-warm/25 flex items-center justify-center text-accent-warm shadow-sm">
+                    <AuraLogo size={20} />
                   </div>
-                  <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-black/80 shadow-[0_0_8px_#10b981]" />
+                  <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-[#070912] shadow-[0_0_6px_#10b981]" />
                 </div>
                 <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-sm sm:text-base font-black text-white tracking-tight font-display">
+                  <div className="flex items-center gap-1.5">
+                    <h3 className="text-sm sm:text-base font-bold text-white tracking-tight font-display">
                       AURA
                     </h3>
-                    <span className="px-1.5 py-0.5 rounded-full text-[0.56rem] font-bold font-mono tracking-wider uppercase bg-white/10 text-gray-200 border border-white/15">
+                    <span className="px-1.5 py-0.5 rounded-full text-[0.55rem] font-bold font-mono tracking-wider uppercase bg-accent-warm/15 text-accent-warm border border-accent-warm/25">
                       AI
                     </span>
-                    <span className="hidden xs:inline-flex px-2 py-0.5 rounded-full text-[0.6rem] font-sans font-medium tracking-wide bg-white/[0.06] border border-white/10 text-gray-300 backdrop-blur-sm transition-all duration-500">
-                      {theme.name}
-                    </span>
                   </div>
-                  <p className="text-[0.68rem] text-gray-400 font-sans flex items-center gap-1 mt-0.5">
-                    <span>Portfolio AI</span>
+                  <p className="text-[0.66rem] text-gray-400 font-sans flex items-center gap-1 mt-0.5">
+                    <span>Portfolio Assistant</span>
                     <span className="text-gray-600">•</span>
                     <span className="text-emerald-400 font-medium">Online</span>
                   </p>
@@ -879,7 +795,7 @@ export default function Chatbot() {
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
-                  className="hidden sm:flex w-7 h-7 rounded-full items-center justify-center bg-white/[0.05] hover:bg-white/[0.12] border border-white/10 text-gray-300 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                  className="hidden sm:flex w-7 h-7 rounded-full items-center justify-center bg-white/[0.04] hover:bg-white/[0.1] border border-white/10 text-gray-300 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
                   title={isExpanded ? "Standard view" : "Expand view"}
                   aria-label="Toggle size"
                 >
@@ -887,7 +803,7 @@ export default function Chatbot() {
                 </button>
                 <button
                   onClick={handleReset}
-                  className="w-7 h-7 rounded-full flex items-center justify-center bg-white/[0.05] hover:bg-white/[0.12] border border-white/10 text-gray-300 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                  className="w-7 h-7 rounded-full flex items-center justify-center bg-white/[0.04] hover:bg-white/[0.1] border border-white/10 text-gray-300 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
                   title="Reset conversation"
                   aria-label="Reset conversation"
                 >
@@ -895,7 +811,7 @@ export default function Chatbot() {
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="w-7 h-7 rounded-full flex items-center justify-center bg-white/[0.05] hover:bg-red-500/20 hover:border-red-500/40 border border-white/10 text-gray-300 hover:text-red-300 transition-all cursor-pointer shadow-sm active:scale-95"
+                  className="w-7 h-7 rounded-full flex items-center justify-center bg-white/[0.04] hover:bg-red-500/20 hover:border-red-500/40 border border-white/10 text-gray-300 hover:text-red-300 transition-all cursor-pointer shadow-sm active:scale-95"
                   aria-label="Close chat"
                 >
                   <X size={14} />
@@ -903,13 +819,13 @@ export default function Chatbot() {
               </div>
             </div>
 
-            {/* Compact Sculpted Messages Area with Deep Frosted Glass Refraction */}
-            <div className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-3.5 custom-scrollbar bg-black/15 z-10">
+            {/* Matte Frosted Messages Area */}
+            <div className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-3.5 custom-scrollbar bg-transparent z-10">
               {messages.map((msg, idx) => (
                 <motion.div
-                  initial={{ opacity: 0, y: 12 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.22, ease: "easeOut" }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
                   key={idx}
                   className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
@@ -917,8 +833,8 @@ export default function Chatbot() {
                     {/* Avatar */}
                     <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mb-1 transition-all ${
                       msg.type === 'user'
-                        ? 'bg-gradient-to-br from-accent-warm to-[#ea580c] text-white shadow-[0_0_10px_rgba(255,122,69,0.4)]'
-                        : 'bg-white/10 text-white border border-white/20 shadow-[0_0_12px_rgba(255,255,255,0.1)]'
+                        ? 'bg-accent-warm text-white shadow-sm'
+                        : 'bg-white/10 text-accent-warm border border-white/15'
                     }`}>
                       {msg.type === 'user' ? <User size={14} /> : <AuraLogo size={16} />}
                     </div>
@@ -926,8 +842,8 @@ export default function Chatbot() {
                     {/* Message Bubble Card */}
                     <div className={`text-xs sm:text-[0.82rem] ${
                       msg.type === 'user'
-                        ? 'bg-gradient-to-r from-[#ff7a45] via-[#ea580c] to-[#d9480f] text-white font-medium rounded-2xl rounded-tr-xs shadow-[0_4px_20px_rgba(255,122,69,0.35)] px-3.5 py-2.5'
-                        : 'bg-white/[0.055] hover:bg-white/[0.07] text-gray-100 rounded-2xl rounded-tl-xs border border-white/15 hover:border-white/25 shadow-xl backdrop-blur-2xl p-3.5 sm:p-4 transition-all'
+                        ? 'bg-accent-warm text-white font-medium rounded-2xl rounded-tr-xs shadow-md px-3.5 py-2.5'
+                        : 'bg-white/[0.04] hover:bg-white/[0.055] text-gray-200 rounded-2xl rounded-tl-xs border border-white/[0.08] shadow-sm p-3.5 sm:p-4 transition-all leading-relaxed'
                     }`}>
                       {msg.type === 'user' ? (
                         <span className="leading-relaxed">{msg.text}</span>
@@ -946,16 +862,16 @@ export default function Chatbot() {
                   className="flex justify-start"
                 >
                   <div className="flex items-end gap-2 max-w-[85%]">
-                    <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center shrink-0 mb-1 border border-white/20 shadow-[0_0_12px_rgba(255,255,255,0.1)]">
+                    <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center shrink-0 mb-1 border border-white/15 text-accent-warm">
                       <AuraLogo size={16} />
                     </div>
-                    <div className="p-3 rounded-2xl rounded-tl-xs bg-white/[0.05] border border-white/15 flex items-center gap-2 shadow-xl backdrop-blur-xl">
+                    <div className="p-3 rounded-2xl rounded-tl-xs bg-white/[0.04] border border-white/[0.08] flex items-center gap-2 shadow-sm">
                       <div className="flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce shadow-[0_0_6px_#ff7a45]" />
-                        <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce shadow-[0_0_6px_#ff7a45]" style={{ animationDelay: '0.2s' }} />
-                        <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce shadow-[0_0_6px_#ff7a45]" style={{ animationDelay: '0.4s' }} />
+                        <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce" />
+                        <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                        <span className="w-1.5 h-1.5 bg-accent-warm rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
                       </div>
-                      <span className="text-[0.7rem] text-gray-200 font-sans font-medium">AURA is synthesizing...</span>
+                      <span className="text-[0.7rem] text-gray-300 font-sans font-medium">AURA is synthesizing...</span>
                     </div>
                   </div>
                 </motion.div>
@@ -963,11 +879,11 @@ export default function Chatbot() {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input Bar with Frosted Glass & Ambient Glow */}
-            <div className="p-3 sm:p-3.5 bg-black/40 border-t border-white/10 backdrop-blur-2xl z-10 transition-colors duration-700">
+            {/* Input Bar: Matte Frosted Glass */}
+            <div className={`p-3 sm:p-3.5 ${theme.inputBg} border-t border-white/[0.07] backdrop-blur-xl z-10 transition-colors duration-500`}>
               <div className="flex items-center gap-2 relative">
                 <div className="relative flex-1">
-                  <Sparkles className="w-3.5 h-3.5 text-accent-warm/70 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <Sparkles className="w-3.5 h-3.5 text-accent-warm/60 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   <input
                     ref={inputRef}
                     type="text"
@@ -980,13 +896,13 @@ export default function Chatbot() {
                     }}
                     placeholder="Ask about tech stack, projects, resume..."
                     disabled={isTyping}
-                    className="w-full bg-white/[0.05] border border-white/15 focus:border-accent-warm/70 focus:bg-white/[0.09] focus:ring-1 focus:ring-accent-warm/50 rounded-full pl-9 pr-3.5 py-2.5 text-xs sm:text-[0.82rem] text-white placeholder-gray-400 focus:outline-none transition-all duration-200 disabled:opacity-50 shadow-inner font-sans"
+                    className="w-full bg-white/[0.035] border border-white/10 focus:border-accent-warm/50 focus:bg-white/[0.06] rounded-full pl-9 pr-3.5 py-2.5 text-xs sm:text-[0.82rem] text-white placeholder-gray-500 focus:outline-none transition-all duration-200 disabled:opacity-50 shadow-inner font-sans"
                   />
                 </div>
                 <button
                   onClick={() => handleSend(input)}
                   disabled={isTyping || !input.trim()}
-                  className="w-9 h-9 rounded-full flex items-center justify-center bg-gradient-to-r from-accent-warm to-[#ea580c] hover:from-[#ff8a5c] hover:to-[#f97316] text-white hover:shadow-[0_0_18px_rgba(255,122,69,0.5)] active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer shrink-0"
+                  className="w-9 h-9 rounded-full flex items-center justify-center bg-accent-warm hover:bg-[#ea580c] text-white shadow-sm active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer shrink-0"
                   aria-label="Send message"
                 >
                   <Send size={14} />
